@@ -7,7 +7,7 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		
-	pearlimages = ["{}pearl1.png", "{}pearl2.png", "{}pearl3.png"]
+	pearlimages = ["{}pearl.png", "{}pearl2.png", "{}pearl3.png"]
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):

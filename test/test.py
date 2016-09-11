@@ -6,11 +6,10 @@ class test:
 	def __init__(self, bot):
 		self.bot = bot
 		self.base = 'data/test/images/'
-		
-	pearlimages = ["{}pearl.png", "{}pearl2.png", "{}pearl3.png"]
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
+		pearlimages = ["{}pearl.png", "{}pearl2.png", "{}pearl3.png"]
 		await self.bot.send_file(context.message.channel, random.choice(pearlimages).format(self.base))
 
 def setup(bot):

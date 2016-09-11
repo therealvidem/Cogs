@@ -4,7 +4,7 @@ from discord.ext import commands
 class test:
 	def __init__(self, bot):
 		self.bot = bot
-		self.base = 'data/downloader/videmcogs/test/data/images/'
+		self.base = 'data/test/images/'
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):

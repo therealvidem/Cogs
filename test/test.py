@@ -11,4 +11,5 @@ class test:
 		await self.bot.send_file(context.message.channel, '{}pearl.png'.format(self.base))
 
 def setup(bot):
+	n = test(bot)
 	bot.add_cog(n)

@@ -11,4 +11,4 @@ class test:
 
 def setup(bot):
 	n = test(bot)
-bot.add_cog(n)
+	bot.add_cog(n)

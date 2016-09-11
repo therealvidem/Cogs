@@ -14,7 +14,7 @@ class test:
 		s2 = '{}meme_(' + str(n) + ').PNG'
 		try:
 			await self.bot.send_file(context.message.channel, s.format(self.base))
-		except
+		except:
 			await self.bot.send_file(context.message.channel, s2.format(self.base))
 
 def setup(bot):

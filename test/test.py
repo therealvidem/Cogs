@@ -9,7 +9,13 @@ class test:
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
-		await self.bot.send_file(context.message.channel, "meme_" + str(random.randint(1,133)).format(self.base))
+		n = random.randint(1,133)
+		s = "meme_" + str(n) + ".png"
+		s2 = "meme_" + str(n) + ".PNG"
+		try
+			await self.bot.send_file(context.message.channel, s.format(self.base))
+		except
+			await self.bot.send_file(context.message.channel, s2.format(self.base))
 
 def setup(bot):
 	n = test(bot)

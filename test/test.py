@@ -9,8 +9,7 @@ class test:
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
-		pearlimages = ["{}pearl.png", "{}pearl2.png", "{}pearl3.png"]
-		await self.bot.send_file(context.message.channel, random.choice(pearlimages).format(self.base))
+		await self.bot.send_file(context.message.channel, ("meme_" + str(random.randint(1,133)).format(self.base))
 
 def setup(bot):
 	n = test(bot)

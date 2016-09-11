@@ -12,7 +12,7 @@ class test:
 		n = random.randint(1,133)
 		s = '{}meme_(' + str(n) + ').png'
 		s2 = '{}meme_(' + str(n) + ').PNG'
-		try
+		try:
 			await self.bot.send_file(context.message.channel, s.format(self.base))
 		except
 			await self.bot.send_file(context.message.channel, s2.format(self.base))

@@ -9,7 +9,7 @@ class binary:
 	@commands.command(pass_context=True)
 	async def binarytoascii(self, context, message):
 		try:
-			await self.bot.say(bin(message, 16))
+			await self.bot.say(bin(int(message), 16))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 			

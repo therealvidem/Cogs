@@ -16,14 +16,14 @@ class binary:
 	@commands.command(name="binarytoascii")
 	async def _binarytoascii(self, *, message):
 		try:
-			await self.bot.say(str(text_from_bits(message)))
+			await self.bot.say(str(text_to_bits(message)))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 			
 	@commands.command(name="asciitobinary")
 	async def _asciitobinary(self, *, message):
 		try:
-			await self.bot.say(str(text_to_bits(message)))
+			await self.bot.say(str(text_from_bits(message)))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 

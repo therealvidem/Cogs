@@ -7,7 +7,7 @@ class binary:
 		self.bot = bot
 	
 	@commands.command(pass_context=True)
-	async def binarytoascii(self, context, message):
+	async def binarytoascii(self, *, message):
 		try:
 			await self.bot.say(bin(int(message), 16))
 		except:

@@ -5,19 +5,26 @@ from discord.ext import commands
 class binary:
 	def __init__(self, bot):
 		self.bot = bot
+		
+	def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
+		bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
+		return bits.zfill(8 * ((len(bits) + 7) // 8))
+
+	def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
+    		n = int(bits, 2)
+    		return int2bytes(n).decode(encoding, errors)
 	
-	@commands.command(pass_context=True)
+	@commands.command()
 	async def binarytoascii(self, *, message):
 		try:
-			await self.bot.say(bin(int(binascii.hexlify(message), 16)))
+			await self.bot.say(text_from_bits(message))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 			
-	@commands.command(pass_context=True)
-	async def asciitobinary(self, context, message):
+	@commands.command()
+	async def asciitobinary(self, *, message):
 		try:
-			n = int(message, 2)
-			await self.bot.say(str(binascii.unhexlify('%x' % n)))
+			await self.bot.say(text_to_bits(message))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 

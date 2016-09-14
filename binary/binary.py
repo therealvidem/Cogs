@@ -16,11 +16,11 @@ class binary:
 	@commands.command(pass_context=True)
 	async def asciitobinary(self, context, message):
 		try:
-		  n = int(message, 2)
+			n = int(message, 2)
 			await self.bot.say(binascii.unhexlify('%x' % n))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 
 def setup(bot):
 	n = binary(bot)
-  bot.add_cog(n)
+	bot.add_cog(n)

@@ -11,6 +11,7 @@ class binary:
 		try:
 			await self.bot.say(bin(int(message), 16))
 		except:
+			await self.bot.say("Your message: " + message)
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 			
 	@commands.command(pass_context=True)

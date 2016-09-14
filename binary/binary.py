@@ -13,15 +13,15 @@ class binary:
     		n = int(bits, 2)
     		return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
 	
-	@commands.command()
-	async def binarytoascii(self, *, message):
+	@commands.command(name="binarytoascii")
+	async def _binarytoascii(self, *, message):
 		try:
 			await self.bot.say(str(text_from_bits(message)))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 			
-	@commands.command()
-	async def asciitobinary(self, *, message):
+	@commands.command(name="asciitobinary")
+	async def _asciitobinary(self, *, message):
 		try:
 			await self.bot.say(str(text_to_bits(message)))
 		except:

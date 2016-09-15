@@ -27,7 +27,7 @@ class test:
 			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))
 		else:
 			try:
-				for server in discord.Client.servers:
+				for server in discord.client.servers:
 					for member in server.members:
 						if member.id == 1556:
 							await self.bot.move_member(member, to_channel)

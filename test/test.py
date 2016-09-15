@@ -21,7 +21,7 @@ class test:
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
-	async def movevidem(self, ctx, message, to_channel: discord.Channel):
+	async def movevidem(self, *, message, to_channel: discord.Channel):
 		type_to = str(to_channel.type)
 		if type_to == 'text':
 			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))

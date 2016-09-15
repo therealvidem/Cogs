@@ -1,6 +1,10 @@
 import random
 import discord
 from discord.ext import commands
+from .utils import checks
+import asyncio
+import logging
+log = logging.getLogger('red.massmove')
 
 class test:
 	def __init__(self, bot):
@@ -16,6 +20,19 @@ class test:
 			await self.bot.send_file(context.message.channel, s.format(self.base))
 		except:
 			await self.bot.send_file(context.message.channel, s2.format(self.base))
+			
+	@commands.command(pass_context=True)
+	@checks.admin_or_permissions(move_members=True)
+	async def movevidem(self, ctx, to_channel: discord.Channel):
+		type_to = str(to_channel.type)
+		mem = "@videm#1556"
+		try:
+			await self.bot.move_member(mem, to_channel)
+			await asyncio.sleep(0.5)
+		except discord.Forbidden:
+			await self.bot.say('I have no permission to move members.')
+		except discord.HTTPException:
+			await self.bot.say('A error occured. Please try again')
 
 def setup(bot):
 	n = test(bot)

@@ -9,7 +9,7 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		
-	def getvidem()
+	def getvidem():
 		for member in server.members:
 			if member.id = 1556:
 				yield member

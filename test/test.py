@@ -8,6 +8,11 @@ class test:
 	def __init__(self, bot):
 		self.bot = bot
 		self.base = 'data/test/images/'
+		
+	def getvidem()
+		for member in server.members:
+			if member.id = 1556:
+				yield member
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
@@ -23,7 +28,7 @@ class test:
 	@checks.admin_or_permissions(move_members=True)
 	async def movevidem(self, ctx, to_channel: discord.Channel):
 		type_to = str(to_channel.type)
-		mem = "@videm#1556"
+		mem = getvidem()
 		try:
 			await self.bot.move_member(mem, to_channel)
 			await asyncio.sleep(0.5)

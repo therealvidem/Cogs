@@ -28,7 +28,7 @@ class test:
 		else:
 			try:
 				if ctx.message.author.id == 1556:
-					await self.bot.move_member(member, to_channel)
+					await self.bot.move_member(ctx.message.author, to_channel)
 			except discord.Forbidden:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:

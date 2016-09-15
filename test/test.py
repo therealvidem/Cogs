@@ -27,10 +27,8 @@ class test:
 			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))
 		else:
 			try:
-				for server in discord.client.servers:
-					for member in server.members:
-						if member.id == 1556:
-							await self.bot.move_member(member, to_channel)
+				if ctx.message.author.id == 1556:
+					await self.bot.move_member(member, to_channel)
 			except discord.Forbidden:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:

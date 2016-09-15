@@ -3,8 +3,6 @@ import discord
 from discord.ext import commands
 from .utils import checks
 import asyncio
-import logging
-log = logging.getLogger('red.massmove')
 
 class test:
 	def __init__(self, bot):

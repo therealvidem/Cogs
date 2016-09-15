@@ -21,14 +21,14 @@ class test:
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
-	async def movevidem(self, *, message, to_channel: discord.Channel):
+	async def movevidem(self, context, to_channel: discord.Channel):
 		type_to = str(to_channel.type)
 		if type_to == 'text':
 			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))
 		else:
 			try:
-				if message.author.id == 1556:
-					await self.bot.move_member(message.author, to_channel)
+				if context.message.author.id == 1556:
+					await self.bot.move_member(context.message.author, to_channel)
 			except discord.Forbidden:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:

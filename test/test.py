@@ -11,7 +11,7 @@ class test:
 		
 	def getvidem():
 		for member in server.members:
-			if member.id = 1556:
+			if member.id == 1556:
 				yield member
 	
 	@commands.command(pass_context=True)

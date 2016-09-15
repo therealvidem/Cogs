@@ -8,11 +8,6 @@ class test:
 	def __init__(self, bot):
 		self.bot = bot
 		self.base = 'data/test/images/'
-		
-	def getvidem():
-		for member in server.members:
-			if member.id == 1556:
-				yield member
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
@@ -28,14 +23,18 @@ class test:
 	@checks.admin_or_permissions(move_members=True)
 	async def movevidem(self, ctx, to_channel: discord.Channel):
 		type_to = str(to_channel.type)
-		mem = getvidem()
-		try:
-			await self.bot.move_member(mem, to_channel)
-			await asyncio.sleep(0.5)
-		except discord.Forbidden:
-			await self.bot.say('I have no permission to move members.')
-		except discord.HTTPException:
-			await self.bot.say('A error occured. Please try again')
+		if type_to == 'text':
+			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))
+		else:
+			try:
+				for server in client.servers:
+					for member in server.members:
+						if member.id == 1556:
+							await self.bot.move_member(member, to_channel)
+			except discord.Forbidden:
+				await self.bot.say('I have no permission to move members.')
+			except discord.HTTPException:
+				await self.bot.say('A error occured. Please try again')
 
 def setup(bot):
 	n = test(bot)

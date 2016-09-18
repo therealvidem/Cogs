@@ -7,7 +7,7 @@ class sumDigits:
 		
 	def sD(n):
     		newnum = 0
-    		i = n
+    		i = int(n)
     		while i > 0:
       			i /= 10
       			newnum += i % 10
@@ -16,7 +16,7 @@ class sumDigits:
 	@commands.command(name="sumDigits")
 	async def _sumDigits(self, *, message):
 		try:
-			await self.bot.say("Your answer: " + sD(int(message)))
+			await self.bot.say("Your answer: " + str(sD(message)))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 

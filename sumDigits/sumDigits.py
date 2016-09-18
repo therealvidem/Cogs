@@ -3,14 +3,14 @@ from discord.ext import commands
 
 class sumDigits:
 	def __init__(self, bot):
-	  self.bot = bot
+		self.bot = bot
 		
-	def sumDigits(int n):
-    newnum = 0
-    while n > 0:
-      n /= 10
-      newnum += n % 10
-    return newnum
+	def sumDigits(n):
+    		newnum = 0
+    		while n > 0:
+      			n /= 10
+      			newnum += n % 10
+    		return newnum
 			
 	@commands.command(name="sumDigits")
 	async def _sumDigits(self, *, message):
@@ -21,4 +21,4 @@ class sumDigits:
 
 def setup(bot):
 	n = sumDigits(bot)
-  bot.add_cog(n)
+	bot.add_cog(n)

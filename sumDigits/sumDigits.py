@@ -10,12 +10,12 @@ class sumDigits:
     		while n > 0:
       			n /= 10
       			newnum += n % 10
-    		return newnum
+    		return newnum;
 			
 	@commands.command(name="sumDigits")
 	async def _sumDigits(self, *, message):
 		try:
-			await self.bot.say(str(sumDigits(int(message))))
+			await self.bot.say(sumDigits(int(message)))
 		except:
 			await self.bot.say("Either you entered something invalid, or I fucked up.")
 

@@ -19,6 +19,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def pearl(self, context, message):
 		try:
+			message = int(message)
 			s = '{}meme_(' + str(message) + ').png'
 			s2 = '{}meme_(' + str(message) + ').PNG'
 		except:

@@ -21,7 +21,7 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
-		await self.bot.send_file("!chat HI I AM VIDEMBOT")
+		await self.bot.send_message(message.channel, '!chat HI I AM VIDEMBOT')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)

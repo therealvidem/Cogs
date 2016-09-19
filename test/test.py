@@ -47,4 +47,5 @@ class test:
 
 def setup(bot):
 	n = test(bot)
+	bot.add_listener(n.listener, "on_message")
 	bot.add_cog(n)

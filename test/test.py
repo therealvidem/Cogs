@@ -21,7 +21,7 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
-		await self.bot.send_message(message.channel, '!chat HI I AM VIDEMBOT')
+		await self.bot.say('!chat HI I AM VIDEMBOT')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
@@ -41,9 +41,9 @@ class test:
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
 			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
-				await self.bot.send_message(message.channel, '¡Harambe!')
+				await self.bot.say('¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
-				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
+				await self.bot.say('I\'m sorry, I don\'t speak Japanese.')
 
 def setup(bot):
 	n = test(bot)

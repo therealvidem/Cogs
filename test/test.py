@@ -17,10 +17,14 @@ class test:
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 	
 	@commands.command(pass_context=True)
-	async def pearl(self, context):
-		n = random.randint(1,136)
-		s = '{}meme_(' + str(n) + ').png'
-		s2 = '{}meme_(' + str(n) + ').PNG'
+	async def pearl(self, context, message):
+		try:
+			s = '{}meme_(' + str(message) + ').png'
+			s2 = '{}meme_(' + str(message) + ').PNG'
+		except:
+			n = random.randint(1,136)
+			s = '{}meme_(' + str(n) + ').png'
+			s2 = '{}meme_(' + str(n) + ').PNG'
 		try:
 			await self.bot.send_file(context.message.channel, s.format(self.base))
 		except:

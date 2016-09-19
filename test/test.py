@@ -16,7 +16,7 @@ class test:
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 	
-	@commands.command(pass_context=True)
+	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
 		try:
 			message = int(message)

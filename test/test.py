@@ -20,6 +20,10 @@ class test:
 			await self.bot.send_file(context.message.channel, s2.format(self.base))
 			
 	@commands.command(pass_context=True)
+	async def talktoabby(self, context):
+		await self.bot.send_file("!chat HI I AM VIDEMBOT")
+			
+	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
 	async def movevidem(self, context, to_channel: discord.Channel):
 		type_to = str(to_channel.type)
@@ -33,6 +37,13 @@ class test:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
 				await self.bot.say('A error occured. Please try again')
+				
+	async def listener(self, message):
+		if message.author.id != self.bot.user.id:
+			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
+				await self.bot.send_message(message.channel, '¡Harambe!')
+			elif message.content.lower().startswith('japanese'):
+				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 
 def setup(bot):
 	n = test(bot)

@@ -12,9 +12,9 @@ class test:
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
 			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
-				await self.bot.say('¡Harambe!')
+				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
-				await self.bot.say('I\'m sorry, I don\'t speak Japanese.')
+				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):

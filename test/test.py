@@ -8,6 +8,13 @@ class test:
 	def __init__(self, bot):
 		self.bot = bot
 		self.base = 'data/test/images/'
+		
+	async def listener(self, message):
+		if message.author.id != self.bot.user.id:
+			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
+				await self.bot.say('¡Harambe!')
+			elif message.content.lower().startswith('japanese'):
+				await self.bot.say('I\'m sorry, I don\'t speak Japanese.')
 	
 	@commands.command(pass_context=True)
 	async def pearl(self, context):
@@ -37,13 +44,6 @@ class test:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
 				await self.bot.say('A error occured. Please try again')
-				
-	async def listener(self, message):
-		if message.author.id != self.bot.user.id:
-			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
-				await self.bot.say('¡Harambe!')
-			elif message.content.lower().startswith('japanese'):
-				await self.bot.say('I\'m sorry, I don\'t speak Japanese.')
 
 def setup(bot):
 	n = test(bot)

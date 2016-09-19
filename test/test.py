@@ -49,6 +49,11 @@ class test:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
 				await self.bot.say('A error occured. Please try again')
+				
+	@commands.command(pass_context=True)
+	async def rateship(self, context, message, message2):
+		stringthing = 'qwertyuiopasdfghjklzxcvbnm'
+		
 
 def setup(bot):
 	n = test(bot)

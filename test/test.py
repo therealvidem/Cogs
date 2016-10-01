@@ -8,6 +8,7 @@ class test:
 	def __init__(self, bot):
 		self.bot = bot
 		self.base = 'data/test/images/'
+		self.base2 = 'data/test/imagesj/'
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
@@ -30,6 +31,21 @@ class test:
 			await self.bot.send_file(context.message.channel, s.format(self.base))
 		except:
 			await self.bot.send_file(context.message.channel, s2.format(self.base))
+			
+	@commands.command(pass_context=True, invoke_without_command=True)
+	async def bar(self, context, message):
+		try:
+			message = int(message)
+			s = '{}meme (' + str(message) + ').png'
+			s2 = '{}meme (' + str(message) + ').PNG'
+		except:
+			n = random.randint(1,17)
+			s = '{}meme (' + str(n) + ').png'
+			s2 = '{}meme (' + str(n) + ').PNG'
+		try:
+			await self.bot.send_file(context.message.channel, s.format(self.base2))
+		except:
+			await self.bot.send_file(context.message.channel, s2.format(self.base2))
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):

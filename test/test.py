@@ -24,7 +24,7 @@ class test:
 			if message.author.id == '81026656365453312':
 				time.sleep(10)
 				result = await self.get_response(message)
-				await self.bot.say(result)
+				await self.bot.send_message(message.channel, result)
 			elif message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
 				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):

@@ -21,8 +21,9 @@ class talktoabby:
 		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410':
 			for i in range(60):
 				time.sleep(0.5)
-			result = await self.get_response(message.content)
-			await self.bot.send_message(message.channel, '!chat ' + result)
+				if i == 59:
+					result = await self.get_response(message.content)
+					await self.bot.send_message(message.channel, '!chat ' + result)
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):

@@ -20,6 +20,8 @@ class talktoabby:
 	def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410':
 			send(message)
+			result = await self.get_response(message.content)
+			await self.bot.send_message(message.channel, '!chat ' + result)
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
@@ -36,8 +38,7 @@ class talktoabby:
 	
 def send(message):
 	time.sleep(30)
-	result = await self.get_response(message.content)
-	await self.bot.send_message(message.channel, '!chat ' + result)
+	return
 
 def setup(bot):
 	n = talktoabby(bot)

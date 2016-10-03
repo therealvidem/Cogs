@@ -12,6 +12,7 @@ from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
 import threading
+from threading import Timer
 
 class test:
 	def __init__(self, bot):
@@ -23,16 +24,13 @@ class test:
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
 			if message.author.id == '81026656365453312':
-				t = threading.Thread(target=getmessage)
-				t.start(message)
-				await self.bot.send_message(message.channel, '!chat ' + result)
+				Timer(10, self.getmessage, [message]).start()
 			elif message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
 				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 				
 	async def getmessage(self, msg):
-		time.sleep(10)
 		result = await self.get_response(msg)
 		await self.bot.say('!chat ' + result)
 	

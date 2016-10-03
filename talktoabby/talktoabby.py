@@ -11,7 +11,6 @@ except:
 from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
-import threading
 
 class talktoabby:
 	def __init__(self, bot):
@@ -21,7 +20,7 @@ class talktoabby:
 	async def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410':
 			for i in range(60):
-				sleep(0.5)
+				time.sleep(0.5)
 			result = await self.get_response(message.content)
 			await self.bot.send_message(message.channel, '!chat ' + result)
 			

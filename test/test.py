@@ -58,7 +58,7 @@ class test:
 			s = '{}meme (' + str(message) + ').png'
 			s2 = '{}meme (' + str(message) + ').PNG'
 		except:
-			n = random.randint(1,17)
+			n = random.randint(1,25)
 			s = '{}meme (' + str(n) + ').png'
 			s2 = '{}meme (' + str(n) + ').PNG'
 		try:

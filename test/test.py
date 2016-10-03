@@ -22,13 +22,18 @@ class test:
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
 			if message.author.id == '81026656365453312':
-				time.sleep(10)
-				result = await self.get_response(message)
+				t = threading.Thread(target=getmessage)
+    				t.start()
 				await self.bot.send_message(message.channel, '!chat ' + result)
 			elif message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
 				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
+				
+	async def getmessage()
+		time.sleep(10)
+		result = await self.get_response(message)
+		await self.bot.send_message(message.channel, '!chat ' + result)
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):

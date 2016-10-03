@@ -11,6 +11,7 @@ except:
 from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
+import threading
 
 class test:
 	def __init__(self, bot):

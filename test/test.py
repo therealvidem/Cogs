@@ -24,16 +24,16 @@ class test:
 		if message.author.id != self.bot.user.id:
 			if message.author.id == '81026656365453312':
 				t = threading.Thread(target=getmessage)
-				t.start(self, message)
+				t.start(message)
 				await self.bot.send_message(message.channel, '!chat ' + result)
 			elif message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
 				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 				
-	async def getmessage(self, message):
+	async def getmessage(self, msg):
 		time.sleep(10)
-		result = await self.get_response(message)
+		result = await self.get_response(msg)
 		await self.bot.say('!chat ' + result)
 	
 	@commands.command(pass_context=True, invoke_without_command=True)

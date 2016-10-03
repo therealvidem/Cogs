@@ -31,7 +31,7 @@ class test:
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
 				
-	async def getmessage()
+	async def getmessage():
 		time.sleep(10)
 		result = await self.get_response(message)
 		await self.bot.send_message(message.channel, '!chat ' + result)

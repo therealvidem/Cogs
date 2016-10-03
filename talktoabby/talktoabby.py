@@ -21,7 +21,7 @@ class talktoabby:
 	async def listener(self, message):
                 if message.author.id == '81026656365453312':
                         time.sleep(5)
-                        result = await self.get_response(msg)
+                        result = await self.get_response(message)
                         await self.bot.send_message(message.channel, '!chat ' + result)
 			
 	@commands.command(pass_context=True)

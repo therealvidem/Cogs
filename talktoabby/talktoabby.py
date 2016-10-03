@@ -19,9 +19,7 @@ class talktoabby:
 		
 	def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410':
-			time.sleep(30)
-			result = await self.get_response(message.content)
-			await self.bot.send_message(message.channel, '!chat ' + result)
+			send(message)
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
@@ -35,6 +33,11 @@ class talktoabby:
 		except asyncio.TimeoutError:
 		    answer = "We'll talk later..."
 		return answer
+	
+def send(message):
+	time.sleep(30)
+	result = await self.get_response(message.content)
+	await self.bot.send_message(message.channel, '!chat ' + result)
 
 def setup(bot):
 	n = talktoabby(bot)

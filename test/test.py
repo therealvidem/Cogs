@@ -19,6 +19,7 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
+		
 		self.clv = Clv()
 		
 	async def listener(self, message):
@@ -39,9 +40,9 @@ class test:
 			s = '{}meme_(' + str(n) + ').png'
 			s2 = '{}meme_(' + str(n) + ').PNG'
 		try:
-			await self.bot.send_file(context.message.channel, s.format(self.base))
+			await self.bot.send_file(context.message.channel, choice(self.base).format(self.base))
 		except:
-			await self.bot.send_file(context.message.channel, s2.format(self.base))
+			await self.bot.send_file(context.message.channel, choice(self.base).format(self.base))
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
@@ -54,9 +55,9 @@ class test:
 			s = '{}meme (' + str(n) + ').png'
 			s2 = '{}meme (' + str(n) + ').PNG'
 		try:
-			await self.bot.send_file(context.message.channel, s.format(self.base2))
+			await self.bot.send_file(context.message.channel, choice(self.base2).format(self.base2))
 		except:
-			await self.bot.send_file(context.message.channel, s2.format(self.base2))
+			await self.bot.send_file(context.message.channel, choice(self.base2).format(self.base2))
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)

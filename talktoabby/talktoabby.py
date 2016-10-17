@@ -56,7 +56,7 @@ class talktoabby():
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
-		await self.bot.say('!chat ' + random.choice(quotes))
+		await self.bot.say('!chat ' + random.choice(self.quotes))
 		
 	async def get_response(self, msg):
 		question = self.bot.loop.run_in_executor(None, self.clv.ask, msg)

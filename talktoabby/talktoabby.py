@@ -16,12 +16,15 @@ class talktoabby():
 	def __init__(self, bot):
 		self.bot = bot
 		self.clv = Clv()
+		self.waiting = False
 		
 	async def listener(self, message):
-		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410':
+		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410' and waiting == False:
 			result = await self.get_response(message.content)
 			await self.bot.send_message(message.channel, '!chat ' + result)
+			waiting = True
 			await asyncio.sleep(10)
+			waiting = False
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):

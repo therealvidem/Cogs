@@ -16,7 +16,6 @@ class talktoabby():
 	def __init__(self, bot):
 		self.bot = bot
 		self.clv = Clv()
-		self.waiting = False
 		self.quotes = quotes = ["Abby!","So… um…","How was it back there in your visit to Hawaii?","That’s nice…",
 					"I’m just a little tired, that’s all.","Well... I kind of…","Shh…!",
 					"Quiet! Not so loud…","Well, not just her- I mean, darnit, why would I-",
@@ -45,14 +44,6 @@ class talktoabby():
 					"Abby, just look at the situation right now! I lied to you and this entire group the whole time, I put you into a trap that killed my stupid roommate, and I- I didn’t love you, and I regret it.",
 					"No. Nothing can clean up the mess I’ve created, and now the world’s in danger because of me…",
 					"Our story. The origin of the group… I was going to give it to you guys earlier, but…","Y-yes, indeed we are."]
-		
-	async def listener(self, message):
-		if message.author.id == '81026656365453312' and message.channel.id == '232362669649297410' and waiting == False:
-			result = await self.get_response(message.content)
-			await self.bot.send_message(message.channel, '!chat ' + result)
-			waiting = True
-			await asyncio.sleep(10)
-			waiting = False
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
@@ -65,6 +56,11 @@ class talktoabby():
 		except asyncio.TimeoutError:
 		    answer = "We'll talk later..."
 		return answer
+	
+	async def forevertalktoabby():
+		while True:
+			await asyncio.sleep(10)
+			await self.bot.send_message(
 
 def setup(bot):
 	n = talktoabby(bot)

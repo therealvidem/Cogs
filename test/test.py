@@ -13,6 +13,8 @@ from __main__ import send_cmd_help, user_allowed
 import os, os.path
 import threading
 from threading import Timer
+from .utils.dataIO import dataIO
+
 
 class test:
 	def __init__(self, bot):
@@ -22,6 +24,12 @@ class test:
 		self.baselen = len([name for name in os.listdir('Red-DiscordBot/' + self.base) if os.path.isfile(name)])
 		self.base2len = len([name for name in os.listdir('Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
 		self.clv = Clv()
+		self.shiplist = dataIO.load_json("data/shiplist.json")
+		self.shiplistsay = {
+			'1': {
+				'	
+			}
+		}
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
@@ -65,9 +73,17 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def rateship(self, context, message, message2):
-		stringthing = 'qwertyuiopasdfghjklzxcvbnm'
+		if self.shiplist[message.content + " x " + message2.content]:
+			ship = self.shiplist[message.content + " x " + message2.content]
+			await.self.bot.say('I give the %q x %w ship a %e/10. %y' % (message.content, message2.content, ship.rate, ))  
+
+def check_files():
+    if not dataIO.is_valid_json('shiplist.json'):
+        print("Creating duelist.json...")
+        dataIO.save_json('shiplist.json', {})
 
 def setup(bot):
 	n = test(bot)
+	check_files()
 	bot.add_listener(n.listener, "on_message")
 	bot.add_cog(n)

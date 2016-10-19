@@ -19,8 +19,8 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
-		self.baselen = len([name for name in os.listdir('root/Red-DiscordBot/' + self.base) if os.path.isfile(name)])
-		self.base2len = len([name for name in os.listdir('root/Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
+		self.baselen = len([name for name in os.listdir('Red-DiscordBot/' + self.base) if os.path.isfile(name)])
+		self.base2len = len([name for name in os.listdir('Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
 		self.clv = Clv()
 		
 	async def listener(self, message):

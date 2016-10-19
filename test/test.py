@@ -60,6 +60,10 @@ class test:
 				await self.bot.say('An error occured. Please try again')
 				
 	@commands.command(pass_context=True)
+	async def getchannelid(self, context, mesage):
+		await self.bot.say(message.channel.id)
+				
+	@commands.command(pass_context=True)
 	async def rateship(self, context, message, message2):
 		stringthing = 'qwertyuiopasdfghjklzxcvbnm'
 

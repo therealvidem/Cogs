@@ -10,7 +10,7 @@ except:
     Clv = False
 from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
-import os
+import os, os.path
 import threading
 from threading import Timer
 
@@ -19,7 +19,8 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
-		
+		self.baselen = len([name for name in os.listdir('root/Red-DiscordBot/' + self.base) if os.path.isfile(name)])
+		self.base2len = len([name for name in os.listdir('root/Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
 		self.clv = Clv()
 		
 	async def listener(self, message):
@@ -32,32 +33,16 @@ class test:
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
 		try:
-			message = int(message)
-			s = '{}meme_(' + str(message) + ').png'
-			s2 = '{}meme_(' + str(message) + ').PNG'
+			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(self.baselen)) + ').png'.format(self.base))
 		except:
-			n = random.randint(1,136)
-			s = '{}meme_(' + str(n) + ').png'
-			s2 = '{}meme_(' + str(n) + ').PNG'
-		try:
-			await self.bot.send_file(context.message.channel, choice(self.base).format(self.base))
-		except:
-			await self.bot.send_file(context.message.channel, choice(self.base).format(self.base))
+			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
 		try:
-			message = int(message)
-			s = '{}meme (' + str(message) + ').png'
-			s2 = '{}meme (' + str(message) + ').PNG'
+			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(self.base2len)) + ').png'.format(self.base2))
 		except:
-			n = random.randint(1,25)
-			s = '{}meme (' + str(n) + ').png'
-			s2 = '{}meme (' + str(n) + ').PNG'
-		try:
-			await self.bot.send_file(context.message.channel, choice(self.base2).format(self.base2))
-		except:
-			await self.bot.send_file(context.message.channel, choice(self.base2).format(self.base2))
+			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
@@ -72,7 +57,7 @@ class test:
 			except discord.Forbidden:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
-				await self.bot.say('A error occured. Please try again')
+				await self.bot.say('An error occured. Please try again')
 				
 	@commands.command(pass_context=True)
 	async def rateship(self, context, message, message2):

@@ -57,11 +57,11 @@ class talktoabby:
 		    answer = "We'll talk later..."
 		return answer
 	
-	async def on_message(self, context, message):
-		if context.message.channel.id == '232362669649297410' and context.message.author.id == '81026656365453312':
+	async def listener(self, message):
+		if message.channel.id == '232362669649297410' and message.author.id == '81026656365453312':
 			asyncio.sleep(10)
-			response = get_response(context.message.content)
-			await self.bot.send_message(context.message.channel, '!chat ' + response)
+			response = get_response(message.content)
+			await self.bot.send_message(message.channel, '!chat ' + response)
 
 def setup(bot):
 	n = talktoabby(bot)

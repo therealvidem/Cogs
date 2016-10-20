@@ -65,4 +65,5 @@ class talktoabby:
 
 def setup(bot):
 	n = talktoabby(bot)
+	bot.add_listener(n.listener, "on_message")
 	bot.add_cog(n)

@@ -46,7 +46,7 @@ class talktoabby:
 					"Our story. The origin of the group… I was going to give it to you guys earlier, but…","Y-yes, indeed we are."]
 			
 	async def listener(self, message):
-		if message.channel.id == '232362669649297410' and message.author.id == '81026656365453312':
+		if message.author.id == '81026656365453312':
 			asyncio.sleep(10)
 			response = get_response(message.content)
 			await self.bot.send_message(message.channel, '!chat ' + response)

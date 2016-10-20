@@ -36,14 +36,14 @@ class test:
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
 		try:
-			await self.bot.send_file(context.message.channel, '{}meme_(' + str(random.randInt(141)) + ').png'.format(self.base))
+			await self.bot.send_file(context.message.channel, '{}meme_(' + str(random.randint(141)) + ').png'.format(self.base))
 		except:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
 		try:
-			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(25)) + ').png'.format(self.base2))
+			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randint(25)) + ').png'.format(self.base2))
 		except:
 			await self.bot.say('An error occured.')
 			
@@ -76,7 +76,7 @@ class test:
 			ship = {
 				'p1': {p1},
 				'p2': {p2},
-				'rate': {random.randInt(1, 10)}
+				'rate': {random.randint(1, 10)}
 			}
 			self.shiplist[ship['p1'] + " x " + ship['p2']] = ship
 			dataIO.save_json(JSON_PATH, self.shiplist)

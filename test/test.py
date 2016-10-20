@@ -21,8 +21,6 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
-		self.baselen = len([name for name in os.listdir('Red-DiscordBot/' + self.base) if os.path.isfile(name)])
-		self.base2len = len([name for name in os.listdir('Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json("data/shiplist.json")
 		
@@ -38,14 +36,14 @@ class test:
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
 		try:
-			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(self.baselen)) + ').png'.format(self.base))
+			await self.bot.send_file(context.message.channel, '{}meme_(' + str(random.randInt(141)) + ').png'.format(self.base))
 		except:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
 		try:
-			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(self.base2len)) + ').png'.format(self.base2))
+			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randInt(25)) + ').png'.format(self.base2))
 		except:
 			await self.bot.say('An error occured.')
 			

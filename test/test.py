@@ -27,7 +27,34 @@ class test:
 		self.shiplist = dataIO.load_json("data/shiplist.json")
 		self.shiplistsay = {
 			'1': {
-				'	
+				'I think you should try harder'
+			},
+			'2': {
+				'they\'ll last a week'
+			}
+			'3': {
+				'it could be better... not really..'
+			}
+			'4': {
+				'not that good but pretty decent'
+			}
+			'5': {
+				'maybe it\'ll be work'	
+			}
+			'6': {
+				'a little more interactiong would be great'
+			}
+			'7': {
+				'the lucky number 7 is in favor of this ship'
+			}
+			'8': {
+				'what a great ship'	
+			}
+			'9': {
+				'HOT DAMN THAT\'S A NICE SHIP'	
+			}
+			'10': {
+				'*bows down to the ship*'
 			}
 		}
 		
@@ -37,6 +64,8 @@ class test:
 				await self.bot.send_message(message.channel, '¡Harambe!')
 			elif message.content.lower().startswith('japanese'):
 				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
+			elif message.content.lower().startswith('woah'):
+				await self.bot.send_message(message.channel, 'whoa*')
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
@@ -75,7 +104,15 @@ class test:
 	async def rateship(self, context, message, message2):
 		if self.shiplist[message.content + " x " + message2.content]:
 			ship = self.shiplist[message.content + " x " + message2.content]
-			await.self.bot.say('I give the %q x %w ship a %e/10. %y' % (message.content, message2.content, ship.rate, ))  
+			await.self.bot.say('I give the %q x %w ship a %e/10. %y.' % (message.content, message2.content, ship.rate, self.shiplistsay[ship.rate]))
+		else:
+			ship = {
+				'p1': {message.content},
+				'p2': {message2.content},
+				'rate': {random.randInt(1, 10)}
+			}
+			self.shiplist[ship['p1'] + " x " + ship['p2']] = ship
+			dataIO.save_json(JSON_PATH, self.shiplist)
 
 def check_files():
     if not dataIO.is_valid_json('shiplist.json'):

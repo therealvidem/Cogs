@@ -31,28 +31,28 @@ class test:
 			},
 			'2': {
 				'they\'ll last a week'
-			}
+			},
 			'3': {
 				'it could be better... not really..'
-			}
+			},
 			'4': {
 				'not that good but pretty decent'
-			}
+			},
 			'5': {
 				'maybe it\'ll be work'	
-			}
+			},
 			'6': {
 				'a little more interactiong would be great'
-			}
+			},
 			'7': {
 				'the lucky number 7 is in favor of this ship'
-			}
+			},
 			'8': {
 				'what a great ship'	
-			}
+			},
 			'9': {
 				'HOT DAMN THAT\'S A NICE SHIP'	
-			}
+			},
 			'10': {
 				'*bows down to the ship*'
 			}

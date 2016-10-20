@@ -72,7 +72,7 @@ class test:
 	async def rateship(self, context, message, message2):
 		if self.shiplist[message.content + " x " + message2.content]:
 			ship = self.shiplist[message.content + " x " + message2.content]
-			await.self.bot.say('I give the %q x %w ship a %e/10.' % (message.content, message2.content, ship.rate))
+			await.self.bot.say('I give the {} x {} ship a {}/10.'.format(message.content, message2.content, ship.rate))
 		else:
 			ship = {
 				'p1': {message.content},

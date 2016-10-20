@@ -45,6 +45,12 @@ class talktoabby:
 					"No. Nothing can clean up the mess I’ve created, and now the world’s in danger because of me…",
 					"Our story. The origin of the group… I was going to give it to you guys earlier, but…","Y-yes, indeed we are."]
 			
+	async def listener(self, message):
+		if message.channel.id == '232362669649297410' and message.author.id == '81026656365453312':
+			asyncio.sleep(10)
+			response = get_response(message.content)
+			await self.bot.send_message(message.channel, '!chat ' + response)
+			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):
 		await self.bot.say('!chat ' + random.choice(self.quotes))
@@ -56,12 +62,6 @@ class talktoabby:
 		except asyncio.TimeoutError:
 		    answer = "We'll talk later..."
 		return answer
-	
-	async def listener(self, message):
-		if message.channel.id == '232362669649297410' and message.author.id == '81026656365453312':
-			asyncio.sleep(10)
-			response = get_response(message.content)
-			await self.bot.send_message(message.channel, '!chat ' + response)
 
 def setup(bot):
 	n = talktoabby(bot)

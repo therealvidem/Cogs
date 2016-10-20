@@ -71,7 +71,8 @@ class test:
 		str = p1 + ' x ' + p2
 		if self.shiplist.get(str):
 			ship = self.shiplist.get(str)
-			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(ship['rate']) + '/10.')
+			rate = ship['rate']
+			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
 		else:
 			ship = {
 				'p1': p1,
@@ -80,7 +81,8 @@ class test:
 			}
 			self.shiplist[str] = ship
 			dataIO.save_json('data/test/shiplist.json', self.shiplist)
-			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(ship['rate']) + '/10.')
+			rate = ship['rate']
+			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
 
 def check_files():
     if not dataIO.is_valid_json('data/test/shiplist.json'):

@@ -63,7 +63,7 @@ class test:
 				await self.bot.say('An error occured. Please try again')
 				
 	@commands.command(pass_context=True)
-	async def getchannelid(self, context, mesage):
+	async def getchannelid(self, context, message):
 		await self.bot.say(message.channel.id)
 				
 	@commands.command(pass_context=True)

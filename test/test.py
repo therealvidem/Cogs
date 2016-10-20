@@ -86,7 +86,7 @@ def check_files():
         dataIO.save_json('shiplist.json', {})
 
 def setup(bot):
-	n = test(bot)
 	check_files()
+	n = test(bot)
 	bot.add_listener(n.listener, "on_message")
 	bot.add_cog(n)

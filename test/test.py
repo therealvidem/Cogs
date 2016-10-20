@@ -22,7 +22,7 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.clv = Clv()
-		self.shiplist = dataIO.load_json("data/shiplist.json")
+		self.shiplist = dataIO.load_json("data/test/shiplist.json")
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
@@ -81,9 +81,9 @@ class test:
 			dataIO.save_json(JSON_PATH, self.shiplist)
 
 def check_files():
-    if not dataIO.is_valid_json('shiplist.json'):
+    if not dataIO.is_valid_json('data/test/shiplist.json'):
         print("Creating duelist.json...")
-        dataIO.save_json('shiplist.json', {})
+        dataIO.save_json('data/test/shiplist.json', {})
 
 def setup(bot):
 	check_files()

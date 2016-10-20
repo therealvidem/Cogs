@@ -79,7 +79,7 @@ class test:
 				'rate': {random.randint(1, 10)}
 			}
 			self.shiplist[str] = ship
-			dataIO.save_json(JSON_PATH, self.shiplist)
+			dataIO.save_json('data/test/shiplist.json', self.shiplist)
 
 def check_files():
     if not dataIO.is_valid_json('data/test/shiplist.json'):

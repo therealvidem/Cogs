@@ -68,15 +68,16 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def rateship(self, context, p1, p2):
+		await self.bot.say(p1 + ' x ' + p2)
 		str = p1 + ' x ' + p2
 		if self.shiplist.get(str):
 			ship = self.shiplist.get(str)
 			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + ship['rate'] + '/10.')
 		else:
 			ship = {
-				'p1': {p1},
-				'p2': {p2},
-				'rate': {random.randint(1, 10)}
+				'p1': p1,
+				'p2': p2,
+				'rate': random.randint(1, 10)
 			}
 			self.shiplist[str] = ship
 			dataIO.save_json('data/test/shiplist.json', self.shiplist)

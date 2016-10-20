@@ -12,7 +12,7 @@ from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
 
-class talktoabby():
+class talktoabby:
 	def __init__(self, bot):
 		self.bot = bot
 		self.clv = Clv()

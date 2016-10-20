@@ -36,7 +36,7 @@ class talktoabby():
 					"and she claimed she knew us, and that she tried to kill me in the bathroom!",
 					"Crazy. I know, right?","I think we should be safe here. If we see him coming, we should run…",
 					"If they come, we’ll hear them. If we come, they’ll hear us louder, and if we run, they’ll be there.",
-					"I just- wanted some time to rest and think.","Uh…","Well… what?",p
+					"I just- wanted some time to rest and think.","Uh…","Well… what?",
 					"You know, sometimes, I think to myself, does a star ever die?",
 					"That’s not what I mean. What I meantersay is; do stars ever fully dissipate itself from the universe? Science says its atoms merely convert into something else- even in black holes- but, perhaps, there is something that can cause anything to disappear forever, not leaving any trail of it behind. Boom. It’s gone and done for. Would it not be known or remembered, as its existence was only merely an illusion?",
 					"Did you hear that?","Run, Abby! Go, hurry!","Of course, I had to keep it a secret! I also lied about the vacation…",

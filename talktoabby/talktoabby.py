@@ -45,7 +45,7 @@ class talktoabby:
 					"No. Nothing can clean up the mess I’ve created, and now the world’s in danger because of me…",
 					"Our story. The origin of the group… I was going to give it to you guys earlier, but…","Y-yes, indeed we are."]
 			
-	async def listener(self, message):
+	async def on_message(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '238651267692363787':
 			await asyncio.sleep(10)
 			await self.bot.send_message(message.channel, 'test2')

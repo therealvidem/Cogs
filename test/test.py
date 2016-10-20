@@ -67,15 +67,15 @@ class test:
 		await self.bot.say(message.channel.id)
 				
 	@commands.command(pass_context=True)
-	async def rateship(self, context, message=None, *, message2=None):
-		str = message.content + ' x ' + message2.content
+	async def rateship(self, context, p1=None, *, p1=None):
+		str = p1 + ' x ' + p1
 		if self.shiplist.get(str):
 			ship = self.shiplist.get(str)
-			await self.bot.say('I give the ' + message.content + ' x ' + message2.content + ' ship a ' + ship['rate'] + '/10.')
+			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + ship['rate'] + '/10.')
 		else:
 			ship = {
-				'p1': {message.content},
-				'p2': {message2.content},
+				'p1': {p1},
+				'p2': {p2},
 				'rate': {random.randInt(1, 10)}
 			}
 			self.shiplist[ship['p1'] + " x " + ship['p2']] = ship

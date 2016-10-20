@@ -25,18 +25,17 @@ class test:
 		self.base2len = len([name for name in os.listdir('Red-DiscordBot/' + self.base2) if os.path.isfile(name)])
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json("data/shiplist.json")
-		self.shiplistsay = {'1': {'I think you should try harder'},
-				    '2': {'they\'ll last a week'},
-				    '3': {'it could be better... not really..'},
-				    '4': {'not that good but pretty decent'},
-				    '5': {'maybe it\'ll be work'},
-				    '6': {'a little more interactiong would be great'},
-				    '7': {'the lucky number 7 is in favor of this ship'},
-				    '8': {'what a great ship',
-					  'hot'},
-				    '9': {'HOT DAMN THAT\'S A NICE SHIP'},
-				    '10': {'*bows down to the ship*'}
-		}
+		self.shiplistsay = {'1': {'1': 'I think you should try harder'},
+				    '2': {'1': 'they\'ll last a week'},
+				    '3': {'1': 'it could be better... not really..'},
+				    '4': {'1': 'not that good but pretty decent'},
+				    '5': {'1': 'maybe it\'ll be work'},
+				    '6': {'1': 'a little more interactiong would be great'},
+				    '7': {'1': 'the lucky number 7 is in favor of this ship'},
+				    '8': {'1': 'what a great ship',
+					  '2': 'hot'},
+				    '9': {'1': 'HOT DAMN THAT\'S A NICE SHIP'},
+				    '10': {'1': '*bows down to the ship*'}}
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:

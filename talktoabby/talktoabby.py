@@ -48,8 +48,9 @@ class talktoabby:
 	async def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '238651267692363787':
 			await asyncio.sleep(10)
-			response = await self.get_response(message)
-			await self.bot.say('!chat ' + response)
+			await self.bot.send_message(message.channel, 'test2')
+			response = await self.get_response(message.content)
+			await self.bot.send_message(message.channel, '!chat ' + response)
 			
 	@commands.command(pass_context=True)
 	async def talktoabby(self, context):

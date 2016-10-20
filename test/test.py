@@ -68,8 +68,9 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def rateship(self, context, message, message2):
-		if self.shiplist.get(message.content + ' x ' + message2.content):
-			ship = self.shiplist.get(message.content + ' x ' + message2.content)
+		str = message.content + ' x ' + message2.content
+		if self.shiplist.get(str):
+			ship = self.shiplist.get(str)
 			await self.bot.say('I give the ' + message.content + ' x ' + message2.content + ' ship a ' + ship['rate'] + '/10.')
 		else:
 			ship = {

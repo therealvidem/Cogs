@@ -78,7 +78,7 @@ class test:
 				'p2': {p2},
 				'rate': {random.randint(1, 10)}
 			}
-			self.shiplist[ship['p1'] + " x " + ship['p2']] = ship
+			self.shiplist[str] = ship
 			dataIO.save_json(JSON_PATH, self.shiplist)
 
 def check_files():

@@ -36,16 +36,16 @@ class test:
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, message):
 		try:
-			await self.bot.send_file(message.channel, self.base + 'meme_(' + str(message.content) + ').png')
+			await self.bot.send_file(message.channel, self.base + 'meme_(' + message.content + ').png')
 		except:
-			await self.bot.send_file(message.channel, self.base + 'meme_(' + str(random.randint(1, 141)) + ').png')
+			await self.bot.send_file(message.channel, self.base + 'meme_(' + random.randint(1, 141) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
 		try:
-			await self.bot.send_file(message.channel, self.base2 + 'meme (' + str(message.content) + ').png')
+			await self.bot.send_file(message.channel, self.base2 + 'meme (' + message.content + ').png')
 		except:
-			await self.bot.send_file(message.channel, self.base2 + 'meme (' + str(random.randint(1, 27)) + ').png')
+			await self.bot.send_file(message.channel, self.base2 + 'meme (' + random.randint(1, 27) + ').png')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)

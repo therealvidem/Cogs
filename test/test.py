@@ -43,7 +43,8 @@ class test:
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, message):
 		try:
-			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randint(25)) + ').png'.format(self.base2))
+			await self.bot.say('{}meme (' + str(random.randint(27)) + ').png')
+			await self.bot.send_file(context.message.channel, '{}meme (' + str(random.randint(27)) + ').png'.format(self.base2))
 		except:
 			await self.bot.say('An error occured.')
 			

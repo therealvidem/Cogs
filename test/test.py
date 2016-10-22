@@ -74,6 +74,7 @@ class test:
 			message2.replace(' ', '+')
 			startIndex = 0
 			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + message2 + "&start=" + str(startIndex)
+			await self.bot.say(searchUrl)
 			f = fetcher.open(searchUrl)
 			deserialized_output = simplejson.load(f)
 			imageUrl = deserialized_output['responseData']['results']['0']['unescapedUrl']

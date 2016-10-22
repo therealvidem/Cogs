@@ -70,7 +70,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def google(self, context, message, message2):
 		if message == 'image':
-			fetcher = urllib2.build_opener()
+			fetcher = urllib.build_opener()
 			searchTerm = str.replace(' ', '+')
 			startIndex = 0
 			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + startIndex

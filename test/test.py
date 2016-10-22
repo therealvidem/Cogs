@@ -72,6 +72,7 @@ class test:
 		if message == 'image':
 			fetcher = urllib.request.build_opener()
 			searchTerm = message.replace(' ', '+')
+			await self.bot.say(searchTerm)
 			startIndex = 0
 			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + str(startIndex)
 			f = fetcher.open(searchUrl)

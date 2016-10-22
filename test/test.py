@@ -71,9 +71,9 @@ class test:
 	async def google(self, context, message, message2):
 		if message == 'image':
 			fetcher = urllib.request.build_opener()
-			searchTerm = message2.replace(' ', '+')
+			message2.replace(' ', '+')
 			startIndex = 0
-			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + str(startIndex)
+			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + message2 + "&start=" + str(startIndex)
 			f = fetcher.open(searchUrl)
 			deserialized_output = simplejson.load(f)
 			imageUrl = deserialized_output['responseData']['results']['0']['unescapedUrl']

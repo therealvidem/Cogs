@@ -6,7 +6,7 @@ import asyncio
 import time
 import urllib.request
 import simplejson
-import cStringIO
+from io import StringIO
 try:
     from cleverbot import Cleverbot as Clv
 except:

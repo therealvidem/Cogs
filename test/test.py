@@ -68,7 +68,7 @@ class test:
 				await self.bot.say('An error occured. Please try again')
 	
 	@commands.command(pass_context=True)
-	async def google(self, context, messsage, message2):
+	async def google(self, context, message, message2):
 		if message == 'image':
 			fetcher = urllib2.build_opener()
 			searchTerm = str.replace(' ', '+')

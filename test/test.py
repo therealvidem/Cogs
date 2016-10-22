@@ -4,7 +4,7 @@ from discord.ext import commands
 from .utils import checks
 import asyncio
 import time
-import urllib2
+import urllib.request
 import simplejson
 import cStringIO
 try:

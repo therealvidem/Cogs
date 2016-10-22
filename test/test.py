@@ -66,21 +66,6 @@ class test:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
 				await self.bot.say('An error occured. Please try again')
-	
-	@commands.command(pass_context=True)
-	async def google(self, context, message, message2):
-		if message == 'image':
-			fetcher = urllib.request.build_opener()
-			startIndex = 0
-			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + message2.replace(' ', '+') + "&start=" + str(startIndex)
-			await self.bot.say(searchUrl)
-			f = fetcher.open(searchUrl)
-			deserialized_output = simplejson.load(f)
-			imageUrl = deserialized_output['responseData']['results']['0']['unescapedUrl']
-			file = cStringIO.StringIO(urllib.urlopen(imageUrl).read())
-			img = Image.open(file)
-			await self.bot.send_file(context.message.channel, img)
-			
 				
 	@commands.command(pass_context=True)
 	async def getchannelid(self, context, message):

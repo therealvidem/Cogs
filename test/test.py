@@ -76,7 +76,7 @@ class test:
 			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + str(startIndex)
 			f = fetcher.open(searchUrl)
 			deserialized_output = simplejson.load(f)
-			imageUrl = deserialized_output['responseData']['results'][0]['unescapedUrl']
+			imageUrl = deserialized_output['responseData']['results']['0']['unescapedUrl']
 			file = cStringIO.StringIO(urllib.urlopen(imageUrl).read())
 			img = Image.open(file)
 			await self.bot.send_file(context.message.channel, img)

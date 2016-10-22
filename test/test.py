@@ -35,17 +35,19 @@ class test:
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = 0):
-		memenum = num
-		if memenum == 0:
-			memenum = random.randint(1, 141)
-		await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(memenum) + ').png')
+		memenum = memenum = random.randint(1, 141)
+		try:
+			await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, num = 0):
-		memenum = num
-		if memenum == 0:
-			memenum = random.randint(1, 27)
-		await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
+		memenum = memenum = random.randint(1, 27)
+		try:
+			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)

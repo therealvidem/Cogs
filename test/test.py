@@ -71,7 +71,7 @@ class test:
 	async def google(self, context, message, message2):
 		if message == 'image':
 			fetcher = urllib.request.build_opener()
-			searchTerm = str.replace(' ', '+')
+			searchTerm = message.replace(' ', '+')
 			startIndex = 0
 			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + startIndex
 			f = fetcher.open(searchUrl)

@@ -73,7 +73,7 @@ class test:
 			fetcher = urllib.request.build_opener()
 			searchTerm = message.replace(' ', '+')
 			startIndex = 0
-			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + startIndex
+			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + str(startIndex)
 			f = fetcher.open(searchUrl)
 			deserialized_output = simplejson.load(f)
 			imageUrl = deserialized_output['responseData']['results'][0]['unescapedUrl']

@@ -4,6 +4,9 @@ from discord.ext import commands
 from .utils import checks
 import asyncio
 import time
+import urllib2
+import simplejson
+import cStringIO
 try:
     from cleverbot import Cleverbot as Clv
 except:
@@ -63,6 +66,21 @@ class test:
 				await self.bot.say('I have no permission to move members.')
 			except discord.HTTPException:
 				await self.bot.say('An error occured. Please try again')
+	
+	@commands.command(pass_context=True)
+	async def google(self, context, messsage, message2):
+		if message == 'image':
+			fetcher = urllib2.build_opener()
+			searchTerm = str.replace(' ', '+')
+			startIndex = 0
+			searchUrl = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + searchTerm + "&start=" + startIndex
+			f = fetcher.open(searchUrl)
+			deserialized_output = simplejson.load(f)
+			imageUrl = deserialized_output['responseData']['results'][0]['unescapedUrl']
+			file = cStringIO.StringIO(urllib.urlopen(imageUrl).read())
+			img = Image.open(file)
+			await self.bot.send_file(context.message.channel, img)
+			
 				
 	@commands.command(pass_context=True)
 	async def getchannelid(self, context, message):

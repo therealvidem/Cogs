@@ -34,16 +34,16 @@ class test:
 				await self.bot.send_message(message.channel, 'whoa*')
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
-	async def pearl(self, context, message):
+	async def pearl(self, context, num):
 		try:
-			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + message.content + ').png')
+			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + num + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(random.randint(1, 141)) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
-	async def bar(self, context, message):
+	async def bar(self, context, num):
 		try:
-			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + message.content + ').png')
+			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + num + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(random.randint(1, 27)) + ').png')
 			

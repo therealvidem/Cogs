@@ -3,7 +3,7 @@ import xmltodict
 
 class color:
 	def __init__(self, bot):
-	self.bot = bot
+		self.bot = bot
 	
 	@commands.command(pass_context=True)
 	async def hexcolor(self, context, colr):

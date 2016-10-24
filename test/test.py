@@ -91,13 +91,6 @@ class test:
 			dataIO.save_json('data/test/shiplist.json', self.shiplist)
 			rate = ship['rate']
 			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
-	
-	@commands.command(pass_context=True)
-	async def addvp(self, context, url):
-		count = self.memes['vp'] + 1
-		urllib.request.urlretrieve(url, self.base + 'memes_(' + count + ').png')
-		self.memes['vp'] = count
-		dataIO.save_json('data/test/memes.json', self.memes)
 
 	@commands.command(pass_context=True)
 	async def addvp(self, context, url):

@@ -13,8 +13,8 @@ class color:
 	
 	@commands.command(pass_context=True)
 	async def hexcolor(self, context, colr):
-		colour = self.Colour(colr)
-		await self.bot.say(colour.image_url)
+		colr.replace('#', '')
+		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 
 def setup(bot):
 	n = color(bot)

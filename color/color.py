@@ -13,7 +13,7 @@ class color:
 	
 	@commands.command(pass_context=True)
 	async def hexcolor(self, context, colr):
-		colour = cl.color(colr)
+		colour = self.cl.color(colr)
 		await self.bot.say(colour.imageUrl)
 
 def setup(bot):

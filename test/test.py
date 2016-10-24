@@ -100,7 +100,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def addvp(self, context, url):
 		count = self.memes['vb'] + 1
-		urllib.request.urlretrieve(url, self.base + 'memes (' + count + ').png')
+		urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vb'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
 

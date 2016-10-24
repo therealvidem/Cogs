@@ -94,10 +94,22 @@ class test:
 
 	@commands.command(pass_context=True)
 	async def addvp(self, context, url):
+		count = self.memes['vp'] + 1
+		r = requests.get(url, stream=True)
+		if r.status_code == 200:
+			with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
+				r.raw.decode_content = True
+				shutil.copyfileobj(r.raw, f)
+		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
+		self.memes['vp'] = count
+		dataIO.save_json('data/test/memes.json', self.memes)
+		
+	@commands.command(pass_context=True)
+	async def addvb(self, context, url):
 		count = self.memes['vb'] + 1
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
-			with open(self.base + 'memes (' + str(count) + ').png', 'wb') as f:
+			with open(self.base + 'meme (' + str(count) + ').png', 'wb') as f:
 				r.raw.decode_content = True
 				shutil.copyfileobj(r.raw, f)
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')

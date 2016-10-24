@@ -109,7 +109,7 @@ class test:
 		count = self.memes['vb'] + 1
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
-			with open(self.base + 'meme (' + str(count) + ').png', 'wb') as f:
+			with open(self.base2 + 'meme (' + str(count) + ').png', 'wb') as f:
 				r.raw.decode_content = True
 				shutil.copyfileobj(r.raw, f)
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')

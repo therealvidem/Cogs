@@ -1,5 +1,7 @@
 import urllib.request
 import xmltodict
+from discord.ext import commands
+import asyncio
 
 class color:
 	def __init__(self, bot):

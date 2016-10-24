@@ -25,7 +25,8 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.clv = Clv()
-		self.shiplist = dataIO.load_json("data/test/shiplist.json")
+		self.shiplist = dataIO.load_json('data/test/shiplist.json')
+		self.memes = dataIO.load_json('data/test/memes.json')
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
@@ -38,7 +39,7 @@ class test:
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):
-		memenum = random.randint(1, 142)
+		memenum = random.randint(1, self.memes['vp'])
 		try:
 			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(num) + ').png')
 		except:
@@ -46,7 +47,7 @@ class test:
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, num = '0'):
-		memenum = random.randint(1, 27)
+		memenum = random.randint(1, self.memes['vb'])
 		try:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
 		except:
@@ -88,11 +89,26 @@ class test:
 			dataIO.save_json('data/test/shiplist.json', self.shiplist)
 			rate = ship['rate']
 			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
+	
+	@commands.command(pass_context=True)
+	async def addvp(self, context, url):
+		count = self.memes['vp'] + 1
+		urllib.request.urlretrieve(url, self.base + 'memes_(' + count + ').png')
+		self.memes['vp'] = count
+		dataIO.save_json('data/test/memes.json', self.memes)
+
+	@commands.command(pass_context=True)
+	async def addvp(self, context, url):
+		count = self.memes['vb'] + 1
+		urllib.request.urlretrieve(url, self.base + 'memes (' + count + ').png')
+		self.memes['vb'] = count
+		dataIO.save_json('data/test/memes.json', self.memes)
 
 def check_files():
-    if not dataIO.is_valid_json('data/test/shiplist.json'):
-        print("Creating duelist.json...")
-        dataIO.save_json('data/test/shiplist.json', {})
+	if not dataIO.is_valid_json('data/test/shiplist.json'):
+		dataIO.save_json('data/test/shiplist.json', {})
+	if not dataIO.is_valid_json('data/test/memes.json'):
+		dataIO.save_json('data/test/memes.json', {'vp': 142, 'vb': 27})
 
 def setup(bot):
 	check_files()

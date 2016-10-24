@@ -10,7 +10,7 @@ class color:
 	@commands.command(pass_context=True)
 	async def hexcolor(self, context, colr):
 		colr.replace('#', '')
-		file = urllib2.urlopen('http://www.colourlovers.com/api/color/' + colr)
+		file = urllib.request.urlopen('http://www.colourlovers.com/api/color/' + colr)
 		data = file.read()
 		file.close()
 		data = xmltodict.parse(data)

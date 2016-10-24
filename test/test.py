@@ -38,7 +38,7 @@ class test:
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):
-		memenum = memenum = random.randint(1, 141)
+		memenum = memenum = random.randint(1, 142)
 		try:
 			await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(num) + ').png')
 		except:

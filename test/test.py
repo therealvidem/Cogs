@@ -93,6 +93,7 @@ class test:
 			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
 
 	@commands.command(pass_context=True)
+	@checks.admin_or_permissions(kick_members=True)
 	async def addvp(self, context, url):
 		count = self.memes['vp'] + 1
 		r = requests.get(url, stream=True)
@@ -105,6 +106,7 @@ class test:
 		dataIO.save_json('data/test/memes.json', self.memes)
 		
 	@commands.command(pass_context=True)
+	@checks.admin_or_permissions(kick_members=True)
 	async def addvb(self, context, url):
 		count = self.memes['vb'] + 1
 		r = requests.get(url, stream=True)

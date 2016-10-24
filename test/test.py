@@ -16,6 +16,8 @@ from __main__ import send_cmd_help, user_allowed
 import os, os.path
 import threading
 from threading import Timer
+import requests
+import shutil
 from .utils.dataIO import dataIO
 
 
@@ -100,7 +102,12 @@ class test:
 	@commands.command(pass_context=True)
 	async def addvp(self, context, url):
 		count = self.memes['vb'] + 1
-		urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
+		r = requests.get(url, stream=True)
+		if r.status_code == 200:
+			with open(self.base + 'memes (' + str(count) + ').png', 'wb') as f:
+				r.raw.decode_content = True
+				shutil.copyfileobj(r.raw, f)
+		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vb'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
 

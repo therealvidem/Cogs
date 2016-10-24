@@ -9,7 +9,8 @@ class color:
 	
 	@commands.command(pass_context=True)
 	async def hexcolor(self, context, colr):
-        	file = urllib2.urlopen('https://www.goodreads.com/review/list/20990068.xml?key=nGvCqaQ6tn9w4HNpW8kquw&v=2&shelf=toread')
+		colr.replace('#', '')
+        	file = urllib2.urlopen('http://www.colourlovers.com/api/color/' + colr)
         	data = file.read()
         	file.close()
         	data = xmltodict.parse(data)

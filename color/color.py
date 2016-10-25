@@ -9,6 +9,11 @@ class color:
 	async def hexcolor(self, context, colr):
 		colr = colr.lower().replace('#', '')
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
+		
+	@commands.command(pass_context=True)
+	async def rgbcolor(self, context, r, g, b):
+		colr = '#%02x%02x%02x' % (r, g, b)
+		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 
 def setup(bot):
 	n = color(bot)

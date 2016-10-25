@@ -12,7 +12,7 @@ class color:
 		
 	@commands.command(pass_context=True)
 	async def rgbcolor(self, context, r, g, b):
-		colr = '#%02x%02x%02x' % (r, g, b)
+		colr = '#%02x%02x%02x' % (int(r), int(g), int(b))
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 
 def setup(bot):

@@ -8,7 +8,7 @@ class reaction:
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
-			if message.content.lower() == 'sara':
+			if message.content[0:4].lower() == 'sara':
 				await self.bot.send_message(message.channel, 'Ew!')
 				
 def setup(bot):

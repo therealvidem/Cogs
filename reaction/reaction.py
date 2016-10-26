@@ -10,6 +10,8 @@ class reaction:
 		if message.author.id != self.bot.user.id:
 			if message.content[0:4].lower() == 'sara':
 				await self.bot.send_message(message.channel, 'Ew!')
+			elif message.content[0:3].lower() == 'omg':
+				await self.bot.send_message(message.channel, '0 milligrams?')
 				
 def setup(bot):
 	n = reaction(bot)

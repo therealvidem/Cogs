@@ -16,6 +16,13 @@ class reaction:
 				await self.bot.send_message(message.channel, 'Oh my god?')
 			elif message.content[0:4].lower() == 'syrz':
 				await self.bot.send_message(message.channel, 'that was one of them sam constantly changed itt')
+		if message.author.id != self.bot.user.id:
+			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
+				await self.bot.send_message(message.channel, '¡Harambe!')
+			elif message.content.lower().startswith('japanese'):
+				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
+			elif message.content.lower().startswith('woah'):
+				await self.bot.send_message(message.channel, 'whoa*,  you uneducated swine.')
 				
 def setup(bot):
 	n = reaction(bot)

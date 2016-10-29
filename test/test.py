@@ -29,15 +29,6 @@ class test:
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
-		
-	async def listener(self, message):
-		if message.author.id != self.bot.user.id:
-			if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
-				await self.bot.send_message(message.channel, '¡Harambe!')
-			elif message.content.lower().startswith('japanese'):
-				await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
-			elif message.content.lower().startswith('woah'):
-				await self.bot.send_message(message.channel, 'whoa*')
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):

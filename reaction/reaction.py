@@ -14,6 +14,8 @@ class reaction:
 				await self.bot.send_message(message.channel, '0 milligrams?')
 			elif message.content[0:3].lower() == '0mg':
 				await self.bot.send_message(message.channel, 'Oh my god?')
+			elif message.content[0:4].lower() == 'sara':
+				await self.bot.send_message(message.channel, 'that was one of them sam constantly changed itt')
 				
 def setup(bot):
 	n = reaction(bot)

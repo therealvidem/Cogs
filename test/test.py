@@ -134,7 +134,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def rollbetween(self, context, one, two):
 		choice = random.randint(int(one), int(two))
-		await self.bot.say('You got ' + str(choice))
+		await self.bot.say('You got a ' + str(choice) + '.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

@@ -139,8 +139,6 @@ class test:
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):
 		dataIO.save_json('data/test/shiplist.json', {})
-	if not dataIO.is_valid_json('data/test/memes.json'):
-		dataIO.save_json('data/test/memes.json', {'vp': 142, 'vb': 27})
 
 def setup(bot):
 	check_files()

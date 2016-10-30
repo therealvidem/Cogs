@@ -26,6 +26,7 @@ class test:
 		self.bot = bot
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
+		self.base3 = 'data/test/imagesm/'
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
@@ -45,6 +46,14 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
+			
+	@commands.command(pass_context=True, invoke_without_command=True)
+	async def meme(self, context, num = '0'):
+		memenum = random.randint(1, self.memes['vm'])
+		try:
+			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)
@@ -107,6 +116,19 @@ class test:
 				shutil.copyfileobj(r.raw, f)
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vb'] = count
+		dataIO.save_json('data/test/memes.json', self.memes)
+		
+	@commands.command(pass_context=True)
+	@checks.admin_or_permissions(kick_members=True)
+	async def addvm(self, context, url):
+		count = self.memes['vm'] + 1
+		r = requests.get(url, stream=True)
+		if r.status_code == 200:
+			with open(self.base3 + 'meme (' + str(count) + ').png', 'wb') as f:
+				r.raw.decode_content = True
+				shutil.copyfileobj(r.raw, f)
+		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
+		self.memes['vm'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
 		
 	@commands.command(pass_context=True)

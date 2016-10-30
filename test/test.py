@@ -108,6 +108,11 @@ class test:
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vb'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
+		
+	@commands.command(pass_context=True)
+	async def rollbetween(self, context, one, two):
+		choice = random.randint(one, two)
+		await self.bot.say('You got ' + choice)
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

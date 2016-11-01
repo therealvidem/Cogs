@@ -135,6 +135,16 @@ class test:
 	async def rollbetween(self, context, one, two):
 		choice = random.randint(int(one), int(two))
 		await self.bot.say('You got a ' + str(choice) + '.')
+		
+	@commands.command(pass_context=True)
+	async def factorial(self, context, n):
+		rFactorial(n)
+		
+	async def rFactorial(n):
+		if (n == 0):
+			return 1
+		else:
+			return n * (rFactorial(n - 1))
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

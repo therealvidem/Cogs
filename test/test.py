@@ -138,7 +138,7 @@ class test:
 		
 	@commands.command(pass_context=True)
 	async def factorial(self, context, n):
-		await self.bot.say(n + '! =' + rFactorial(int(n)))
+		await self.bot.say(n + '! =' + str(rFactorial(int(n))))
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

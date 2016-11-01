@@ -136,12 +136,6 @@ class test:
 		choice = random.randint(int(one), int(two))
 		await self.bot.say('You got a ' + str(choice) + '.')
 		
-	def rFactorial(n):
-		if (n == 0):
-			return 1
-		else:
-			return n * (rFactorial(n - 1))
-		
 	@commands.command(pass_context=True)
 	async def factorial(self, context, n):
 		await self.bot.say(rFactorial(n))
@@ -149,6 +143,12 @@ class test:
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):
 		dataIO.save_json('data/test/shiplist.json', {})
+		
+def rFactorial(n):
+	if (n == 0):
+		return 1
+	else:
+		return n * (rFactorial(n - 1))
 
 def setup(bot):
 	check_files()

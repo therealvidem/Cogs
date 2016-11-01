@@ -136,7 +136,7 @@ class test:
 		choice = random.randint(int(one), int(two))
 		await self.bot.say('You got a ' + str(choice) + '.')
 		
-	async def rFactorial(n):
+	def rFactorial(n):
 		if (n == 0):
 			return 1
 		else:

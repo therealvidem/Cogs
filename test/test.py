@@ -138,10 +138,12 @@ class test:
 		
 	@commands.command(pass_context=True)
 	async def factorial(self, context, n):
-		if (n >= 0):
+		if (int(n) >= 0):
 			await self.bot.say(n + '! = ' + str(rFactorial(int(n))))
-		else:
+		elif (int(n) < 0):
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
+		else:
+			await self.bot.say('An error occured.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

@@ -19,10 +19,10 @@ class reaction:
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
-			for k, v in self.listensub:
+			for k, v in self.listensub.items():
 				if message.content[0:len(k)].lower() == k:
 					await self.bot.send_message(message.channel, v)
-			for k, v in self.listenstart:
+			for k, v in self.listenstart.items():
 				if message.content.lower().startswith(k):
 					await self.bot.send_message(message.channel, v)
 			# if message.content[0:4].lower() == 'sara':

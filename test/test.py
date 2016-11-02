@@ -75,7 +75,9 @@ class test:
 		await self.bot.say(str(message.channel.id))
 				
 	@commands.command(pass_context=True)
-	async def rateship(self, context, p1, xpart = 'x', p2):
+	async def rateship(self, context, p1, p2, otherpart = ''):
+		if p2 == 'x':
+			p2 = otherpart
 		strf = p1 + ' x ' + p2
 		if self.shiplist.get(strf):
 			ship = self.shiplist.get(strf)

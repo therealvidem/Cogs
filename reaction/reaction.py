@@ -13,7 +13,7 @@ class reaction:
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',
-			'japenese': 'I\'m sorry, I dont\'t speak Japanese.',
+			'japanese': 'I\'m sorry, I dont\'t speak Japanese.',
 			'woah': 'whoa*,  you uneducated swine.'
 		}
 		

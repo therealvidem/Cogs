@@ -71,8 +71,8 @@ class test:
 				await self.bot.say('An error occured. Please try again')
 				
 	@commands.command(pass_context=True)
-	async def getchannelid(self, context, message):
-		await self.bot.say(message.channel.id)
+	async def getchannelid(self, context):
+		await self.bot.say(str(message.channel.id))
 				
 	@commands.command(pass_context=True)
 	async def rateship(self, context, p1, p2):

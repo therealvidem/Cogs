@@ -14,7 +14,8 @@ class reaction:
 		self.listenstart = {
 			'hayy': '¡Harambe!',
 			'japanese': 'I\'m sorry, I dont\'t speak Japanese.',
-			'woah': 'whoa*,  you uneducated swine.'
+			'woah': 'whoa*,  you uneducated swine.',
+			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif'
 		}
 		
 	async def listener(self, message):

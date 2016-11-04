@@ -10,7 +10,7 @@ class reaction:
 			'sara': 'Ew!',
 			'omg': '0 milligrams?',
 			'0mg': 'Oh my god?',
-			'syrz': 'It\'s called a dress.'
+			'syrz': 'It\'s called a dress.',
 			'ppap': '/ban ' + self.mentionpass
 		}
 		self.listenstart = {

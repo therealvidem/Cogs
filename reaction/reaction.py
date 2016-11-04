@@ -5,11 +5,13 @@ import asyncio
 class reaction:
 	def __init__(self, bot):
 		self.bot = bot
+		self.mentionpass = ''
 		self.listensub = {
 			'sara': 'Ew!',
 			'omg': '0 milligrams?',
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.'
+			'ppap': '/ban ' + self.mentionpass
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',
@@ -20,6 +22,7 @@ class reaction:
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
+			self.mentionpass = message.author.username
 			for k, v in self.listensub.items():
 				if message.content[0:len(k)].lower() == k:
 					await self.bot.send_message(message.channel, v)

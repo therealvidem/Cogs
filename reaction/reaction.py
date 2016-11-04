@@ -11,7 +11,7 @@ class reaction:
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
-			'ppap': '/ban '
+			'ppap': '*bans '
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',
@@ -24,7 +24,7 @@ class reaction:
 			for k, v in self.listensub.items():
 				if message.content[0:len(k)].lower() == k:
 					if k == 'ppap':
-						await self.bot.send_message(message.channel, v + '{}'.format(message.author.username))
+						await self.bot.send_message(message.channel, v + message.author.username)
 					else:
 						await self.bot.send_message(message.channel, v)
 			for k, v in self.listenstart.items():

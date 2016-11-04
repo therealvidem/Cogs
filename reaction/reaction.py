@@ -9,7 +9,7 @@ class reaction:
 			'sara': 'Ew!',
 			'omg': '0 milligrams?',
 			'0mg': 'Oh my god?',
-			'syrz': 'that was one of them sam constantly changed itt'
+			'syrz': 'It\'s called a dress.'
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',

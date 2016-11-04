@@ -22,12 +22,12 @@ class reaction:
 		
 	async def listener(self, message):
 		if message.author.id != self.bot.user.id:
+			container = ''
 			for k, v in self.listensub.items():
 				if message.content[0:len(k)].lower() == k:
 					if k == 'ppap':
-						await self.bot.send_message(message.channel, v + message.author.username + '*')
-					else:
-						await self.bot.send_message(message.channel, v)
+						container = message.author.username + '*'
+					await self.bot.send_message(message.channel, v + container)
 			for k, v in self.listenstart.items():
 				if message.content.lower().startswith(k):
 					await self.bot.send_message(message.channel, v)

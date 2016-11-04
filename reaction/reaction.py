@@ -25,9 +25,9 @@ class reaction:
 			container = ''
 			for k, v in self.listensub.items():
 				if message.content[0:len(k)].lower() == k:
-					await.self.bot.send_message(message.channel, 'test')
+					await self.bot.send_message(message.channel, 'test')
 					if k == 'ppap':
-						await.self.bot.send_message(message.channel, 'test2')
+						await self.bot.send_message(message.channel, 'test2')
 						container = message.author.username + '*'
 					await self.bot.send_message(message.channel, v + container)
 			for k, v in self.listenstart.items():

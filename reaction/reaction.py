@@ -11,6 +11,7 @@ class reaction:
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
+			'darnit': 'Amethyst, and Pearl, and Steven!',
 			'ppap': '*bans '
 		}
 		self.listenstart = {

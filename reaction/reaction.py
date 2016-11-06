@@ -29,22 +29,8 @@ class reaction:
 						container = message.author.name + '*'
 					await self.bot.send_message(message.channel, v + container)
 			for k, v in self.listenstart.items():
-				if message.content.lower().startswith(k):
+				if message.content.lower().find(k) != -1:
 					await self.bot.send_message(message.channel, v)
-			# if message.content[0:4].lower() == 'sara':
-			#	await self.bot.send_message(message.channel, 'Ew!')
-			# elif message.content[0:3].lower() == 'omg':
-			#	await self.bot.send_message(message.channel, '0 milligrams?')
-			# elif message.content[0:3].lower() == '0mg':
-			#	await self.bot.send_message(message.channel, 'Oh my god?')
-			# elif message.content[0:4].lower() == 'syrz':
-			#	await self.bot.send_message(message.channel, 'that was one of them sam constantly changed itt')
-			# if message.content.lower().startswith('hayy') or message.content.lower().startswith('haayy'):
-			#	await self.bot.send_message(message.channel, '¡Harambe!')
-			# elif message.content.lower().startswith('japanese'):
-			#	await self.bot.send_message(message.channel, 'I\'m sorry, I don\'t speak Japanese.')
-			# elif message.content.lower().startswith('woah'):
-			#	await self.bot.send_message(message.channel, 'whoa*,  you uneducated swine.')
 				
 def setup(bot):
 	n = reaction(bot)

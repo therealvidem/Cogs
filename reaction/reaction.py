@@ -10,13 +10,13 @@ class reaction:
 			'omg': '0 milligrams?',
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
-			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
 			'ppap': '*bans '
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',
 			'japanese': 'I\'m sorry, I dont\'t speak Japanese.',
+			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
 			'woah': 'whoa*,  you uneducated swine.'
 		}
 		

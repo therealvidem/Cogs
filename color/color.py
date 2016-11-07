@@ -16,7 +16,7 @@ class color:
 		colr = '%02x%02x%02x' % (int(r), int(g), int(b))
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 		
-	@commands.command()
+	@commands.command(pass_context=True)
 	async def randomcolor(self, context):
 		colr = rgbcol(random.randint(1, 3))
 		for x in range(0, 4):

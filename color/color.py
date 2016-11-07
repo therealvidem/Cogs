@@ -1,5 +1,6 @@
 from discord.ext import commands
 import asyncio
+import random
 
 class color:
 	def __init__(self, bot):

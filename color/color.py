@@ -20,6 +20,7 @@ class color:
 	@commands.command(pass_context=True)
 	async def randomcolor(self, context):
 		rand = random.randint(1, 3)
+		colr = ''
 		if rand == 1:
 			colr = 'F*0000'
 		elif rand == 2:

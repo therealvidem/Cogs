@@ -19,17 +19,10 @@ class color:
 		
 	@commands.command(pass_context=True)
 	async def randomcolor(self, context):
-		rand = random.randint(1, 3)
-		colr = ''
-		if rand == 1:
-			colr = 'F*0000'
-		elif rand == 2:
-			colr = '00F*00'
-		else:
-			colr = '0000F*'
-		for x in range(0, 4):
-			colr = colr.replace('0', str(random.randint(0,9)), 1)
-		colr = colr.replace('*', random.choice(self.hexalphabet))
+		r = random.randint(0, 255)
+		g = random.randint(0, 255)
+		b = random.randint(0, 255)
+		colr = '%02x%02x%02x' % (int(r), int(g), int(b))
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 
 def setup(bot):

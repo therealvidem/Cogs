@@ -27,7 +27,7 @@ class color:
 		else:
 			colr = '0000F*'
 		for x in range(0, 4):
-			colr.replace('0', random.randint(0,10), 1)
+			colr.replace('0', str(random.randint(0,9)), 1)
 		colr.replace('*', random.choice(self.hexalphabet))
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 

@@ -31,13 +31,6 @@ class color:
 		colr.replace('*', random.choice(self.hexalphabet))
 		await self.bot.say('http://www.colorhexa.com/' + colr + '.png')
 
-def rgbcol(x):
-	return {
-		'1': 'F*0000',
-		'2': '00F*00',
-		'3': '0000F*'
-	}[x]
-
 def setup(bot):
 	n = color(bot)
 	bot.add_cog(n)

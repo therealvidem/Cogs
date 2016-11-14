@@ -16,7 +16,8 @@ class hangman:
 		self.guessword = ''
         
 	@commands.command(pass_context=True)
-	async def hangman(self, context, msg):
+	async def hangman(self, context, message):
+		msg = message.content
 		if msg == 'start' and not self.insession:
 			self.insession = true
 			self.word = random.choice(self.words)
@@ -35,7 +36,7 @@ class hangman:
 					await self.bot.say('You won!')
 					self.insession = true
 			else:
-				await.self.bot.say('There is no ' + msg)
+				await self.bot.say('There is no ' + msg)
 				self.guesses.append(msg)
 
 

@@ -5,7 +5,7 @@ from discord.ext import commands
 from .utils import checks
 import asyncio
 
-WORD_LIST = open('/usr/share/dict/words', 'r')
+WORD_LIST = open('#!/usr/share/dict/words', 'r')
 WORDS = WORD_LIST.readlines()
 
 class hangman:

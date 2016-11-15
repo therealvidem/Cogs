@@ -22,7 +22,7 @@ class hangman:
 		if msg == 'start' and not self.insession:
 			self.insession = True
 			self.word = random.choice(WORDS)
-			for x in range(0, len(self.word)):
+			for x in range(1, len(self.word)):
 				self.guessword = self.guessword + '-'
 			await self.bot.say('The word is ' + self.guessword)
 		elif msg == 'end' and self.insession:

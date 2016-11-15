@@ -18,12 +18,13 @@ class hangman:
         
 	@commands.command(pass_context=True)
 	async def hangman(self, context, message):
-		msg = message.content
+		msg = message
 		if msg == 'start' and not self.insession:
 			self.insession = True
 			self.word = random.choice(self.words)
 			for x in range(0, len(self.word)):
 				self.guessword = self.guessword + '_'
+			await self.bot.say('The word is ' + self.guessword)
 		elif msg == 'end' and self.insession:
 			self.insession = False
 			await self.bot.say('Ended session')
@@ -42,6 +43,7 @@ class hangman:
 			else:
 				await self.bot.say('There is no ' + msg)
 				self.guesses.append(msg)
+			await self.bot.say('The word is ' + self.guessword)
 
 
 def setup(bot):

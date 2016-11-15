@@ -20,8 +20,8 @@ class hangman:
 	@commands.command(pass_context=True)
 	@commands.cooldown(2, 2, commands.BucketType.user)
 	async def hangman(self, context, message):
-		msg = message
-		if msg.isalpha():
+		if message.isalpha():
+			msg = message.lower()
 			if msg == 'start' and not self.insession:
 				self.insession = True
 				self.word = random.choice(WORDS).lower()
@@ -63,6 +63,8 @@ class hangman:
 				await self.bot.say('You won with ' + str(self.numguesses) + ' guess(es)!')
 				self.insession = False
 			elif msg != self.word and self.insession:
+				await self.bot.say('msg' + msg)
+				await self.bot.say('self.word' + self.word)
 				self.numguesses = self.numguesses + 1
 				await self.bot.say('It\'s not ' + msg)
 

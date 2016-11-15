@@ -33,9 +33,11 @@ class hangman:
 				await self.bot.say('You already guessed that.')
 			elif self.word.find(msg) != -1:
 				await self.bot.say('There is a(n) ' + msg)
-				for x in range(0, len(self.word)):
-					if self.word[x:x] == msg:
-						self.guessword[x:x] == msg
+				index = 0
+				for letter in self.word:
+					index = index + 1
+					if letter == msg:
+						self.guessword[index:index + 1] == msg
 				self.guesses.append(msg)
 				if self.guessword.index('_') == -1:
 					await self.bot.say('You won!')

@@ -11,7 +11,7 @@ WORDS = WORD_LIST.readlines()
 class hangman:
 	def __init__(self, bot):
 		self.bot = bot
-		self.insession = false
+		self.insession = False
 		self.guesses = list()
 		self.word = ''
 		self.guessword = ''
@@ -20,10 +20,13 @@ class hangman:
 	async def hangman(self, context, message):
 		msg = message.content
 		if msg == 'start' and not self.insession:
-			self.insession = true
+			self.insession = True
 			self.word = random.choice(self.words)
 			for x in range(0, len(self.word)):
 				self.guessword = self.guessword + '_'
+		elif msg == 'end' and self.insession:
+			self.insession = False
+			await self.bot.say('Ended session')
 		elif len(msg) == 1 and self.insession:
 			if self.guesses.index(msg):
 				await self.bot.say('You already guessed that.')
@@ -35,7 +38,7 @@ class hangman:
 				self.guesses.append(msg)
 				if not self.guessword.find('_'):
 					await self.bot.say('You won!')
-					self.insession = true
+					self.insession = False
 			else:
 				await self.bot.say('There is no ' + msg)
 				self.guesses.append(msg)

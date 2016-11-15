@@ -17,7 +17,7 @@ class hangman:
 		self.guessword = ''
         
 	@commands.command(pass_context=True)
-	@commands.cooldown(2, 60, commands.BucketType.user)
+	@commands.cooldown(2, 2, commands.BucketType.user)
 	async def hangman(self, context, message):
 		msg = message
 		if msg == 'start' and not self.insession:

@@ -31,13 +31,13 @@ class hangman:
 		elif len(msg) == 1 and self.insession:
 			if msg in self.guesses:
 				await self.bot.say('You already guessed that.')
-			elif self.word.find(msg):
+			elif self.word.find(msg) != -1:
 				await self.bot.say('There is a(n) ' + msg)
 				for x in range(0, len(self.word)):
 					if self.word[x:x] == msg:
 						self.guessword[x:x] == msg
 				self.guesses.append(msg)
-				if not self.guessword.find('_'):
+				if self.guessword.index('_') == -1:
 					await self.bot.say('You won!')
 					self.insession = False
 			else:

@@ -49,6 +49,13 @@ class hangman:
 		elif msg == self.word and self.insession:
 			await self.bot.say('You won!')
 			self.insession = False
+			
+	@commands.command(pass_context=True)
+	async def hangmanguesses(self, context, *):
+		if self.insession:
+			await self.bot.say('[%s]' % ', '.join(map(str, self.guesses))
+		else:
+			await self.bot.say('There is no game currently running.')
 
 
 def setup(bot):

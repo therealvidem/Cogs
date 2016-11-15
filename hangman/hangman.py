@@ -23,6 +23,7 @@ class hangman:
 			self.insession = True
 			self.word = random.choice(WORDS)
 			self.guessword = ''
+			self.guesses = []
 			for x in range(1, len(self.word)):
 				self.guessword = self.guessword + '-'
 			await self.bot.say('The word is ' + self.guessword)
@@ -30,11 +31,10 @@ class hangman:
 			self.insession = False
 			await self.bot.say('Ended session')
 			await self.bot.say('The word was ' + self.word)
-		elif msg == 'guesses' and self.insession:
-			await self.bot.say('[%s]' % ', '.join(map(str, self.guesses)))
 		elif len(msg) == 1 and self.insession:
 			if msg in self.guesses:
 				await self.bot.say('You already guessed that.')
+				await self.bot.say('The word is ' + self.guessword)
 			elif self.word.find(msg) != -1:
 				await self.bot.say('There is a(n) ' + msg)
 				index = 0
@@ -43,13 +43,17 @@ class hangman:
 					if letter == msg:
 						self.guessword = self.guessword[0:index - 1] + msg + self.guessword[index:len(self.guessword)]
 				self.guesses.append(msg)
+				await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
 				if self.guessword.find('-') == -1:
 					await self.bot.say('You won!')
+					await self.bot.say('The word was ' + self.word)
 					self.insession = False
+				else:
+					await self.bot.say('The word is ' + self.guessword)
 			else:
 				await self.bot.say('There is no ' + msg)
+				await self.bot.say('The word is ' + self.guessword)
 				self.guesses.append(msg)
-			await self.bot.say('The word is ' + self.guessword)
 		elif msg == self.word and self.insession:
 			await self.bot.say('You won!')
 			self.insession = False

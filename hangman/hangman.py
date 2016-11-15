@@ -60,7 +60,7 @@ class hangman:
 					self.insession = False
 					await self.bot.say('Ended session')
 					await self.bot.say('The word was ' + self.word)
-				elif str(msg) == str(self.word):
+				elif msg == self.word.strip():
 					await self.bot.say('You won with ' + str(self.numguesses) + ' guess(es)!')
 					self.insession = False
 				elif msg != self.word:

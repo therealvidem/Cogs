@@ -14,6 +14,7 @@ class hangman:
 		self.insession = False
 		self.guesses = list()
 		self.word = ''
+		self.numguesses = 0
 		self.guessword = ''
         
 	@commands.command(pass_context=True)
@@ -25,6 +26,7 @@ class hangman:
 				self.insession = True
 				self.word = random.choice(WORDS).lower()
 				self.guessword = ''
+				self.numguesses = 0
 				self.guesses = []
 				self.guessword = '-' * (len(self.word) - 1)
 				await self.bot.say('The word is ' + self.guessword)
@@ -43,13 +45,14 @@ class hangman:
 							self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:len(self.guessword)]
 					self.guesses.append(msg)
 					self.guesses.sort()
+					self.numguesses = self.guesses + 1
 					await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
 					if self.guessword.find('-') == -1:
 						await self.bot.say('You won!')
 						await self.bot.say('The word was ' + self.word)
 						self.insession = False
 					else:
-						await self.bot.say('The word is ' + self.guessword)
+						await self.bot.say('The word is ' + self.guessword) 
 				else:
 					self.guesses.append(msg)
 					self.guesses.sort()
@@ -60,6 +63,7 @@ class hangman:
 				await self.bot.say('You won!')
 				self.insession = False
 			elif msg != self.word and self.insession:
+				self.numguesses = self.numguesses + 1
 				await self.bot.say('It\'s not ' + msg)
 
 					   

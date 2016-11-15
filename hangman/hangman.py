@@ -61,6 +61,8 @@ class hangman:
 		elif msg == self.word and self.insession:
 			await self.bot.say('You won!')
 			self.insession = False
+		elif msg != self.word and self.insession:
+			await self.bot.say('It\'s not ' + self.msg)
 
 					   
 def setup(bot):

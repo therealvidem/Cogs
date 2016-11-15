@@ -39,7 +39,7 @@ class hangman:
 					await self.bot.say('You already guessed that.')
 					await self.bot.say('The word is ' + self.guessword)
 				elif self.word.find(msg) != -1:
-					await self.bot.say('There is a(n) ' + msg)
+					await self.bot.say('The word does contain ' + msg)
 					for i, letter in enumerate(self.word, start = 1):
 						if letter == msg:
 							self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:len(self.guessword)]

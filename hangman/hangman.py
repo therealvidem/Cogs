@@ -32,6 +32,11 @@ class hangman:
 			self.insession = False
 			await self.bot.say('Ended session')
 			await self.bot.say('The word was ' + self.word)
+		elif msg == self.word and self.insession:
+			await self.bot.say('You won!')
+			self.insession = False
+		elif msg != self.word and self.insession:
+			await self.bot.say('It\'s not ' + msg)
 		elif len(msg) == 1 and self.insession:
 			if msg in self.guesses:
 				await self.bot.say('You already guessed that.')
@@ -58,11 +63,6 @@ class hangman:
 				await self.bot.say('There is no ' + msg)
 				await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
 				await self.bot.say('The word is ' + self.guessword)
-		elif msg == self.word and self.insession:
-			await self.bot.say('You won!')
-			self.insession = False
-		elif msg != self.word and self.insession:
-			await self.bot.say('It\'s not ' + msg)
 
 					   
 def setup(bot):

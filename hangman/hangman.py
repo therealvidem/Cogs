@@ -45,7 +45,7 @@ class hangman:
 							self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:len(self.guessword)]
 					self.guesses.append(msg)
 					self.guesses.sort()
-					self.numguesses = self.guesses + 1
+					self.numguesses = self.numguesses + 1
 					await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
 					if self.guessword.find('-') == -1:
 						await self.bot.say('You won with ' + str(self.numguesses) + ' guess(es)!')

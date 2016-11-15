@@ -29,7 +29,7 @@ class hangman:
 			self.insession = False
 			await self.bot.say('Ended session')
 			await self.bot.say('The word was ' + self.word)
-		elif msg == 'gusess' and self.insession:
+		elif msg == 'guesses' and self.insession:
 			await self.bot.say('[%s]' % ', '.join(map(str, self.guesses)))
 		elif len(msg) == 1 and self.insession:
 			if msg in self.guesses:

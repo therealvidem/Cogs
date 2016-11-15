@@ -40,7 +40,7 @@ class hangman:
 				for letter in self.word:
 					index = index + 1
 					if letter == msg:
-						self.guessword = self.guessword[0:index - 1] + msg + self.guessword[index + 1:len(self.guessword)]
+						self.guessword = self.guessword[0:index - 1] + msg + self.guessword[index:len(self.guessword)]
 				self.guesses.append(msg)
 				if self.guessword.find('-') == -1:
 					await self.bot.say('You won!')

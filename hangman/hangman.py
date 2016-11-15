@@ -51,9 +51,10 @@ class hangman:
 				else:
 					await self.bot.say('The word is ' + self.guessword)
 			else:
-				await self.bot.say('There is no ' + msg)
-				await self.bot.say('The word is ' + self.guessword)
 				self.guesses.append(msg)
+				await self.bot.say('There is no ' + msg)
+				await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
+				await self.bot.say('The word is ' + self.guessword)
 		elif msg == self.word and self.insession:
 			await self.bot.say('You won!')
 			self.insession = False

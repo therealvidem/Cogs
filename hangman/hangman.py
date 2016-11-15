@@ -39,7 +39,7 @@ class hangman:
 					if letter == msg:
 						self.guessword = self.guessword[0:index - 1] + msg + self.guessword[index + 1:len(self.guessword)]
 				self.guesses.append(msg)
-				if self.guessword.find('_') == -1:
+				if self.guessword.find('-') == -1:
 					await self.bot.say('You won!')
 					self.insession = False
 			else:

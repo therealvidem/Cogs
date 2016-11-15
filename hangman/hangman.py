@@ -29,7 +29,7 @@ class hangman:
 			self.insession = False
 			await self.bot.say('Ended session')
 		elif len(msg) == 1 and self.insession:
-			if self.guesses.index(msg):
+			if msg in self.guesses:
 				await self.bot.say('You already guessed that.')
 			elif self.word.find(msg):
 				await self.bot.say('There is a(n) ' + msg)

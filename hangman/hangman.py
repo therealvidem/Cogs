@@ -28,6 +28,11 @@ class hangman:
 		elif msg == 'end' and self.insession:
 			self.insession = False
 			await self.bot.say('Ended session')
+		elif msg == 'gusess' and self.insession:
+			await self.bot.say('[%s]' % ', '.join(map(str, self.guesses))
+		elif msg == 'giveup' and self.insession:
+			await self.bot.say('The word was ' + self.word)
+			self.insession = False
 		elif len(msg) == 1 and self.insession:
 			if msg in self.guesses:
 				await self.bot.say('You already guessed that.')
@@ -49,15 +54,8 @@ class hangman:
 		elif msg == self.word and self.insession:
 			await self.bot.say('You won!')
 			self.insession = False
-			
-	@commands.command(pass_context=True)
-	async def hangmanguesses(self, context, *):
-		if self.insession:
-			await self.bot.say('[%s]' % ', '.join(map(str, self.guesses))
-		else:
-			await self.bot.say('There is no game currently running.')
 
-
+					   
 def setup(bot):
 	n = hangman(bot)
 	bot.add_cog(n)

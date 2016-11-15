@@ -22,7 +22,7 @@ class hangman:
 		msg = message
 		if msg == 'start' and not self.insession:
 			self.insession = True
-			self.word = random.choice(WORDS)
+			self.word = random.choice(WORDS).lower()
 			self.guessword = ''
 			self.guesses = []
 			for x in range(1, len(self.word)):

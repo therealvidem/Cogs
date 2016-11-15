@@ -44,7 +44,8 @@ class hangman:
 					if letter == msg:
 						self.guessword = self.guessword[0:index - 1] + msg + self.guessword[index:len(self.guessword)]
 				self.guesses.append(msg)
-				await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
+				self.guesses.sort()
+				await self.bot.say('Guesses: ' + self.guesses)
 				if self.guessword.find('-') == -1:
 					await self.bot.say('You won!')
 					await self.bot.say('The word was ' + self.word)
@@ -53,6 +54,7 @@ class hangman:
 					await self.bot.say('The word is ' + self.guessword)
 			else:
 				self.guesses.append(msg)
+				self.guesses.sort()
 				await self.bot.say('There is no ' + msg)
 				await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
 				await self.bot.say('The word is ' + self.guessword)

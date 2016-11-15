@@ -42,5 +42,5 @@ class hangman:
 
 
 def setup(bot):
-	n = test(bot)
+	n = hangman(bot)
 	bot.add_cog(n)

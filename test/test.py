@@ -33,7 +33,7 @@ class test:
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):
-		if num == 'length':
+		if str(num) == 'length':
 			await self.bot.say('vp has ' + self.memes['vp'] + ' emotes.')
 		else:
 			memenum = random.randint(1, self.memes['vp'])
@@ -44,7 +44,7 @@ class test:
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, num = '0'):
-		if num == 'length':
+		if str(num) == 'length':
 			await self.bot.say('vb has ' + self.memes['vb'] + ' emotes.')
 		else:
 			memenum = random.randint(1, self.memes['vb'])
@@ -55,7 +55,7 @@ class test:
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def meme(self, context, num = '0'):
-		if num == 'length':
+		if str(num) == 'length':
 			await self.bot.say('vm hsa ' + self.memes['vm'] + ' emotes.')
 		else:
 			memenum = random.randint(1, self.memes['vm'])

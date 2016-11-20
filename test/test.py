@@ -30,39 +30,34 @@ class test:
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
+		
+	@commands.command(pass_context=True, invoke_without_command=True)
+	async def memecount(self, context, memetype):
+		await self.bot.say(memetype + ' has ' + self.memes[memetype] + ' emotes.')
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):
-		if str(num) == 'length':
-			await self.bot.say('vp has ' + self.memes['vp'] + ' emotes.')
-		else:
-			memenum = random.randint(1, self.memes['vp'])
-			try:
-				await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(num) + ').png')
-			except:
-				await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(memenum) + ').png')
+		memenum = random.randint(1, self.memes['vp'])
+		try:
+			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def bar(self, context, num = '0'):
-		if str(num) == 'length':
-			await self.bot.say('vb has ' + self.memes['vb'] + ' emotes.')
-		else:
-			memenum = random.randint(1, self.memes['vb'])
-			try:
-				await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
-			except:
-				await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
+		memenum = random.randint(1, self.memes['vb'])
+		try:
+			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def meme(self, context, num = '0'):
-		if str(num) == 'length':
-			await self.bot.say('vm hsa ' + self.memes['vm'] + ' emotes.')
-		else:
-			memenum = random.randint(1, self.memes['vm'])
-			try:
-				await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
-			except:
-				await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
+		memenum = random.randint(1, self.memes['vm'])
+		try:
+			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
+		except:
+			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(move_members=True)

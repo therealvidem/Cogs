@@ -33,7 +33,7 @@ class test:
 		
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def memecount(self, context, memetype):
-		await self.bot.say(memetype + ' has ' + self.memes[memetype] + ' emotes.')
+		await self.bot.say(memetype + ' has ' + str(self.memes[memetype]) + ' emotes.')
 	
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def pearl(self, context, num = '0'):

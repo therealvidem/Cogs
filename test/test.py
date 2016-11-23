@@ -26,7 +26,6 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.base3 = 'data/test/imagesm/'
-		self.verbs = dataIO.load_json('data/test/verbs.txt')
 		self.clv = Clv()
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')

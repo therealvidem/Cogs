@@ -20,9 +20,6 @@ import requests
 import shutil
 from .utils.dataIO import dataIO
 
-WORD_LIST = open('data/test/verbs.txt', 'r')
-WORDS = WORD_LIST.readlines()
-
 class test:
 	def __init__(self, bot):
 		self.bot = bot
@@ -153,11 +150,6 @@ class test:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
 		else:
 			await self.bot.say('An error occured.')
-			
-	@commands.command(pass_context=True)
-	async def verb(self, context):
-		verb = random.choice(WORDS).lower()
-		await self.bot.say(verb)
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

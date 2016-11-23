@@ -154,7 +154,7 @@ class test:
 		else:
 			await self.bot.say('An error occured.')
 			
-	@command.command(pass_context=True)
+	@commands.command(pass_context=True)
 	async def verb(self, context):
 		verb = random.choice(WORDS).lower()
 		await self.bot.say(verb)

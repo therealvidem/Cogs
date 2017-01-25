@@ -167,7 +167,7 @@ class test:
 						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
 						await self.bot.say('TIME!')
-					self.counting = 
+					self.counting = False
 				elif (int(n) >= 0 and tonumber > int(n)):
 					self.counting = True
 					for x in range(tonumber, int(n) - 1):
@@ -180,6 +180,7 @@ class test:
 						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
 						await self.bot.say('TIME!')
+					self.counting = False
 				else:
 					await self.bot.say('Can\'t do that.')
 			else:

@@ -153,7 +153,7 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def countdown(self, context, n):
-		if (int(n) >= 0):
+		if (isinstance(n, int) and int(n) >= 0):
 			COUNTING = True
 			for x in range(int(n), -1, -1):
 				if (COUNTING):
@@ -162,7 +162,7 @@ class test:
 				else:
 					break
 			await self.bot.say('TIME!')
-		elif (str(n) == 'stop'):
+		elif (isinstance(n, str) and str(n) == 'stop'):
 			COUNTING = False
 			await self.bot.say('Stopped.')
 		else:

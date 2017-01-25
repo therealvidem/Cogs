@@ -170,7 +170,7 @@ class test:
 					self.counting = False
 				elif (int(n) >= 0 and tonumber > int(n)):
 					self.counting = True
-					for x in range(tonumber, int(n) - 1):
+					for x in range(int(n), tonumber - 1):
 						if (self.counting == True):
 							await self.bot.say(str(x) + ',')
 							await asyncio.sleep(1)

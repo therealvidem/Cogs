@@ -20,6 +20,8 @@ import requests
 import shutil
 from .utils.dataIO import dataIO
 
+COUNTING = False
+
 class test:
 	def __init__(self, bot):
 		self.bot = bot
@@ -152,10 +154,16 @@ class test:
 	@commands.command(pass_context=True)
 	async def countdown(self, context, n):
 		if (int(n) >= 0):
+			COUNTING = True
 			for x in range(int(n), -1, -1):
-				await self.bot.say(str(x) + ',')
-				await asyncio.sleep(1)
+				if (COUNTING):
+					await self.bot.say(str(x) + ',')
+					await asyncio.sleep(1)
+				else:
+					break
 			await self.bot.say('TIME!')
+		elif (int(n) == -1):
+			COUNTING = False
 		else:
 			await self.bot.say('An error occured.')
 

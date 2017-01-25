@@ -26,7 +26,6 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.base3 = 'data/test/imagesm/'
-		self.clv = Clv()
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
 		
@@ -153,9 +152,9 @@ class test:
 	@commands.command(pass_context=True)
 	async def countdown(self, context, n):
 		if (int(n) >= 0):
-			for x in range(n, -1, -1):
+			for x in range(int(n), -1, -1):
 				await self.bot.say(n + ',')
-				asyncio.sleep(1)
+				await asyncio.sleep(1)
 			await self.bot.say('TIME!')
 		else:
 			await self.bot.say('An error occured.')

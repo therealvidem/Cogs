@@ -20,8 +20,6 @@ import requests
 import shutil
 from .utils.dataIO import dataIO
 
-COUNTING = False
-
 class test:
 	def __init__(self, bot):
 		self.bot = bot
@@ -30,6 +28,7 @@ class test:
 		self.base3 = 'data/test/imagesm/'
 		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
+		self.counting = False
 		
 	@commands.command(pass_context=True, invoke_without_command=True)
 	async def memecount(self, context, memetype):
@@ -152,12 +151,12 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def countdown(self, context, n):
+	async def countdown(self, context, n, tonumber = 0):
 		try:
-			if (int(n) >= 0):
-				COUNTING = True
-				for x in range(int(n), -1, -1):
-					if (COUNTING):
+			if (int(n) >= 0 and tonumber < int(n)):
+				self.counting = True
+				for x in range(int(n), tonumber - 1, -1):
+					if (self.counting == True):
 						await self.bot.say(str(x) + ',')
 						await asyncio.sleep(1)
 					else:
@@ -168,7 +167,7 @@ class test:
 		except:
 			try:
 				if (str(n) == 'stop'):
-					COUNTING = False
+					self.counting = False
 					await self.bot.say('Stopped.')
 			except:
 				await self.bot.say('An error occured.')

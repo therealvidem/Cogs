@@ -152,8 +152,8 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def count(self, context, n, tonumber = 0):
-		if (self.counting == False):
-			try:
+		try:
+			if (self.counting == False):
 				chance = random.randint(1, 10)
 				if (int(n) >= 0 and tonumber < int(n)):
 					self.counting = True
@@ -167,6 +167,7 @@ class test:
 						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
 						await self.bot.say('TIME!')
+					self.counting = 
 				elif (int(n) >= 0 and tonumber > int(n)):
 					self.counting = True
 					for x in range(tonumber, int(n) - 1):
@@ -181,14 +182,14 @@ class test:
 						await self.bot.say('TIME!')
 				else:
 					await self.bot.say('Can\'t do that.')
+			else:
+				await self.bot.say('I\'m already counting.')
+		except:
+			try:
+				if (str(n) == 'stop'):
+					self.counting = False
 			except:
-				try:
-					if (str(n) == 'stop'):
-						self.counting = False
-				except:
-					await self.bot.say('An error occured.')
-		else:
-			await self.bot.say('I\'m already counting.')
+				await self.bot.say('An error occured.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

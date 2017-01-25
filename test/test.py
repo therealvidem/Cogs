@@ -151,25 +151,44 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def countdown(self, context, n, tonumber = 0):
-		try:
-			if (int(n) >= 0 and tonumber < int(n)):
-				self.counting = True
-				for x in range(int(n), tonumber - 1, -1):
-					if (self.counting == True):
-						await self.bot.say(str(x) + ',')
-						await asyncio.sleep(1)
-					else:
-						break
-				await self.bot.say('TIME!')
-			else:
-				await self.bot.say('Can\'t do that.')
-		except:
+	async def count(self, context, n, tonumber = 0):
+		if (self.counting == False):
 			try:
-				if (str(n) == 'stop'):
-					self.counting = False
+				chance = random.randint(1, 10)
+				if (int(n) >= 0 and tonumber < int(n)):
+					self.counting = True
+					for x in range(int(n), tonumber - 1, -1):
+						if (self.counting == True):
+							await self.bot.say(str(x) + ',')
+							await asyncio.sleep(1)
+						else:
+							break
+					if (chance == 10):
+						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
+					else:
+						await self.bot.say('TIME!')
+				elif (int(n) >= 0 and tonumber > int(n)):
+					self.counting = True
+					for x in range(tonumber, int(n) - 1):
+						if (self.counting == True):
+							await self.bot.say(str(x) + ',')
+							await asyncio.sleep(1)
+						else:
+							break
+					if (chance == 10):
+						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
+					else:
+						await self.bot.say('TIME!')
+				else:
+					await self.bot.say('Can\'t do that.')
 			except:
-				await self.bot.say('An error occured.')
+				try:
+					if (str(n) == 'stop'):
+						self.counting = False
+				except:
+					await self.bot.say('An error occured.')
+		else:
+			await self.bot.say('I\'m already counting.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

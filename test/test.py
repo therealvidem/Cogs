@@ -153,7 +153,7 @@ class test:
 	async def countdown(self, context, n):
 		if (int(n) >= 0):
 			for x in range(int(n), -1, -1):
-				await self.bot.say(n + ',')
+				await self.bot.say(x + ',')
 				await asyncio.sleep(1)
 			await self.bot.say('TIME!')
 		else:

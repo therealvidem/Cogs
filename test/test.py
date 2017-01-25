@@ -162,7 +162,7 @@ class test:
 				else:
 					break
 			await self.bot.say('TIME!')
-		elif (int(n) == -1):
+		elif (n == 'stop'):
 			COUNTING = False
 		else:
 			await self.bot.say('An error occured.')

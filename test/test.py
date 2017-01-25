@@ -153,20 +153,25 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def countdown(self, context, n):
-		if (isinstance(n, int) and int(n) >= 0):
-			COUNTING = True
-			for x in range(int(n), -1, -1):
-				if (COUNTING):
-					await self.bot.say(str(x) + ',')
-					await asyncio.sleep(1)
-				else:
-					break
-			await self.bot.say('TIME!')
-		elif (isinstance(n, str) and str(n) == 'stop'):
-			COUNTING = False
-			await self.bot.say('Stopped.')
-		else:
-			await self.bot.say('An error occured.')
+		try:
+			if (int(n) >= 0):
+				COUNTING = True
+				for x in range(int(n), -1, -1):
+					if (COUNTING):
+						await self.bot.say(str(x) + ',')
+						await asyncio.sleep(1)
+					else:
+						break
+				await self.bot.say('TIME!')
+			else:
+				await self.bot.say('Can\'t do that.')
+		except:
+			try:
+				if (str(n) == 'stop'):
+					COUNTING = False
+					await self.bot.say('Stopped.')
+			except:
+				await self.bot.say('An error occured.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

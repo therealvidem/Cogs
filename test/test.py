@@ -168,7 +168,6 @@ class test:
 			try:
 				if (str(n) == 'stop'):
 					self.counting = False
-					await self.bot.say('Stopped.')
 			except:
 				await self.bot.say('An error occured.')
 

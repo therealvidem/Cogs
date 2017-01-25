@@ -149,6 +149,16 @@ class test:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
 		else:
 			await self.bot.say('An error occured.')
+			
+	@commands.command(pass_context=True)
+	async def countdown(self, context, n)
+		if (int(n) >= 0):
+			for x in range(n, -1, -1):
+				await self.bot.say(n + ',')
+				asyncio.sleep(1)
+			await self.bot.say('TIME!')
+		else:
+			await self.bot.say('An error occured.')
 
 def check_files():
 	if not dataIO.is_valid_json('data/test/shiplist.json'):

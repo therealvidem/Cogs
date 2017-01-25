@@ -151,7 +151,7 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def countdown(self, context, n)
+	async def countdown(self, context, n):
 		if (int(n) >= 0):
 			for x in range(n, -1, -1):
 				await self.bot.say(n + ',')

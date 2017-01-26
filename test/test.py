@@ -151,7 +151,7 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def count(self, context, n, tonumber = 0):
+	async def count(self, context, n, tonumber = 0, mention = 'false'):
 		try:
 			if (self.counting == False):
 				chance = random.randint(1, 10)
@@ -164,9 +164,15 @@ class test:
 						else:
 							break
 					if (chance == 10):
-						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
+						if (str(mention) == 'true'):
+							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA ' + context.message.author.mention)
+						else:
+							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
-						await self.bot.say('TIME!')
+						if (str(mention) == 'true'):
+							await self.bot.say('TIME! ' +  + context.message.author.mention)
+						else:
+							await self.bot.say('TIME!')
 					self.counting = False
 				elif (int(n) >= 0 and tonumber > int(n)):
 					self.counting = True
@@ -177,9 +183,15 @@ class test:
 						else:
 							break
 					if (chance == 10):
-						await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
+						if (str(mention) == 'true'):
+							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA ' + context.message.author.mention)
+						else:
+							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
-						await self.bot.say('TIME!')
+						if (str(mention) == 'true'):
+							await self.bot.say('TIME! ' +  + context.message.author.mention)
+						else:
+							await self.bot.say('TIME!')
 					self.counting = False
 				else:
 					await self.bot.say('Can\'t do that.')

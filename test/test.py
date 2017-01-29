@@ -170,7 +170,7 @@ class test:
 							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
 						if (str(mention) == 'true'):
-							await self.bot.say('TIME! ' +  + context.message.author.mention)
+							await self.bot.say('TIME! ' + context.message.author.mention)
 						else:
 							await self.bot.say('TIME!')
 					self.counting = False
@@ -189,7 +189,7 @@ class test:
 							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
 					else:
 						if (str(mention) == 'true'):
-							await self.bot.say('TIME! ' +  + context.message.author.mention)
+							await self.bot.say('TIME! ' + context.message.author.mention)
 						else:
 							await self.bot.say('TIME!')
 					self.counting = False

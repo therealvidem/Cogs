@@ -10,6 +10,6 @@ class everfell:
 	
 				
 def setup(bot):
-	n = reaction(bot)
+	n = everfell(bot)
 	bot.add_listener(n.listener, "on_message")
 	bot.add_cog(n)

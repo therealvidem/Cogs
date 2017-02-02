@@ -5,9 +5,11 @@ from .utils import checks
 import asyncio
 import time
 try:
-    from cleverbot import Cleverbot as Clv
+	from cleverbot import Cleverbot as _Cleverbot
+	if 'API_URL' in _Cleverbot.__dict__:
+		_Cleverbot = False
 except:
-    Clv = False
+	_Cleverbot = False
 from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
@@ -15,7 +17,7 @@ import os
 class talktoabby():
 	def __init__(self, bot):
 		self.bot = bot
-		self.clv = _talktoabby('Red-DiscordBot')
+		self.clv = _Cleverbot('Red-DiscordBot')
 			
 	async def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '276490574624849920':
@@ -36,7 +38,7 @@ class talktoabby():
 		return answer
 
 def setup(bot):
-	if _talktoabby is False:
+	if _Cleverbot is False:
 		raise RuntimeError("Your cleverbot library is either missing or not "
 				"up to date. Please do\n"
 				"[p]debug bot.pip_install('cleverbot')\n"

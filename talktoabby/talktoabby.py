@@ -12,10 +12,10 @@ from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os
 
-class talktoabby:
+class talktoabby():
 	def __init__(self, bot):
 		self.bot = bot
-		self.clv = Clv()
+		self.clv = _Cleverbot('Red-DiscordBot')
 			
 	async def listener(self, message):
 		if message.author.id == '81026656365453312' and message.channel.id == '276490574624849920':
@@ -36,6 +36,14 @@ class talktoabby:
 		return answer
 
 def setup(bot):
-	n = talktoabby(bot)
-	bot.add_listener(n.listener, "on_message")
+	if _Cleverbot is False:
+		raise RuntimeError("Your cleverbot library is either missing or not "
+				"up to date. Please do\n"
+				"[p]debug bot.pip_install('cleverbot')\n"
+				"and restart Red once you get a response.\n"
+				"Then [p]load cleverbot")
+	check_folders()
+	check_files()
+	n = Cleverbot(bot)
 	bot.add_cog(n)
+	bot.add_listener(n.listener, "on_message")

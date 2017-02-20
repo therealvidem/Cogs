@@ -15,7 +15,7 @@ class reaction:
 			'kys': 'Kind your self?'
 		}
 		self.listenstart = {
-			'hayy': '¡Harambe!',
+			'hayy': 'Harambe!',
 			'japanese': 'I\'m sorry, I don\'t speak Japanese.',
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
 			'woah': 'whoa*,  you uneducated swine.'

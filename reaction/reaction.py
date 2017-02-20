@@ -33,7 +33,7 @@ class reaction:
 				for k, v in self.listenstart.items():
 					if message.content.lower().find(k) != -1:
 						await self.bot.send_message(message.channel, v)
-			if message.content == 'FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':
+			if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':
 				await asyncio.sleep(0.5)
 				await self.bot.send_message(message.channel, 'VIDEM!')
 			elif message.content == 'VIDEM!' and message.author.id == '224328344769003520' and self.bot.user.id == '276425303276912640':
@@ -45,9 +45,11 @@ class reaction:
 			elif message.content == 'MADISON!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
 				await asyncio.sleep(0.5)
 				await self.bot.send_message(message.channel, 'AND RACHEL!')
-			elif message.content == 'AND RACHEL!' and message.author.id == '283327246150926336' and (self.bot.user.id == '224328344769003520' or self.bot.user.id == '276425303276912640' or self.bot.user.id == '283325760851410944' or self.bot.user.id == '283327246150926336'):
+			elif message.content == 'AND RACHEL!' and message.author.id == '283327246150926336' and (self.bot.user.id == '224328344769003520' or self.bot.user.id == '276425303276912640' or self.bot.user.id == '283325760851410944'):
 				await asyncio.sleep(0.5)
 				await self.bot.send_message(message.channel, 'AND WE ARE THE WEIRD QUARTET!')
+			elif message.content == 'AND WE ARE THE WEIRD QUARTET!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
+				await self.bot.send_message(message.channel, 'AND WE ARE TEH WEIRD QUARTET!')
 				
 def setup(bot):
 	n = reaction(bot)

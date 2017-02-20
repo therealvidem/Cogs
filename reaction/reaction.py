@@ -11,7 +11,8 @@ class reaction:
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
-			'ppap': '*bans '
+			'ppap': '*bans ',
+			'kys': 'Kind your self?'
 		}
 		self.listenstart = {
 			'hayy': '¡Harambe!',

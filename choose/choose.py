@@ -10,7 +10,7 @@ class choose:
 	@commands.command(pass_context=True)
 	async def choosebetween(self, ctx, *args):
 		choices = list(args)
-		if choices.len > 1:
+		if len(choices) > 1:
 			await self.bot.say(random.choice(choices))
 		else:
 			await self.bot.say('Not enough choices to choose from.')
@@ -19,10 +19,10 @@ class choose:
 	async def chooserate(self, ctx, *args):
 		author = ctx.message.author
 		choices = list(args).shuffle()
-		if choices.len > 1:
+		if len(choices) > 1:
 			em = discord.Embed(title='Choices', colour=0x2F93E0)
 			em.set_author(name=str(author), icon_url=author.avatar_url)
-			for x in range(1, choices.len):
+			for x in range(1, len(choices)):
 				em.add_field(name=x, value=choices[x], inline=True)
 			await self.bot.send_message(ctx.message.channel, embed=em)
 		else:

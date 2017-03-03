@@ -1,0 +1,57 @@
+import discord
+from discord.ext import commands
+import asyncio
+
+class reaction:
+	def __init__(self, bot):
+		self.bot = bot
+		self.listensub = {
+			'sara': 'Ew!',
+			'omg': '0 milligrams?',
+			'0mg': 'Oh my god?',
+			'syrz': 'It\'s called a dress.',
+			'darnit': 'Amethyst, and Pearl, and Steven!',
+			'ppap': '*bans ',
+			'kys': 'Kind your self?'
+		}
+		self.listenstart = {
+			'hayy': 'Harambe!',
+			'japanese': 'I\'m sorry, I don\'t speak Japanese.',
+			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
+			'woah': 'whoa*,  you uneducated swine.'
+		}
+		
+	async def listener(self, message):
+		if message.author.id != self.bot.user.id:
+			if self.bot.user.id == '224328344769003520':
+				container = ''
+				for k, v in self.listensub.items():
+					if message.content[0:len(k)].lower() == k:
+						if k == 'ppap':
+							container = message.author.name + '*'
+						await self.bot.send_message(message.channel, v + container)
+				for k, v in self.listenstart.items():
+					if message.content.lower().find(k) != -1:
+						await self.bot.send_message(message.channel, v)
+			if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':
+				await asyncio.sleep(0.5)
+				await self.bot.send_message(message.channel, 'VIDEM!')
+			elif message.content == 'VIDEM!' and message.author.id == '224328344769003520' and self.bot.user.id == '276425303276912640':
+				await asyncio.sleep(0.5)
+				await self.bot.send_message(message.channel, 'CATALINA!')
+			elif message.content == 'CATALINA!' and message.author.id == '276425303276912640' and self.bot.user.id == '283325760851410944':
+				await asyncio.sleep(0.5)
+				await self.bot.send_message(message.channel, 'MADISON!')
+			elif message.content == 'MADISON!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
+				await asyncio.sleep(0.5)
+				await self.bot.send_message(message.channel, 'AND RACHEL!')
+			elif message.content == 'AND RACHEL!' and message.author.id == '283327246150926336' and (self.bot.user.id == '224328344769003520' or self.bot.user.id == '276425303276912640' or self.bot.user.id == '283325760851410944'):
+				await asyncio.sleep(0.5)
+				await self.bot.send_message(message.channel, 'AND WE ARE THE WEIRD QUARTET!')
+			elif message.content == 'AND WE ARE THE WEIRD QUARTET!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
+				await self.bot.send_message(message.channel, 'AND WE ARE TEH WEIRD QUARTET!')
+				
+def setup(bot):
+	n = reaction(bot)
+	bot.add_listener(n.listener, "on_message")
+	bot.add_cog(n)

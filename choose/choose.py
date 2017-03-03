@@ -18,8 +18,9 @@ class choose:
 	@commands.command(pass_context=True)
 	async def chooserate(self, ctx, *args):
 		author = ctx.message.author
-		choices = random.shuffle(list(args))
+		choices = list(args)
 		if len(choices) > 1:
+			random.shuffle(choices)
 			em = discord.Embed(title='Choices', colour=0x2F93E0)
 			em.set_author(name=str(author), icon_url=author.avatar_url)
 			for x in range(1, len(choices)):

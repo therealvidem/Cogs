@@ -8,7 +8,7 @@ class choose:
 		self.bot = bot
 
 	@commands.command(pass_context=True)
-	async def choose(self, ctx, *args):
+	async def choosebetween(self, ctx, *args):
 		choices = args.items()
 		await self.bot.say(random.choice(choices))
 		

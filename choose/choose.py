@@ -24,7 +24,7 @@ class choose:
 			em = discord.Embed(title='Choices', colour=0x2F93E0)
 			em.set_author(name=str(author), icon_url=author.avatar_url)
 			for x in range(1, len(choices)):
-				em.add_field(name=choices[x])
+				em.add_field(name=x, value=choices[x])
 			await self.bot.send_message(ctx.message.channel, embed=em)
 		else:
 			await self.bot.say('Not enough choices to choose from')

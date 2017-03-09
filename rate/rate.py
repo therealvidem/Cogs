@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 import asyncio
@@ -25,6 +24,4 @@ class rate:
     # @_rate.command(pass_context=True, name='
 
 def setup(bot):
-    n = rate(bot)
-    bot.add_listener(n.listener, "on_message")
-    bot.add_cog(n)
+    bot.add_cog(rate(bot))

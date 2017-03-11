@@ -39,7 +39,8 @@ class rate:
                 emoji = ':heart:'
             else:
                 emoji = ':broken_heart:'
-            await self.bot.say('I give the {0} x {1} a {2}/10 {3}'.format(name1, name2, rate, emoji))
+            article = 'an' if rate == 8 else 'a'
+            await self.bot.say('I give the {0} x {1} {2} {3}/10 {4}'.format(name1, name2, article, rate, emoji))
         else:
             await self.bot.say('Do {0}help rate ship for more information.'.format(context.prefix))
 

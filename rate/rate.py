@@ -25,7 +25,7 @@ class rate:
             name = member.display_name
             random.seed(name)
             rate = random.randint(0, 10)
-            emoji = ':thumbsup:' if rate > 5 else ':thumbsdown:'
+            emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             await self.bot.say('I give {} a {}/10 {}'.format(name, rate, emoji))
         else:
             await self.bot.say('Do {}help rate discordmember for more information.'.format(context.prefix))
@@ -38,7 +38,7 @@ class rate:
             shipname = ' x '.join(shiplist)
             random.seed(shipname)
             rate = random.randint(0, 10)
-            emoji = ':heart:' if rate > 5 else ':broken_heart:'
+            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
             await self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
         else:

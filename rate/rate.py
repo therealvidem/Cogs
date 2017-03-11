@@ -11,18 +11,14 @@ class rate:
     async def _rate(self, context, thing: str=None):
         if context.invoked_subcommand is None:
             if thing:
-                isdiscordmember = False
-                for member in context.message.server.members:
-                    if thing == member.display_name:
-                        isdiscordmember = True
-                if isdiscordmember:
-                    await self.bot.say('is discord member')
-                else:
-                    await self.bot.say('is not discord member')
+                random.seed(thing)
+                rate = random.randint(0, 10)
+                article = 'an' if rate == 8 else 'a'
+                await self.bot.say('I give {0} {1} {2}/10 {3}'.format(thing, article, rate, emoji))
             else:
                 await self.bot.say('Do {0}help rate for more information.'.format(context.prefix))
             
-    @_rate.command(pass_context=True, name='discordmember')
+    """@_rate.command(pass_context=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
@@ -35,10 +31,10 @@ class rate:
                 emoji = ':thumbsdown:'
             await self.bot.say('I give {0} a {1}/10 {2}'.format(name, rate, emoji))
         else:
-            await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))
+            await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))"""
             
-    @_rate.command(pass_context=True, name='ship')
-    async def _ship(self, context, member1: discord.Member=None, member2: discord.Member=None):
+    @_rate.command(pass_context=True, name='discordship')
+    async def _discordship(self, context, member1: str=None, member2: str=None):
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name

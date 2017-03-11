@@ -7,7 +7,7 @@ class rate:
     def __init__(self, bot):
         self.bot = bot
             
-    async def shipf(name1, name2):
+    async def shipf(self, name1, name2):
         if name1 and name2:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()

@@ -41,7 +41,7 @@ class rate:
                 emoji = ':broken_heart:'
             await self.bot.say('I give the {0} x {1} a {2}/10 {3}'.format(name1, name2, rate, emoji))
         else:
-            await self.bot.say('Do {0}help rate discordship for more information.'.format(context.prefix))
+            await self.bot.say('Do {0}help rate ship for more information.'.format(context.prefix))
 
 def setup(bot):
     bot.add_cog(rate(bot))

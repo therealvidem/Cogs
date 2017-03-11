@@ -16,9 +16,9 @@ class rate:
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
-            self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
+            await self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
         else:
-            self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context):

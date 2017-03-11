@@ -8,18 +8,18 @@ class rate:
         self.bot = bot
 
     @commands.group(pass_context=True, name='rate')
-    async def _rate(self, context, *, thing: str=None):
+    async def _rate(self, context):
         if context.invoked_subcommand is None:
-            if thing:
-                random.seed(thing)
-                rate = random.randint(0, 10)
-                article = 'an' if rate == 8 else 'a'
-                emoji = ':thumbsup:' if rate > 5 else ':thumbsdown:'
-                await self.bot.say('I give {0} {1} {2}/10 {3}'.format(thing, article, rate, emoji))
-            else:
-                await self.bot.say('Do {0}help rate for more information.'.format(context.prefix))
+            prefix = context.prefix
+            title = 'VidemBot\'s Rating System'
+            message = 'List of commands available for {}rate\n'.format(prefix)
+            message += '{}rate discordmember [member]\n'.format(prefix)
+            message += '{}rate discordship [member] [member]\n'.format(prefix)
+            message += '{}rate thing [thingy]\n'.format(prefix)
+            em = discord.Embed(title=title, description=description, color=discord.Color.dark_blue())
+            await self.bot.say(embed=em)
             
-    """@_rate.command(pass_context=True, name='discordmember')
+   @_rate.command(pass_context=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
@@ -32,7 +32,7 @@ class rate:
                 emoji = ':thumbsdown:'
             await self.bot.say('I give {0} a {1}/10 {2}'.format(name, rate, emoji))
         else:
-            await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))"""
+            await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))
             
     @_rate.command(pass_context=True, name='discordship')
     async def _discordship(self, context, member1: str=None, member2: str=None):

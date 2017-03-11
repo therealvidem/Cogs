@@ -20,8 +20,8 @@ class rate:
             else:
                 emoji = ':thumbsdown:'
             self.bot.send_message(channel, 'I give {0} a {1}/10 {2}'.format(name, rate, emoji)
-        
-    # @_rate.command(pass_context=True, name='
 
 def setup(bot):
     bot.add_cog(rate(bot))
+
+

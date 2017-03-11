@@ -30,7 +30,7 @@ class rate:
             await self.bot.say('Do \'{}rate thing\' for more information.'.format(context.prefix))
     
     @_rate.command(pass_context=True, name='someone')
-    async def _someone(self, context, member: discord.Member=None):
+    async def _someone(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
             random.seed(name.lower())

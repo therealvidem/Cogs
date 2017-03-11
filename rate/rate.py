@@ -10,7 +10,7 @@ class rate:
     async def send_message(message):
         await self.bot.say(message)
         
-    def ship(person1: discord.Member=None, person2: discord.Member=None):
+    def shipf(person1: discord.Member=None, person2: discord.Member=None):
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name
@@ -25,7 +25,7 @@ class rate:
         else:
             send_message('Do \'{}help rate ship\' for more information.'.format(context.prefix))
             
-    def ship(name1: str=None, name2: str=None):
+    def shipf(name1: str=None, name2: str=None):
         if name1 and name2:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
@@ -73,7 +73,7 @@ class rate:
             
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1, member2):
-        ship(member1, member2)
+        shipf(member1, member2)
 
 def setup(bot):
     bot.add_cog(rate(bot))

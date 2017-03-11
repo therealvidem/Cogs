@@ -6,19 +6,6 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
-            
-    async def shipf(self, name1, name2):
-        if name1 and name2:
-            shiplist = [name1.lower(), name2.lower()]
-            shiplist.sort()
-            shipname = ' x '.join(shiplist)
-            random.seed(shipname)
-            rate = random.randint(0, 10)
-            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
-            article = 'an' if rate == 8 else 'a'
-            await self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
-        else:
-            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context):
@@ -59,7 +46,16 @@ class rate:
             if isinstance(member1, discord.Member) and isinstance(member2, discord.Member):
                 member1 = member1.display_name
                 member2 = member2.display_name
-            self.shipf(member1, member2)
+            shiplist = [name1.lower(), name2.lower()]
+            shiplist.sort()
+            shipname = ' x '.join(shiplist)
+            random.seed(shipname)
+            rate = random.randint(0, 10)
+            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
+            article = 'an' if rate == 8 else 'a'
+            await self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
+        else:
+            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
 def setup(bot):
     bot.add_cog(rate(bot))

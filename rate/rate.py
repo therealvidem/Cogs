@@ -56,7 +56,7 @@ class rate:
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1, member2):
         if member1 and member2:
-            if isInstance(member1, discord.Member) and isInstance(member2, discord.Member):
+            if isinstance(member1, discord.Member) and isinstance(member2, discord.Member):
                 member1 = member1.display_name
                 member2 = member2.display_name
             self.ship(member1, member2)

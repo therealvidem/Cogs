@@ -15,7 +15,7 @@ class rate:
                 for member in context.message.server.members:
                     if thing == member.display_name:
                         isdiscordmember = True
-                if thing is discord.Member:
+                if isdiscordmember:
                     await self.bot.say('is discord member')
                 else:
                     await self.bot.say('is not discord member')

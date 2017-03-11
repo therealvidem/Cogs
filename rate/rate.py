@@ -9,12 +9,12 @@ class rate:
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context):
-        await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.'.format(context.prefix))
+        if context.invoked_subcommand is None:
+            await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.'.format(context.prefix))
             
     @_rate.command(pass_conext=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):
-        channel = context.message.channel
-        if member is not None:
+        if member:
             name = member.display_name
             random.seed(name)
             rate = random.randint(0, 10)
@@ -23,12 +23,11 @@ class rate:
                 emoji = ':thumbsup:'
             else:
                 emoji = ':thumbsdown:'
-            await self.bot.send_message(channel, 'I give {0} a {1}/10 {2}'.format(name, rate, emoji))
+            await self.bot.say('I give {0} a {1}/10 {2}'.format(name, rate, emoji))
             
     @_rate.command(pass_conext=True, name='discordship')
     async def _discordship(self, context, *, member1: discord.Member=None, member2: discord.Member=None):
-        channel = context.message.channel
-        if member1 is not None and member2 is not None:
+        if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name
             random.seed(name1 + name2)
@@ -38,7 +37,7 @@ class rate:
                 emoji = ':heart:'
             else:
                 emoji = ':broken_heart:'
-            await self.bot.send_message(channel, 'I give the {0} x {1} a {2}/10 {3}'.format(name1, name2, rate, emoji))
+            await self.bot.say('I give the {0} x {1} a {2}/10 {3}'.format(name1, name2, rate, emoji))
 
 def setup(bot):
     bot.add_cog(rate(bot))

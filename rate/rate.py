@@ -6,21 +6,6 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
-        
-    async def ship(member1: discord.Member=None, member2: discord.Member=None):
-        if member1 and member2:
-            name1 = member1.display_name
-            name2 = member2.display_name
-            shiplist = [name1.lower(), name2.lower()]
-            shiplist.sort()
-            shipname = ' x '.join(shiplist)
-            random.seed(shipname)
-            rate = random.randint(0, 10)
-            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
-            article = 'an' if rate == 8 else 'a'
-            self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
-        else:
-            self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
             
     async def ship(name1: str=None, name2: str=None):
         if name1 and name2:
@@ -71,8 +56,9 @@ class rate:
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1, member2):
         if member1 and member2:
-            await self.bot.say(member1)
-            await self.bot.say(member2)
+            if isInstance(member1, discord.Member) and isInstance(member2, discord.Member):
+                member1 = member1.display_name
+                member2 = member2.display_name
             self.ship(member1, member2)
 
 def setup(bot):

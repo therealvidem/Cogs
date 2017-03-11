@@ -20,7 +20,7 @@ class rate:
             await self.bot.say(embed=em)
     
     @_rate.command(pass_context=True, name='thing')
-    async def _thing(self, context, *):
+    async def _thing(self, context, *, thing: str=None):
         if thing:
             random.seed(thing)
             rate = random.randint(0, 10)

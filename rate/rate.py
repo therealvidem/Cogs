@@ -32,7 +32,8 @@ class rate:
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name
-            random.seed(name1 + name2)
+            shipname = ' x '.join(list.sort([member1, member2]))
+            random.seed(shipname)
             rate = random.randint(0, 10)
             emoji = ''
             if rate >= 5:
@@ -40,7 +41,7 @@ class rate:
             else:
                 emoji = ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
-            await self.bot.say('I give the {0} x {1} {2} {3}/10 {4}'.format(name1, name2, article, rate, emoji))
+            await self.bot.say('I give the {0} {2} {3}/10 {4}'.format(shipname, article, rate, emoji))
         else:
             await self.bot.say('Do {0}help rate ship for more information.'.format(context.prefix))
 

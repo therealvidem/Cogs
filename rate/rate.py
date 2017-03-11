@@ -27,8 +27,8 @@ class rate:
         else:
             await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))
             
-    @_rate.command(pass_context=True, name='discordship')
-    async def _discordship(self, context, *, member1: discord.Member=None, member2: discord.Member=None):
+    @_rate.command(pass_context=True, name='ship')
+    async def _ship(self, context, member1: discord.Member=None, member2: discord.Member=None):
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name

@@ -13,14 +13,14 @@ class rate:
             prefix = context.prefix
             title = '**VidemBot\'s Rating System Commands:**\n'
             message = 'List of commands available for {}rate\n'.format(prefix)
-            message += '``{}rate discordmember [member]``\n'.format(prefix)
-            message += '``{}rate discordship [member] [member]``\n'.format(prefix)
+            message += '``{}rate someone [member]``\n'.format(prefix)
+            message += '``{}rate ship [person] [person]``\n'.format(prefix)
             message += '``{}rate thing [thingy]``\n'.format(prefix)
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
             
-    @_rate.command(pass_context=True, name='discordmember')
-    async def _discordmember(self, context, *, member: discord.Member=None):
+    @_rate.command(pass_context=True, name='someone')
+    async def _someone(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
             random.seed(name)
@@ -30,11 +30,9 @@ class rate:
         else:
             await self.bot.say('Do {}help rate discordmember for more information.'.format(context.prefix))
             
-    @_rate.command(pass_context=True, name='discordship')
-    async def _discordship(self, context, member1: str=None, member2: str=None):
+    @_rate.command(pass_context=True, name='ship')
+    async def _ship(self, context, member1: str=None, member2: str=None):
         if member1 and member2:
-            name1 = member1.display_name
-            name2 = member2.display_name
             shiplist = [name1, name2]
             shiplist.sort()
             shipname = ' x '.join(shiplist)

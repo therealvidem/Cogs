@@ -70,7 +70,7 @@ class rate:
             
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1, member2):
-        ship(member1, member2)
+        self.ship(member1, member2)
 
 def setup(bot):
     bot.add_cog(rate(bot))

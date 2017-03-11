@@ -6,8 +6,6 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
-        
-    def rateemoji(
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context, thing: str=None):

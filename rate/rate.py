@@ -18,7 +18,17 @@ class rate:
             message += '``{}rate thing [thingy]``\n'.format(prefix)
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
-            
+    
+    @_rate.command(pass_context=True, name='thing')
+    async def _thing(self, context, *, thing: str=None):
+        if thing:
+            random.seed(thing)
+            rate = random.randint(0, 10)
+            emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
+            await self.bot.say('I give {} a {}/10 {}'.format(thing, rate, emoji))
+        else:
+            await self.bot.say('Do \'{}rate thing\' for more information.'.format(context.prefix))
+    
     @_rate.command(pass_context=True, name='someone')
     async def _someone(self, context, *, member: discord.Member=None):
         if member:
@@ -28,7 +38,7 @@ class rate:
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             await self.bot.say('I give {} a {}/10 {}'.format(name, rate, emoji))
         else:
-            await self.bot.say('Do {}help rate discordmember for more information.'.format(context.prefix))
+            await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
             
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1: str=None, member2: str=None):
@@ -42,7 +52,7 @@ class rate:
             article = 'an' if rate == 8 else 'a'
             await self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
         else:
-            await self.bot.say('Do {}help rate ship for more information.'.format(context.prefix))
+            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
 def setup(bot):
     bot.add_cog(rate(bot))

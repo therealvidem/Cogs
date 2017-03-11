@@ -11,6 +11,10 @@ class rate:
     async def _rate(self, context, thing: str=None):
         if context.invoked_subcommand is None:
             if thing:
+                isdiscordmember = False
+                for member in context.message.server.members:
+                    if thing == member.display_name:
+                        isdiscordmember = True
                 if thing is discord.Member:
                     await self.bot.say('is discord member')
                 else:

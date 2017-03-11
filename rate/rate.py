@@ -11,7 +11,7 @@ class rate:
     async def _rate(self, context):
         if context.invoked_subcommand is None:
             prefix = context.prefix
-            title = '**VidemBot\'s Robust Rating R 9000:**\n'
+            title = '**VidemBot\'s Robust Rating System 9000:**\n'
             message = 'List of commands available for {}rate:\n'.format(prefix)
             message += '``{}rate someone [member]``\n'.format(prefix)
             message += '``{}rate ship [person] [person]``\n'.format(prefix)

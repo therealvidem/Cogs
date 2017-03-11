@@ -6,6 +6,8 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
+        
+    def rateemoji(
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context, thing: str=None):
@@ -14,6 +16,7 @@ class rate:
                 random.seed(thing)
                 rate = random.randint(0, 10)
                 article = 'an' if rate == 8 else 'a'
+                emoji = ':thumbsup:' if rate > 5 else ':thumbsdown:'
                 await self.bot.say('I give {0} {1} {2}/10 {3}'.format(thing, article, rate, emoji))
             else:
                 await self.bot.say('Do {0}help rate for more information.'.format(context.prefix))
@@ -43,11 +46,7 @@ class rate:
             shipname = ' x '.join(shiplist)
             random.seed(shipname)
             rate = random.randint(0, 10)
-            emoji = ''
-            if rate >= 5:
-                emoji = ':heart:'
-            else:
-                emoji = ':broken_heart:'
+            emoji = ':heart:' if rate > 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
             await self.bot.say('I give the {0} {1} {2}/10 {3}'.format(shipname, article, rate, emoji))
         else:

@@ -8,7 +8,7 @@ class rate:
         self.bot = bot
 
     @commands.group(pass_context=True, name='rate')
-    async def _rate(self, context, thing: str=None):
+    async def _rate(self, context, *, thing: str=None):
         if context.invoked_subcommand is None:
             if thing:
                 random.seed(thing)

@@ -24,6 +24,8 @@ class rate:
             else:
                 emoji = ':thumbsdown:'
             await self.bot.say('I give {0} a {1}/10 {2}'.format(name, rate, emoji))
+        else:
+            await self.bot.say('Do {0}help rate discordmember for more information.'.format(context.prefix))
             
     @_rate.command(pass_context=True, name='discordship')
     async def _discordship(self, context, *, member1: discord.Member=None, member2: discord.Member=None):
@@ -38,6 +40,8 @@ class rate:
             else:
                 emoji = ':broken_heart:'
             await self.bot.say('I give the {0} x {1} a {2}/10 {3}'.format(name1, name2, rate, emoji))
+        else:
+            await self.bot.say('Do {0}help rate discordship for more information.'.format(context.prefix))
 
 def setup(bot):
     bot.add_cog(rate(bot))

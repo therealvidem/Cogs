@@ -7,10 +7,7 @@ class rate:
     def __init__(self, bot):
         self.bot = bot
         
-    async def send_message(message):
-        await self.bot.say(message)
-        
-    def shipf(person1: discord.Member=None, person2: discord.Member=None):
+    async def shipf(person1: discord.Member=None, person2: discord.Member=None):
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name
@@ -21,11 +18,11 @@ class rate:
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
-            send_message('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
+            self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
         else:
-            send_message('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+            self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
             
-    def shipf(name1: str=None, name2: str=None):
+    async def shipf(name1: str=None, name2: str=None):
         if name1 and name2:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
@@ -34,9 +31,9 @@ class rate:
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
-            send_message('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
+            self.bot.say('I give the {} {} {}/10 {}'.format(shipname, article, rate, emoji))
         else:
-            send_message('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+            self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context):

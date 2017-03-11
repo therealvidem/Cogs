@@ -11,7 +11,7 @@ class rate:
     async def _rate(self, context):
         await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.'.format(context.prefix))
             
-    @_rate.command(pass_conext=True, name='ship')
+    @_rate.command(pass_conext=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):
         channel = context.message.channel
         if member is not None:

@@ -12,7 +12,7 @@ class rate:
         if context.invoked_subcommand is None:
             await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.'.format(context.prefix))
             
-    @_rate.command(pass_conext=True, name='discordmember')
+    @_rate.command(pass_context=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
@@ -25,7 +25,7 @@ class rate:
                 emoji = ':thumbsdown:'
             await self.bot.say('I give {0} a {1}/10 {2}'.format(name, rate, emoji))
             
-    @_rate.command(pass_conext=True, name='discordship')
+    @_rate.command(pass_context=True, name='discordship')
     async def _discordship(self, context, *, member1: discord.Member=None, member2: discord.Member=None):
         if member1 and member2:
             name1 = member1.display_name

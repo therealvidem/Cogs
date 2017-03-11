@@ -32,7 +32,9 @@ class rate:
         if member1 and member2:
             name1 = member1.display_name
             name2 = member2.display_name
-            shipname = ' x '.join([name1, name2].sort)
+            shiplist = [name1, name2]
+            shiplist.sort()
+            shipname = ' x '.join(shiplist)
             random.seed(shipname)
             rate = random.randint(0, 10)
             emoji = ''

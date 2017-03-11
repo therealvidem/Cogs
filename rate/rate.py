@@ -41,8 +41,8 @@ class rate:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
             
     @_rate.command(pass_context=True, name='ship')
-    async def _ship(self, context, member1: str=None, member2: str=None):
-        if member1 and member2:
+    async def _ship(self, context, name1: str=None, name2: str=None):
+        if name1 and name2:
             shiplist = [name1, name2]
             shiplist.sort()
             shipname = ' x '.join(shiplist)

@@ -7,7 +7,7 @@ class rate:
     def __init__(self, bot):
         self.bot = bot
             
-    async def ship(name1, name2):
+    async def shipf(name1, name2):
         if name1 and name2:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
@@ -59,7 +59,7 @@ class rate:
             if isinstance(member1, discord.Member) and isinstance(member2, discord.Member):
                 member1 = member1.display_name
                 member2 = member2.display_name
-            self.ship(member1, member2)
+            self.shipf(member1, member2)
 
 def setup(bot):
     bot.add_cog(rate(bot))

@@ -43,9 +43,8 @@ class rate:
     @_rate.command(pass_context=True, name='ship')
     async def _ship(self, context, member1, member2):
         if member1 and member2:
-            if isinstance(member1, discord.Member) and isinstance(member2, discord.Member):
-                member1 = member1.display_name
-                member2 = member2.display_name
+            name1 = str(member1)
+            name2 = str(member2)
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)

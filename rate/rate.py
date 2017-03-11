@@ -8,7 +8,11 @@ class rate:
         self.bot = bot
 
     @commands.group(pass_context=True, name='rate')
-    async def _rate(self, context, *, member: discord.Member=None):
+    async def _rate(self, context):
+        await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.')
+            
+    @_rate.command(pass_conext=True, name='ship')
+    async def _discordmember(self, context, *, member: discord.Member=None):
         channel = context.message.channel
         if member is not None:
             name = member.display_name
@@ -21,7 +25,7 @@ class rate:
                 emoji = ':thumbsdown:'
             await self.bot.send_message(channel, 'I give {0} a {1}/10 {2}'.format(name, rate, emoji))
             
-    @_rate.command(pass_conext=True, name='ship')
+    @_rate.command(pass_conext=True, name='discordship')
     async def _discordship(self, context, *, member1: discord.Member=None, member2: discord.Member=None):
         channel = context.message.channel
         if member1 is not None and member2 is not None:

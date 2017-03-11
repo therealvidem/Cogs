@@ -8,9 +8,15 @@ class rate:
         self.bot = bot
 
     @commands.group(pass_context=True, name='rate')
-    async def _rate(self, context):
+    async def _rate(self, context, thing: str=None):
         if context.invoked_subcommand is None:
-            await self.bot.send_message(context.message.channel, 'Do {0}help rate for more information.'.format(context.prefix))
+            if thing:
+                if thing is discord.Member:
+                    await self.bot.say('is discord member')
+                else:
+                    await self.bot.say('is not discord member')
+            else:
+                await self.bot.say('Do {0}help rate for more information.'.format(context.prefix))
             
     @_rate.command(pass_context=True, name='discordmember')
     async def _discordmember(self, context, *, member: discord.Member=None):

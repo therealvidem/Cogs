@@ -26,7 +26,6 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.base3 = 'data/test/imagesm/'
-		self.shiplist = dataIO.load_json('data/test/shiplist.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
 		self.counting = False
 		
@@ -76,26 +75,6 @@ class test:
 	@commands.command(pass_context=True)
 	async def getchannelid(self, context):
 		await self.bot.say(str(message.channel.id))
-				
-	@commands.command(pass_context=True)
-	async def rateship(self, context, p1, p2, otherpart = ''):
-		if p2 == 'x':
-			p2 = otherpart
-		strf = p1 + ' x ' + p2
-		if self.shiplist.get(strf):
-			ship = self.shiplist.get(strf)
-			rate = ship['rate']
-			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
-		else:
-			ship = {
-				'p1': p1,
-				'p2': p2,
-				'rate': random.randint(1, 10)
-			}
-			self.shiplist[strf] = ship
-			dataIO.save_json('data/test/shiplist.json', self.shiplist)
-			rate = ship['rate']
-			await self.bot.say('I give the ' + p1 + ' x ' + p2 + ' ship a ' + str(rate) + '/10.')
 
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
@@ -203,10 +182,6 @@ class test:
 					self.counting = False
 			except:
 				await self.bot.say('An error occured.')
-
-def check_files():
-	if not dataIO.is_valid_json('data/test/shiplist.json'):
-		dataIO.save_json('data/test/shiplist.json', {})
 		
 def rFactorial(n):
 	if (n == 0):
@@ -215,6 +190,5 @@ def rFactorial(n):
 		return n * (rFactorial(n - 1))
 
 def setup(bot):
-	check_files()
 	n = test(bot)
 	bot.add_cog(n)

@@ -68,7 +68,7 @@ class rate:
             em.set_author(name=str(author), icon_url=author.avatar_url)
             for x in range(0, len(choices)):
                 em.add_field(name=x, value=choices[x])
-            await self.bot.send_message(ctx.message.channel, embed=em)
+            await self.bot.send_message(context.message.channel, embed=em)
         else:
             await self.bot.say('Not enough choices to choose from')
 

@@ -136,7 +136,7 @@ class test:
 	async def _count(self, context):
 		if context.invoked_subcommand is None:
 			prefix = context.prefix
-			await self.bot.say('Do \'{}count start <start number> [end number] [mention]\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{}count stop\' to stop any counting operation.'.format(prefix))
+			await self.bot.say('Do \'{0}count start <start number> [end number] [mention]\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{0}count stop\' to stop any counting operation.'.format(prefix))
 	
 	@_count.command(pass_context=True, name='start')
 	async def _start(self, context, startnum: int=None, endnum: int=0, mention: str='false'):

@@ -141,9 +141,9 @@ class test:
 	@_count.command(pass_context=True, name='start')
 	async def _start(self, context, startnum: int=None, endnum: int=0, mention: str='false'):
 		if self.counting == False:
-			if startnum and endnum:
+			if startnum:
 				chance = random.randint(1, 10)
-				if (int(startnum) >= 0 and endnum < int(startnum)):
+				if (startnum >= 0 and endnum < startnum):
 					self.counting = True
 					for x in range(int(startnum), endnum - 1, -1):
 						if (self.counting == True):
@@ -162,7 +162,7 @@ class test:
 						else:
 							await self.bot.say('TIME!')
 					self.counting = False
-				elif (int(startnum) >= 0 and endnum > int(startnum)):
+				elif (startnum >= 0 and endnum > startnum):
 					self.counting = True
 					for x in range(int(startnum), endnum + 1):
 						if (self.counting == True):

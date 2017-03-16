@@ -6,6 +6,7 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
+        self.id = bot.user.id
 
     @commands.group(pass_context=True, name='rate')
     async def _rate(self, context):
@@ -23,7 +24,7 @@ class rate:
     @_rate.command(pass_context=True, name='thing')
     async def _thing(self, context, *, thing: str=None):
         if thing:
-            random.seed(self.bot.id + thing.lower())
+            random.seed(self.id + thing.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -35,7 +36,7 @@ class rate:
     async def _someone(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
-            random.seed(self.bot.id + name.lower())
+            random.seed(self.id + name.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -51,7 +52,7 @@ class rate:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)
-            random.seed(self.bot.id + shipname)
+            random.seed(self.id + shipname)
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'

@@ -139,7 +139,7 @@ class test:
 			await self.bot.say('Do \'{}count start [start number] {end number} {mention}\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{}count stop\' to stop any counting operation.').format(prefix)
 	
 	@_count.command(pass_context=True, name='start')
-	async def _start(self, context, startnum: int=None, endnum: int=0, mention = 'false'):
+	async def _start(self, context, startnum: int=None, endnum: int=0, mention: str='false'):
 		if self.counting == False:
 			if startnum and endnum:
 				chance = random.randint(1, 10)
@@ -182,7 +182,7 @@ class test:
 							await self.bot.say('TIME!')
 					self.counting = False
 				else:
-					await self.bot.say('Can\'t do that.')
+					await self.bot.say('An error occured.')
 			else:
 				await self.bot.say('An error occured.')
 		else:

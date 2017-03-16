@@ -88,6 +88,7 @@ class test:
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vp'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
+		await self.bot.say('Successfully added emote as vp ' + str(count))
 		
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
@@ -101,6 +102,7 @@ class test:
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vb'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
+		await self.bot.say('Successfully added emote as vb ' + str(count))
 		
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
@@ -114,6 +116,7 @@ class test:
 		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
 		self.memes['vm'] = count
 		dataIO.save_json('data/test/memes.json', self.memes)
+		await self.bot.say('Successfully added emote as vm ' + str(count))
 		
 	@commands.command(pass_context=True)
 	async def rollbetween(self, context, one, two):
@@ -128,15 +131,21 @@ class test:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
 		else:
 			await self.bot.say('An error occured.')
-			
-	@commands.command(pass_context=True)
-	async def count(self, context, n, tonumber = 0, mention = 'false'):
-		try:
-			if (self.counting == False):
+	
+	@commands.group(pass_context=True, name='count')
+	async def _count(self, context):
+		if context.invoked_subcommand is None:
+			prefix = content.prefix
+			await self.bot.say('Do \'{}count start [start number] {end number} {mention}\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{}count stop\' to stop any counting operation.').format(prefix)
+	
+	@_count.command(pass_context=True, name='start')
+	async def _start(self, context, startnum: int=None, endnum: int=0, mention = 'false'):
+		if self.counting == False:
+			if startnum and endnum:
 				chance = random.randint(1, 10)
-				if (int(n) >= 0 and tonumber < int(n)):
+				if (int(startnum) >= 0 and endnum < int(startnum)):
 					self.counting = True
-					for x in range(int(n), tonumber - 1, -1):
+					for x in range(int(startnum), endnum - 1, -1):
 						if (self.counting == True):
 							await self.bot.say(str(x) + ',')
 							await asyncio.sleep(1)
@@ -153,15 +162,15 @@ class test:
 						else:
 							await self.bot.say('TIME!')
 					self.counting = False
-				elif (int(n) >= 0 and tonumber > int(n)):
+				elif (int(startnum) >= 0 and endnum > int(startnum)):
 					self.counting = True
-					for x in range(int(n), tonumber + 1):
+					for x in range(int(startnum), endnum + 1):
 						if (self.counting == True):
 							await self.bot.say(str(x) + ',')
 							await asyncio.sleep(1)
 						else:
 							break
-					if (chance == 10):
+					if (chance == 10):						
 						if (str(mention) == 'true'):
 							await self.bot.say('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA ' + context.message.author.mention)
 						else:
@@ -175,13 +184,13 @@ class test:
 				else:
 					await self.bot.say('Can\'t do that.')
 			else:
-				await self.bot.say('I\'m already counting.')
-		except:
-			try:
-				if (str(n) == 'stop'):
-					self.counting = False
-			except:
 				await self.bot.say('An error occured.')
+		else:
+			await self.bot.say('I\'m already counting.')
+			
+	@_count.command(pass_context=True, name='stop')
+	async def _stop(self, context):
+		self.counting = False
 		
 def rFactorial(n):
 	if (n == 0):

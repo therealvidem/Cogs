@@ -11,7 +11,7 @@ class rate:
     async def _rate(self, context):
         if context.invoked_subcommand is None:
             prefix = context.prefix
-            title = '**VidemBot\'s Robust Rating System 9000:**\n'
+            title = '**Videm\'s Robust Rating System 9000:**\n'
             message = 'List of commands available for {}rate:\n'.format(prefix)
             message += '``{}rate someone [member]``\n'.format(prefix)
             message += '``{}rate ship [person] [person]``\n'.format(prefix)
@@ -23,7 +23,7 @@ class rate:
     @_rate.command(pass_context=True, name='thing')
     async def _thing(self, context, *, thing: str=None):
         if thing:
-            random.seed(thing.lower())
+            random.seed(self.bot.id + thing.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -35,7 +35,7 @@ class rate:
     async def _someone(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
-            random.seed(name.lower())
+            random.seed(self.bot.id + name.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -51,7 +51,7 @@ class rate:
             shiplist = [name1.lower(), name2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)
-            random.seed(shipname)
+            random.seed(self.bot.id + shipname)
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'

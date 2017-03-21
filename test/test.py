@@ -26,6 +26,7 @@ class test:
 		self.base = 'data/test/images/'
 		self.base2 = 'data/test/imagesj/'
 		self.base3 = 'data/test/imagesm/'
+		self.stabbingobjects = dataIO.load_json('data/test/stabbingobjects.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
 		self.counting = False
 		
@@ -131,6 +132,12 @@ class test:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
 		else:
 			await self.bot.say('An error occured.')
+			
+	@commands.command(pass_context=True)
+	async def stab(self, context, mention: discord.Member=None):
+		obj = random.choice(self.stabbingobjects)
+		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects"])
+		await self.bot.say('{0} {1} {2} with a {3}.'.format(context.message.author.nick, word, mention.nick, obj)) 
 	
 	@commands.group(pass_context=True, name='count')
 	async def _count(self, context):

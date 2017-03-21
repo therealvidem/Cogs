@@ -140,11 +140,20 @@ class test:
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.mention, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)
-	async def addstab(self, context, obj: str=None):
+	async def addstab(self, context, *, obj: str=None):
 		if obj:
 			self.stabbingobjects['objects'].append(obj)
 			dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
 			await self.bot.say('Successfully added ' + obj + ' as a stabby stabby object.')
+		else:
+			await self.bot.say('wat')
+			
+	@commands.command(pass_context=True)
+	async def removestab(self, context, *, obj: str=None):
+		if obj and obj is in self.stabbingobjects['objects']:
+			self.stabbingobjects['objects'].remove(obj)
+			dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
+			await self.bot.say('Successfully removed ' + obj + ' from my knife collection.')
 		else:
 			await self.bot.say('wat')
 	

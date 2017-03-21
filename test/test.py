@@ -156,6 +156,13 @@ class test:
 			await self.bot.say('Successfully removed ' + obj + ' from my knife collection.')
 		else:
 			await self.bot.say('wat')
+			
+	@commands.command(pass_context=True)
+	async def liststab(self, context):
+		em = discord.Embed(title='My Knife Collection', colour=0x2F93E0)
+		for x in range(0, len(self.stabbingobjects['objects']):
+			em.add_field(name=x + 1, value=self.stabbingobjects['objects'][x])
+		await self.bot.send_message(context.message.channel, embed=em)
 	
 	@commands.command(pass_context=True)
 	async def eh(self, context, member: discord.Member=None):

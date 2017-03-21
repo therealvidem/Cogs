@@ -120,7 +120,7 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def stab(self, context, member: discord.Member=None):
+	async def stab(self, context, *, member: discord.Member=None):
 		obj = random.choice(self.stabbingobjects['objects'])
 		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects"])
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.mention, word, member.mention, obj))

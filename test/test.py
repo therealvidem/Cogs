@@ -134,10 +134,24 @@ class test:
 			await self.bot.say('An error occured.')
 			
 	@commands.command(pass_context=True)
-	async def stab(self, context, mention: discord.Member=None):
-		obj = random.choice(self.stabbingobjects.objects)
+	async def stab(self, context, member: discord.Member=None):
+		obj = random.choice(self.stabbingobjects['objects'])
 		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects"])
-		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.nick, word, mention.nick, obj)) 
+		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.mention, word, member.mention, obj))
+		
+	@commands.command(pass_context=True)
+	async def addstab(self, context, obj: str=None):
+		if obj:
+			self.stabbingobjects['objects'].append(obj)
+			dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
+			await self.bot.say('Successfully added ' + obj + ' as a stabby stabby object.')
+		else:
+			await self.bot.say('wat')
+	
+	@commands.command(pass_context=True)
+	async def eh(self, context, member: discord.Member=None):
+		member = member or context.message.author
+		await self.bot.say(member.mention + ', eh?')
 	
 	@commands.group(pass_context=True, name='count')
 	async def _count(self, context):

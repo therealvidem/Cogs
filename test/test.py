@@ -128,9 +128,18 @@ class test:
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
 		if obj:
-			self.stabbingobjects['objects'].append(obj)
-			dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
-			await self.bot.say('Successfully added ' + obj + ' as a stabby stabby object.')
+			allowed = True
+			listofpeople = []
+			for person in context.message.server.members:
+				if obj == person.mention:
+					allowed = False
+					break
+			if allowed:
+				self.stabbingobjects['objects'].append(obj)
+				dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
+				await self.bot.say('Successfully added ' + obj + ' as a stabby stabby object.')
+			else:
+				await self.bot.say('I can\'t add mentions.')
 		else:
 			await self.bot.say('wat')
 			

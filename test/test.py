@@ -137,7 +137,7 @@ class test:
 	async def stab(self, context, mention: discord.Member=None):
 		obj = random.choice(self.stabbingobjects)
 		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects"])
-		await self.bot.say('{0} {1} {2} with a {3}.'.format(context.message.author.nick, word, mention.nick, obj)) 
+		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.nick, word, mention.nick, obj)) 
 	
 	@commands.group(pass_context=True, name='count')
 	async def _count(self, context):

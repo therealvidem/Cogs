@@ -150,7 +150,7 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def removestab(self, context, *, obj: str=None):
-		if obj and obj is in self.stabbingobjects['objects']:
+		if obj and obj in self.stabbingobjects['objects']:
 			self.stabbingobjects['objects'].remove(obj)
 			dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
 			await self.bot.say('Successfully removed ' + obj + ' from my knife collection.')

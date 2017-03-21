@@ -145,20 +145,11 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def liststab(self, context):
-		tick = ''
-		tock = ''
-		tick_tock = 0
+		objs = ''
 		for obj in self.stabbingobjects['objects']:
-			if tick_tock == 0:
-				tick += '**{}**\n'.format(obj)
-				tick_tock = 1
-			else:
-				tock += '**{}**\n'.format(obj)
-				tick_tock = 0
+			objs += '**{}**\n'.format(obj)
 		em = discord.Embed(title='My Knife Collection', color=discord.Color.green())
-		em.add_field(name='\a', value=tick)
-		em.add_field(name='\a', value='\a')
-		em.add_field(name='\a', value=tock)
+		em.add_field(name='\a', value=objs)
 		#em = discord.Embed(title='My Knife Collection', colour=0x2F93E0)
 		#for x in range(0, len(self.stabbingobjects['objects'])):
 		#	em.add_field(name=x + 1, value=self.stabbingobjects['objects'][x])

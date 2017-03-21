@@ -51,27 +51,13 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
+	@commands.cooldown(2, 60, commands.BucketType.user)
 	async def meme(self, context, num = '0'):
 		memenum = random.randint(1, self.memes['vm'])
 		try:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
-			
-	@commands.command(pass_context=True)
-	@checks.admin_or_permissions(move_members=True)
-	async def movevidem(self, context, message, to_channel: discord.Channel):
-		type_to = str(to_channel.type)
-		if type_to == 'text':
-			await self.bot.say('{} is not a valid voice channel'.format(to_channel.name))
-		else:
-			try:
-				if message.author.id == '138838298742226944':
-					await self.bot.move_member(message.author, to_channel)
-			except discord.Forbidden:
-				await self.bot.say('I have no permission to move members.')
-			except discord.HTTPException:
-				await self.bot.say('An error occured. Please try again')
 				
 	@commands.command(pass_context=True)
 	async def getchannelid(self, context):
@@ -159,10 +145,24 @@ class test:
 			
 	@commands.command(pass_context=True)
 	async def liststab(self, context):
-		em = discord.Embed(title='My Knife Collection', colour=0x2F93E0)
-		for x in range(0, len(self.stabbingobjects['objects'])):
-			em.add_field(name=x + 1, value=self.stabbingobjects['objects'][x])
-		await self.bot.send_message(context.message.channel, embed=em)
+		tick = ''
+		tock = ''
+		tick_tock = 0
+		for obj in self.stabbingobjects['objects']:
+			if tick_tock == 0:
+				tick += '**{}**\n'.format(obj)
+				tick_tock = 1
+			else:
+				tock += '**{}**\n'.format(obj)
+				tick_tock = 0
+		em = discord.Embed(title='My Knife Collection', color=discord.Color.green())
+		em.add_field(name='\a', value=tick)
+		em.add_field(name='\a', value='\a')
+		em.add_field(name='\a', value=tock)
+		#em = discord.Embed(title='My Knife Collection', colour=0x2F93E0)
+		#for x in range(0, len(self.stabbingobjects['objects'])):
+		#	em.add_field(name=x + 1, value=self.stabbingobjects['objects'][x])
+		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)
 	async def eh(self, context, member: discord.Member=None):

@@ -57,10 +57,6 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
-				
-	@commands.command(pass_context=True)
-	async def getchannelid(self, context):
-		await self.bot.say(str(message.channel.id))
 
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
@@ -110,14 +106,32 @@ class test:
 		await self.bot.say('You got a ' + str(choice) + '.')
 		
 	@commands.command(pass_context=True)
-	async def factorial(self, context, n):
-		if (int(n) >= 0):
-			await self.bot.say(n + '! = ' + str(rFactorial(int(n))))
-		elif (int(n) < 0):
+	async def factorial(self, context, n: int=None):
+		if n is None:
+			await self.bot.say('wat')
+		elif n > 0:
+			await self.bot.say(n + '! = ' + str(rFactorial(n)))
+		elif n < 0:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
-		else:
-			await self.bot.say('An error occured.')
 			
+	@commands.command(pass_context=True)
+	async def permutations(self, context, n: int=None, r: int=None):
+		if n is None or r is None:
+			await self.bot.say('wat')
+		elif n > 0 and r > 0:
+			await self.bot.say(n + 'P' + r + ' = ' + str(rFactorial(n) / rFactorial(n - r)))
+		elif n < 0 or r < 0:
+			await self.bot.say('I dunno what the means.')
+	
+	@commands.command(pass_context=True)
+	async def combinations(self, context, n: int=None, r: int=None):
+		if n is None or r is None:
+			await self.bot.say('wat')
+		elif n > 0 and r > 0 and n >= r:
+			await self.bot.say(n + 'P' + r + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r)))
+		elif n < 0 or r < 0:
+			await self.bot.say('I dunno what the means.')
+	
 	@commands.command(pass_context=True)
 	async def stab(self, context, *, member: discord.Member=None):
 		obj = random.choice(self.stabbingobjects['objects'])

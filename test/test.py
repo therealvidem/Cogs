@@ -51,7 +51,6 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 			
 	@commands.command(pass_context=True, invoke_without_command=True)
-	@commands.cooldown(2, 60, commands.BucketType.user)
 	async def meme(self, context, num = '0'):
 		memenum = random.randint(1, self.memes['vm'])
 		try:

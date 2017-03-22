@@ -128,8 +128,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
 		if obj:
-			if obj.rfind('.') == len(obj) - 1:
-				obj = obj[0:len(obj) - 2]
+			obj = obj.rstrip(".");
 			allowed = True
 			listofpeople = []
 			for person in context.message.server.members:

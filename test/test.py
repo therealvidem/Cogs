@@ -110,7 +110,7 @@ class test:
 		if n is None:
 			await self.bot.say('wat')
 		elif n > 0:
-			await self.bot.say(n + '! = ' + str(rFactorial(n)))
+			await self.bot.say(str(n) + '! = ' + str(rFactorial(n)))
 		elif n < 0:
 			await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
 			

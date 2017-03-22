@@ -123,11 +123,13 @@ class test:
 	async def stab(self, context, *, member: discord.Member=None):
 		obj = random.choice(self.stabbingobjects['objects'])
 		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects"])
-		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.mention, word, member.mention, obj))
+		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
 		if obj:
+			if obj.rfind('.') == len(obj) - 1:
+				obj = obj[0:len(obj) - 2]
 			allowed = True
 			listofpeople = []
 			for person in context.message.server.members:

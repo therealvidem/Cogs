@@ -136,7 +136,7 @@ class test:
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
 			
-	async def init(member):
+	async def init(self, member):
 		if context.message.server.id not in self.coffee:
 			self.coffee[context.message.server.id] = {}
 		self.coffee[context.message.server.id][member.id] = 0

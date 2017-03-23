@@ -199,7 +199,7 @@ class test:
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
 		i = 1
-		for person,value in sorted(self.coffee[context.message.server.id].items().items):
+		for person,value in sorted(self.coffee[context.message.server.id].items()):
 			i += 1
 			personname = ''
 			for p in context.message.server.members:

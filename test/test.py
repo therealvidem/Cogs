@@ -139,7 +139,7 @@ class test:
 	async def init(self, context, member):
 		if context.message.server.id not in self.coffee:
 			self.coffee[context.message.server.id] = {}
-		self.coffee[context.message.server.id][member.id] = 0
+		await self.coffee[context.message.server.id][member.id] = 0
 
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):

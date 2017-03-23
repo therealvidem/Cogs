@@ -136,15 +136,24 @@ class test:
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
 			
+	async def init(member):
+		if context.message.server.id not in self.coffee:
+			self.coffee[context.message.server.id] = {}
+		self.coffee[context.message.server.id][member.id] = 0
+			
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):
 		if context.invoked_subcommand is None:
+			if context.message.server.id not in self.coffee:
+				self.coffee[context.message.server.id] = {}
 			await self.bot.say('blep')
 		
 	@_coffee.command(pass_context=True, name='plus')
 	@checks.admin()
 	async def _plus(self, context, member: discord.Member=None):
 		if member:
+			if member.id not in self.coffee[context.message.server.id]:
+				self.init()
 			numcoffee = self.coffee[context.message.server.id][member.id] + 1
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -154,6 +163,8 @@ class test:
 	@checks.admin()
 	async def _subtract(self, context, member: discord.Member=None):
 		if member:
+			if member.id not in self.coffee[context.message.server.id]:
+				self.init()
 			numcoffee = max(0, self.coffee[context.message.server.id][member.id] - 1)
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -163,6 +174,8 @@ class test:
 	@checks.admin()
 	async def _give(self, context, member: discord.Member=None, n: int=1):
 		if member:
+			if member.id not in self.coffee[context.message.server.id]:
+				self.init()
 			numcoffee = self.coffee[context.message.server.id][member.id] + n
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -172,6 +185,8 @@ class test:
 	@checks.admin()
 	async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
 		if member:
+			if member.id not in self.coffee[context.message.server.id]:
+				self.init()
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')

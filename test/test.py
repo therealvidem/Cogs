@@ -195,7 +195,7 @@ class test:
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
 		for person in self.coffee[context.message.server.id]:
-			em.add_field(name='\a', value=self.coffee[context.message.server.id][person.id])
+			em.add_field(name='\a', value=person)
 		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)

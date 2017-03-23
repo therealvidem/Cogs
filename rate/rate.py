@@ -51,11 +51,9 @@ class rate:
             name1 = str(member1)
             name2 = str(member2)
             for person in context.message.server.members:
-                if member1 == person.mention or member1 == str(person):
-                    name1 = person.id
-                elif member2 == person.mention or member2 == str(person):
-                    name2 = person.id
-            shiplist = [name1.lower(), name2.lower()]
+                member1 = person.id if member1 == person.mention or member1 == str(person)
+                member2 = person.id if member2 == person.mention or member2 == str(person)
+            shiplist = [member1.lower(), member2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)

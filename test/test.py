@@ -140,6 +140,7 @@ class test:
 		if context.message.server.id not in self.coffee:
 			self.coffee[context.message.server.id] = {}
 		self.coffee[context.message.server.id][member.id] = 0
+		return
 
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):

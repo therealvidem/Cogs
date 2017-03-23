@@ -146,7 +146,7 @@ class test:
 	async def pat(self, context, member: discord.Member=None, n: int=3):
 		member = member or context.message.author
 		if n and n <= 100 and n > 0:
-			await self.bot.say(mention + ' *' + ('pat' * n) + '*')
+			await self.bot.say(member.mention + ' *' + ('pat' * n) + '*')
 		else:
 			if n > 100:
 				await self.bot.say('That\'s too many pats!')

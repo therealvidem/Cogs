@@ -205,7 +205,8 @@ class test:
 			for p in context.message.server.members:
 				if p.id == person:
 					personname = p.name
-			em.add_field(name=str(i) + '. ' + personname + '\a', value=value)
+			coffeetext = 'coffees' if value > 1 else 'coffee'
+			em.add_field(name=str(i) + '. ' + personname + '\a', value=str(value) + ' coffees')
 		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)

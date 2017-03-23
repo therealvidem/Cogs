@@ -190,12 +190,14 @@ class test:
 	@_coffee.command(pass_context=True, name='list')
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
-		for person,value in self.coffee[context.message.server.id].items():
+		i = 0
+		for person,value in sorted(self.coffee[context.message.server.id].items().items):
+			i += 1
 			personname = ''
 			for p in context.message.server.members:
 				if p.id == person:
 					personname = p.name
-			em.add_field(name=personname + '\a', value=value)
+			em.add_field(name=i + '. ' + personname + '\a', value=value)
 		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)

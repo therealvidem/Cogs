@@ -143,6 +143,12 @@ class test:
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)
+	async def pat(self, context, n: int=None):
+		if n and n < 100:
+			await self.bot.say(context.message.author.mention + ' *pat*' + n) 
+			
+		
+	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
 		if obj and obj not in self.stabbingobjects['objects']:
 			obj = obj.rstrip(".");

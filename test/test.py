@@ -175,7 +175,7 @@ class test:
 			numcoffee = self.coffee[context.message.server.id][member.id] + n
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
-			await self.bot.say('Gave ' + n + ' coffee to ' + member.mention + '!')
+			await self.bot.say('Gave ' + str(n) + ' coffee to ' + member.mention + '!')
 			
 	@_coffee.command(pass_context=True, name='set')
 	@checks.admin()
@@ -185,7 +185,7 @@ class test:
 				self.coffee[context.message.server.id][member.id] = 0
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
-			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')
+			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
 	@_coffee.command(pass_context=True, name='reset')
 	async def _reset(self, context, member: discord.Member=None):

@@ -137,7 +137,6 @@ class test:
 			await self.bot.say('I dunno what the means.')
 			
 	@commands.group(pass_context=True, name='coffee')
-	@checks.admin()
 	async def _coffee(self, context):
 		if context.invoked_subcommand is None:
 			await self.bot.say('blep')
@@ -151,7 +150,7 @@ class test:
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
 			
-	@_coffee.command(pass_context=True, name='plus')
+	@_coffee.command(pass_context=True, name='subtract')
 	@checks.admin()
 	async def _subtract(self, context, member: discord.Member=None):
 		if member:
@@ -160,7 +159,7 @@ class test:
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Took 1 coffee from ' + member.mention + '!')
 			
-	@_coffee.command(pass_context=True, name='plus')
+	@_coffee.command(pass_context=True, name='give')
 	@checks.admin()
 	async def _give(self, context, member: discord.Member=None, n: int=1):
 		if member:
@@ -169,13 +168,20 @@ class test:
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Gave ' + n + ' coffee to ' + member.mention + '!')
 			
-	@_coffee.command(pass_context=True, name='plus')
+	@_coffee.command(pass_context=True, name='set')
 	@checks.admin()
 	async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
 		if member:
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')
+			
+	@_coffee.command(pass_context=True, name='list')
+	async def _list(self, context):
+		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
+		for person in self.coffee[context.message.server.id]:
+			em.add_field(name='\a', value=self.coffee[context.message.server.id][person.id])
+		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)
 	async def sauce(self, context):
@@ -221,7 +227,8 @@ class test:
 				await self.bot.say('I can\'t add mentions.')
 		else:
 			if obj in self.stabbingobjects['objects']:
-				await self.bot.say('That\'s already in my knife collection.'			else:
+				await self.bot.say('That\'s already in my knife collection.'			
+			else:
 				await self.bot.say('wat')
 			
 	@commands.command(pass_context=True)

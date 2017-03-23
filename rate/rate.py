@@ -51,10 +51,13 @@ class rate:
             name1 = str(member1)
             name2 = str(member2)
             for person in context.message.server.members:
-                if member1 == person.mention or member1 == str(person):
-                    member1 = str(person.id)
-                if member2 == person.mention or member2 == str(person):
-                    member2 = str(person.id)
+                if member1 == person.mention or member1 == person.name:
+                    name1 = person.id
+                    member1 = str(person)
+                if member2 == person.mention or member2 == person.name:
+                    name2 = person.id
+                    member2 = str(person)
+            await self.bot.say('m1: ' + member1 + ' m2: ' + member2)
             shiplist = [member1.lower(), member2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)

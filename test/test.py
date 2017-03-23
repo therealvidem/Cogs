@@ -227,7 +227,7 @@ class test:
 				await self.bot.say('I can\'t add mentions.')
 		else:
 			if obj in self.stabbingobjects['objects']:
-				await self.bot.say('That\'s already in my knife collection.'			
+				await self.bot.say('That\'s already in my knife collection.')			
 			else:
 				await self.bot.say('wat')
 			

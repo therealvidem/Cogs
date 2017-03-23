@@ -4,6 +4,7 @@ from discord.ext import commands
 from .utils import checks
 import asyncio
 import time
+import operator
 import urllib.request
 import simplejson
 from io import StringIO
@@ -189,8 +190,9 @@ class test:
 	@_coffee.command(pass_context=True, name='list')
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
-		for person in self.coffee[context.message.server.id]:
-			em.add_field(name='\a', value=person)
+		for person,value in self.coffee[context.message.server.id]:
+			member = [p for p in context.message.server.members if p.id == value]
+			em.add_field(name=member.name + '\a', value=person)
 		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)

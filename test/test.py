@@ -206,7 +206,7 @@ class test:
 				if p.id == person:
 					personname = p.name
 			coffeetext = 'coffees' if value > 1 else 'coffee'
-			em.add_field(name=str(i) + '. ' + personname + '\a', value=str(value) + ' coffees')
+			em.add_field(name=str(i) + '. ' + personname + '\a', value=str(value) + ' ' + coffeetext)
 		await self.bot.say(embed=em)
 	
 	@commands.command(pass_context=True)

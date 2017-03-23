@@ -194,7 +194,7 @@ class test:
 			personname = ''
 			for p in context.message.server.members:
 				if p.id == person:
-					personname = member.name
+					personname = p.name
 			em.add_field(name=personname + '\a', value=value)
 		await self.bot.say(embed=em)
 	

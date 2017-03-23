@@ -144,7 +144,7 @@ class test:
 		
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
-		if obj:
+		if obj and obj not in self.stabbingobjects['objects']:
 			obj = obj.rstrip(".");
 			allowed = True
 			listofpeople = []
@@ -159,7 +159,10 @@ class test:
 			else:
 				await self.bot.say('I can\'t add mentions.')
 		else:
-			await self.bot.say('wat')
+			if obj in self.stabbingobjects['objects']:
+				await self.bot.say('That\'s already in my knife collection.')
+			else:
+				await self.bot.say('wat')
 			
 	@commands.command(pass_context=True)
 	async def removestab(self, context, *, obj: str=None):

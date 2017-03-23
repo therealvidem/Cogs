@@ -61,44 +61,47 @@ class test:
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
 	async def addvp(self, context, url):
-		count = self.memes['vp'] + 1
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
+			count = self.memes['vp'] + 1
 			with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
 				r.raw.decode_content = True
 				shutil.copyfileobj(r.raw, f)
-		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
-		self.memes['vp'] = count
-		dataIO.save_json('data/test/memes.json', self.memes)
-		await self.bot.say('Successfully added emote as vp ' + str(count))
+			self.memes['vp'] = count
+			dataIO.save_json('data/test/memes.json', self.memes)
+			await self.bot.say('Successfully added emote as vp ' + str(count))
+		else:
+			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
 	async def addvb(self, context, url):
-		count = self.memes['vb'] + 1
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
-			with open(self.base2 + 'meme (' + str(count) + ').png', 'wb') as f:
+			count = self.memes['vb'] + 1
+			with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
 				r.raw.decode_content = True
 				shutil.copyfileobj(r.raw, f)
-		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
-		self.memes['vb'] = count
-		dataIO.save_json('data/test/memes.json', self.memes)
-		await self.bot.say('Successfully added emote as vb ' + str(count))
+			self.memes['vb'] = count
+			dataIO.save_json('data/test/memes.json', self.memes)
+			await self.bot.say('Successfully added emote as vb ' + str(count))
+		else:
+			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
 	@checks.admin_or_permissions(kick_members=True)
 	async def addvm(self, context, url):
-		count = self.memes['vm'] + 1
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
-			with open(self.base3 + 'meme (' + str(count) + ').png', 'wb') as f:
+			count = self.memes['vm'] + 1
+			with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
 				r.raw.decode_content = True
 				shutil.copyfileobj(r.raw, f)
-		# urllib.request.urlretrieve(url, self.base + 'memes (' + str(count) + ').png')
-		self.memes['vm'] = count
-		dataIO.save_json('data/test/memes.json', self.memes)
-		await self.bot.say('Successfully added emote as vm ' + str(count))
+			self.memes['vm'] = count
+			dataIO.save_json('data/test/memes.json', self.memes)
+			await self.bot.say('Successfully added emote as vm ' + str(count))
+		else:
+			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
 	async def rollbetween(self, context, one, two):

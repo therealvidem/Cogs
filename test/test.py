@@ -146,7 +146,7 @@ class test:
 	async def pat(self, context, member: discord.Member=None, n: int=3):
 		member = member or context.message.author
 		if n and n <= 100 and n > 0:
-			if member.id != self.bot.id:
+			if member.id != self.bot.user.id:
 				await self.bot.say(member.mention + ' *' + ('pat' * n) + '*')
 			else:
 				await self.bot.say('*eternally pats self*')

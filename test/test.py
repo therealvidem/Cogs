@@ -136,11 +136,10 @@ class test:
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
 	
-	async def init(self, member):
+	async def init(self, context, member):
 		if context.message.server.id not in self.coffee:
 			self.coffee[context.message.server.id] = {}
 		self.coffee[context.message.server.id][member.id] = 0
-		await
 
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):
@@ -154,7 +153,7 @@ class test:
 	async def _plus(self, context, member: discord.Member=None):
 		if member:
 			if member.id not in self.coffee[context.message.server.id]:
-				self.init(member)
+				self.init(context, member)
 			numcoffee = self.coffee[context.message.server.id][member.id] + 1
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -165,7 +164,7 @@ class test:
 	async def _subtract(self, context, member: discord.Member=None):
 		if member:
 			if member.id not in self.coffee[context.message.server.id]:
-				self.init(member)
+				self.init(context, member)
 			numcoffee = max(0, self.coffee[context.message.server.id][member.id] - 1)
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -176,7 +175,7 @@ class test:
 	async def _give(self, context, member: discord.Member=None, n: int=1):
 		if member:
 			if member.id not in self.coffee[context.message.server.id]:
-				self.init(member)
+				self.init(context, member)
 			numcoffee = self.coffee[context.message.server.id][member.id] + n
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
@@ -187,7 +186,7 @@ class test:
 	async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
 		if member:
 			if member.id not in self.coffee[context.message.server.id]:
-				self.init()
+				self.init(context, member)
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')

@@ -27,6 +27,7 @@ class test:
 		self.base2 = 'data/test/imagesj/'
 		self.base3 = 'data/test/imagesm/'
 		self.stabbingobjects = dataIO.load_json('data/test/stabbingobjects.json')
+		self.coffee = dataIO.load_json('data/test/coffee.json')
 		self.memes = dataIO.load_json('data/test/memes.json')
 		self.counting = False
 		
@@ -59,7 +60,7 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 
 	@commands.command(pass_context=True)
-	@checks.admin_or_permissions(kick_members=True)
+	@checks.admin()
 	async def addvp(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
@@ -74,7 +75,7 @@ class test:
 			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
-	@checks.admin_or_permissions(kick_members=True)
+	@checks.admin()
 	async def addvb(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
@@ -89,7 +90,7 @@ class test:
 			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
-	@checks.admin_or_permissions(kick_members=True)
+	@checks.admin()
 	async def addvm(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
@@ -134,6 +135,47 @@ class test:
 			await self.bot.say(str(n) + 'C' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
+			
+	@commands.group(pass_context=True, name='coffee')
+	@checks.admin()
+	async def _coffee(self, context):
+		if context.invoked_subcommand is None:
+			await self.bot.say('blep')
+		
+	@_coffee.command(pass_context=True, name='plus')
+	@checks.admin()
+	async def _plus(self, context, member: discord.Member=None):
+		if member:
+			numcoffee = self.coffee[context.message.server.id][member.id] + 1
+			self.coffee[context.message.server.id][member.id] = numcoffee
+			dataIO.save_json('data/test/coffee.json', self.coffee)
+			await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
+			
+	@_coffee.command(pass_context=True, name='plus')
+	@checks.admin()
+	async def _subtract(self, context, member: discord.Member=None):
+		if member:
+			numcoffee = max(0, self.coffee[context.message.server.id][member.id] - 1)
+			self.coffee[context.message.server.id][member.id] = numcoffee
+			dataIO.save_json('data/test/coffee.json', self.coffee)
+			await self.bot.say('Took 1 coffee from ' + member.mention + '!')
+			
+	@_coffee.command(pass_context=True, name='plus')
+	@checks.admin()
+	async def _give(self, context, member: discord.Member=None, n: int=1):
+		if member:
+			numcoffee = self.coffee[context.message.server.id][member.id] + n
+			self.coffee[context.message.server.id][member.id] = numcoffee
+			dataIO.save_json('data/test/coffee.json', self.coffee)
+			await self.bot.say('Gave ' + n + ' coffee to ' + member.mention + '!')
+			
+	@_coffee.command(pass_context=True, name='plus')
+	@checks.admin()
+	async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
+		if member:
+			self.coffee[context.message.server.id][member.id] = numcoffee
+			dataIO.save_json('data/test/coffee.json', self.coffee)
+			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')
 	
 	@commands.command(pass_context=True)
 	async def sauce(self, context):
@@ -179,8 +221,7 @@ class test:
 				await self.bot.say('I can\'t add mentions.')
 		else:
 			if obj in self.stabbingobjects['objects']:
-				await self.bot.say('That\'s already in my knife collection.')
-			else:
+				await self.bot.say('That\'s already in my knife collection.'			else:
 				await self.bot.say('wat')
 			
 	@commands.command(pass_context=True)

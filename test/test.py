@@ -187,6 +187,14 @@ class test:
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + numcoffee + '!')
 			
+	@_coffee.command(pass_context=True, name='reset')
+	async def _reset(self, context, member: discord.Member=None):
+		if member:
+			try:
+				self.coffee[context.message.server.id].pop(member.id, None)
+			except KeyError:
+				await self.bot.say('Person doesn\'t exist.')
+			
 	@_coffee.command(pass_context=True, name='list')
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())

@@ -143,13 +143,8 @@ class test:
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)
-	async def pat(self, context, member: discord.Member=None, n: int=None):
+	async def pat(self, context, member: discord.Member=context.message.author, n: int=3):
 		if n and n <= 100 and n > 0:
-			mention = None
-			if member:
-				mention = member.mention
-			else:
-				mention = context.message.author.mention
 			await self.bot.say(mention + ' *' + ('pat' * n) + '*')
 		else:
 			if n > 100:

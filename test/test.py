@@ -143,10 +143,16 @@ class test:
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)
-	async def pat(self, context, n: int=None):
-		if n and n < 100:
-			await self.bot.say(context.message.author.mention + ' *pat*' + n) 
-			
+	async def pat(self, context, member: discord.Member=None, n: int=None):
+		if n and n <= 100 and n > 0:
+			await self.bot.say(context.message.author.mention + ' *' + ('pat' * n) + '*')
+		else:
+			if n > 100:
+				await self.bot.say('That\'s too many pats!')
+			elif n <= 0:
+				await self.bot.say('I don\'t know how to pat you that many times.')
+			else:
+				await self.bot.say('wat')
 		
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):

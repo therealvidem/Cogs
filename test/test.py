@@ -135,19 +135,20 @@ class test:
 			await self.bot.say(str(n) + 'C' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
-			
+	
 	async def init(self, member):
 		if context.message.server.id not in self.coffee:
 			self.coffee[context.message.server.id] = {}
 		self.coffee[context.message.server.id][member.id] = 0
-			
+		return
+
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):
 		if context.invoked_subcommand is None:
 			if context.message.server.id not in self.coffee:
 				self.coffee[context.message.server.id] = {}
 			await self.bot.say('blep')
-		
+
 	@_coffee.command(pass_context=True, name='plus')
 	@checks.admin()
 	async def _plus(self, context, member: discord.Member=None):
@@ -158,7 +159,7 @@ class test:
 			self.coffee[context.message.server.id][member.id] = numcoffee
 			dataIO.save_json('data/test/coffee.json', self.coffee)
 			await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
-			
+	
 	@_coffee.command(pass_context=True, name='subtract')
 	@checks.admin()
 	async def _subtract(self, context, member: discord.Member=None):

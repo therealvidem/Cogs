@@ -190,7 +190,7 @@ class test:
 	@_coffee.command(pass_context=True, name='list')
 	async def _list(self, context):
 		em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
-		i = 0
+		i = 1
 		for person,value in sorted(self.coffee[context.message.server.id].items().items):
 			i += 1
 			personname = ''

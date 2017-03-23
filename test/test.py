@@ -128,7 +128,7 @@ class test:
 		if n is None or r is None:
 			await self.bot.say('wat')
 		elif n > 0 and r > 0 and n >= r:
-			await self.bot.say(str(n) + 'P' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
+			await self.bot.say(str(n) + 'C' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
 	

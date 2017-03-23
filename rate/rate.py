@@ -24,7 +24,7 @@ class rate:
     @_rate.command(pass_context=True, name='thing')
     async def _thing(self, context, *, thing: str=None):
         if thing:
-            random.seed(self.id + thing.lower())
+            random.seed(str(self.id) + thing.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -36,7 +36,7 @@ class rate:
     async def _someone(self, context, *, member: discord.Member=None):
         if member:
             name = member.display_name
-            random.seed(self.id + name.lower())
+            random.seed(str(self.id) + name.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -52,13 +52,13 @@ class rate:
             name2 = str(member2)
             for person in context.message.server.members:
                 if member1 == person.mention or member1 == str(person):
-                    member1 = person.id
+                    member1 = str(person.id)
                 if member2 == person.mention or member2 == str(person):
-                    member2 = person.id
+                    member2 = str(person.id)
             shiplist = [member1.lower(), member2.lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)
-            random.seed(self.id + shipname)
+            random.seed(str(self.id) + shipname)
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
@@ -71,7 +71,7 @@ class rate:
         author = context.message.author
         choices = list(args)
         if len(choices) > 1:
-            random.seed(self.id + ', '.join(choices))
+            random.seed(str(self.id) + ', '.join(choices))
             random.shuffle(choices)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             em.set_author(name=str(author), icon_url=author.avatar_url)

@@ -237,12 +237,8 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def aaa(self, context, n: int=10):
-		member = member or context.message.author
 		if n and n <= 1000 and n > 0:
-			if member.id != self.bot.user.id:
-				await self.bot.say(member.mention + ' ***' + ('A' * n) + '***')
-			else:
-				await self.bot.say('***eternally screams***')
+			await self.bot.say('***' + ('A' * n) + '***')
 		else:
 			if n > 1000:
 				await self.bot.say('That\'s too loud, calm down!')

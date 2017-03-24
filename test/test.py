@@ -236,15 +236,15 @@ class test:
 				await self.bot.say('wat')
 				
 	@commands.command(pass_context=True)
-	async def aaa(self, context, member: discord.Member=None, n: int=10):
+	async def aaa(self, context, n: int=10):
 		member = member or context.message.author
-		if n and n <= 500 and n > 0:
+		if n and n <= 1000 and n > 0:
 			if member.id != self.bot.user.id:
 				await self.bot.say(member.mention + ' ***' + ('A' * n) + '***')
 			else:
 				await self.bot.say('***eternally screams***')
 		else:
-			if n > 500:
+			if n > 1000:
 				await self.bot.say('That\'s too loud, calm down!')
 			elif n <= 0:
 				await self.bot.say('Are you silent?')

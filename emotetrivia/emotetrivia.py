@@ -243,6 +243,7 @@ class TriviaSession():
 
     async def check_answer(self, reaction, user):
         if user.id != trivia_manager.bot.user.id:
+            await self.bot.say(reaction.emoji)
             self.timeout = time.perf_counter()
             if self.current_q is not None:
                 for answer in self.current_q["ANSWERS"]:

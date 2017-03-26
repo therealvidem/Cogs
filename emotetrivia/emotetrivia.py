@@ -143,7 +143,7 @@ class TriviaSession():
                     await trivia_manager.bot.say("There is no list with that name.")
                     await self.stop_trivia()
         else:
-            await trivia_manager.bot.say("emotetrivia [list name]")
+            await trivia_manager.bot.say("etrivia [list name]")
 
     async def stop_trivia(self):
         self.status = "stop"
@@ -305,4 +305,4 @@ def setup(bot):
     check_files()
     trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)
-    bot.add_listener(EmoteTrivia.test, "on_reaction_add")
+    bot.add_listener(trivia_manager.test, "on_reaction_add")

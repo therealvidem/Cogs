@@ -15,7 +15,7 @@ class EmoteTrivia:
     def __init__(self, bot):
         self.bot = bot
         self.trivia_sessions = []
-        self.file_path = "data/trivia/settings.json"
+        self.file_path = "data/emotetrivia/settings.json"
         self.settings = dataIO.load_json(self.file_path)
 
     @commands.group(pass_context=True)
@@ -26,7 +26,7 @@ class EmoteTrivia:
             msg = "```\n"
             for k, v in self.settings.items():
                 msg += "{}: {}\n".format(k, v)
-            msg += "```\nSee {}help triviaset to edit the settings".format(ctx.prefix)
+            msg += "```\nSee {}help emotetriviaset to edit the settings".format(ctx.prefix)
             await self.bot.say(msg)
 
     @triviaset.command()
@@ -54,7 +54,7 @@ class EmoteTrivia:
         """Red gains points"""
         if self.settings["TRIVIA_BOT_PLAYS"] is True:
             self.settings["TRIVIA_BOT_PLAYS"] = False
-            await self.bot.say("Alright, I won't embarass you at trivia anymore.")
+            await self.bot.say("Alright, I won't embarass you at emote trivia anymore.")
         else:
             self.settings["TRIVIA_BOT_PLAYS"] = True
             await self.bot.say("I'll gain a point everytime you don't answer in time.")
@@ -85,7 +85,7 @@ class EmoteTrivia:
 
     async def trivia_list(self, author):
         msg = "**Available trivia lists:** \n\n```"
-        lists = os.listdir("data/trivia/")
+        lists = os.listdir("data/emotetrivia/")
         if lists:
             clean_list = []
             for txt in lists:
@@ -131,8 +131,8 @@ class TriviaSession():
                 self.timeout = time.perf_counter()
                 if self.question_list: await self.new_question()
             else:
-                if os.path.isfile("data/trivia/" + qlist + ".txt"):
-                    self.question_list = await self.load_list("data/trivia/" + qlist + ".txt")
+                if os.path.isfile("data/emotetrivia/" + qlist + ".txt"):
+                    self.question_list = await self.load_list("data/emotetrivia/" + qlist + ".txt")
                     self.status = "new question"
                     self.timeout = time.perf_counter()
                     if self.question_list: await self.new_question()
@@ -140,7 +140,7 @@ class TriviaSession():
                     await trivia_manager.bot.say("There is no list with that name.")
                     await self.stop_trivia()
         else:
-            await trivia_manager.bot.say("trivia [list name]")
+            await trivia_manager.bot.say("emotetrivia [list name]")
 
     async def stop_trivia(self):
         self.status = "stop"
@@ -283,7 +283,7 @@ async def check_messages(reaction, user):
 
 
 def check_folders():
-    folders = ("data", "data/trivia/")
+    folders = ("data", "data/emotetrivia/")
     for folder in folders:
         if not os.path.exists(folder):
             print("Creating " + folder + " folder...")
@@ -293,9 +293,9 @@ def check_folders():
 def check_files():
     settings = {"TRIVIA_MAX_SCORE" : 10, "TRIVIA_TIMEOUT" : 120,  "TRIVIA_DELAY" : 15, "TRIVIA_BOT_PLAYS" : False}
 
-    if not os.path.isfile("data/trivia/settings.json"):
+    if not os.path.isfile("data/emotetrivia/settings.json"):
         print("Creating empty settings.json...")
-        dataIO.save_json("data/trivia/settings.json", settings)
+        dataIO.save_json("data/emotetrivia/settings.json", settings)
 
 
 def setup(bot):

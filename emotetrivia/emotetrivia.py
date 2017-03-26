@@ -20,7 +20,7 @@ class Trivia:
 
     @commands.group(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def triviaset(self, ctx):
+    async def etriviaset(self, ctx):
         """Change trivia settings"""
         if ctx.invoked_subcommand is None:
             msg = "```\n"
@@ -61,7 +61,7 @@ class Trivia:
         dataIO.save_json(self.file_path, self.settings)
 
     @commands.command(pass_context=True)
-    async def trivia(self, ctx, list_name : str=None):
+    async def etrivia(self, ctx, list_name : str=None):
         """Start a trivia session with the specified list
         trivia stop - Ends the current session
         trivia - Shows trivia lists
@@ -73,15 +73,15 @@ class Trivia:
             if await get_trivia_by_channel(message.channel):
                 s = await get_trivia_by_channel(message.channel)
                 await s.end_game()
-                await self.bot.say("Trivia stopped.")
+                await self.bot.say("Emote Trivia stopped.")
             else:
-                await self.bot.say("There's no trivia session ongoing in this channel.")
+                await self.bot.say("There's no emote trivia session ongoing in this channel.")
         elif not await get_trivia_by_channel(message.channel):
             t = TriviaSession(message, self.settings)
             self.trivia_sessions.append(t)
             await t.load_questions(message.content)
         else:
-            await self.bot.say("A trivia session is already ongoing in this channel.")
+            await self.bot.say("An emote trivia session is already ongoing in this channel.")
 
     async def trivia_list(self, author):
         msg = "**Available trivia lists:** \n\n```"
@@ -110,7 +110,7 @@ class Trivia:
 
 class TriviaSession():
     def __init__(self, message, settings):
-        self.gave_answer = ["I know this one! {}!", "Easy: {}.", "Oh really? It's {} of course."]
+        self.gave_answer = ["All I'm seeing are losers. The answer is obviously {}!", "Easy peasy lemon squeezy: {}.", "Really? I'm disappointed in all of you. It's clearly {}, you uneducated swines."]
         self.current_q = None # {"QUESTION" : "String", "ANSWERS" : []}
         self.question_list = ""
         self.channel = message.channel
@@ -241,22 +241,22 @@ class TriviaSession():
         t += "```"
         await trivia_manager.bot.say(t)
 
-    async def check_answer(self, message):
-        if message.author.id != trivia_manager.bot.user.id:
+    async def check_answer(self, reaction, user):
+        if user.id != trivia_manager.bot.user.id:
             self.timeout = time.perf_counter()
             if self.current_q is not None:
                 for answer in self.current_q["ANSWERS"]:
-                    if answer in message.content.lower():
+                    if answer in reaction.emoji:
                         self.current_q["ANSWERS"] = []
                         self.status = "correct answer"
-                        self.add_point(message.author.name)
-                        msg = "You got it {}! **+1** to you!".format(message.author.name)
+                        self.add_point(user.name)
+                        msg = "You got it {}! **+1** to you!".format(user.name)
                         try:
                             await trivia_manager.bot.send_typing(self.channel)
-                            await trivia_manager.bot.send_message(message.channel, msg)
+                            await trivia_manager.bot.send_message(reaction.message.channel, msg)
                         except:
                             await asyncio.sleep(0.5)
-                            await trivia_manager.bot.send_message(message.channel, msg)
+                            await trivia_manager.bot.send_message(reaction.message.channel, msg)
                         return True
 
     def add_point(self, user):
@@ -275,11 +275,11 @@ async def get_trivia_by_channel(channel):
                 return t
         return False
 
-async def check_messages(message):
-    if message.author.id != trivia_manager.bot.user.id:
+async def check_messages(reaction, user):
+    if user.id != trivia_manager.bot.user.id:
         if await get_trivia_by_channel(message.channel):
             trvsession = await get_trivia_by_channel(message.channel)
-            await trvsession.check_answer(message)
+            await trvsession.check_answer(reaction, user)
 
 
 def check_folders():
@@ -302,6 +302,6 @@ def setup(bot):
     global trivia_manager
     check_folders()
     check_files()
-    bot.add_listener(check_messages, "on_message")
+    bot.add_listener(check_messages, "on_reaction_add")
     trivia_manager = Trivia(bot)
-bot.add_cog(trivia_manager)
+    bot.add_cog(trivia_manager)

@@ -142,7 +142,7 @@ class test:
 		if context.invoked_subcommand is None:
 			if context.message.server.id not in self.coffee:
 				self.coffee[context.message.server.id] = {}
-			await self.bot.say('blep')
+			await self.bot.say('Do {}help coffee.'.format(context.prefix)) 
 
 	@_coffee.command(pass_context=True, name='plus')
 	@checks.admin()

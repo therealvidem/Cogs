@@ -107,10 +107,6 @@ class EmoteTrivia:
                 await self.bot.say("There are no trivia lists available.")
         else:
             await self.bot.say("There are no trivia lists available.")
-            
-    async def test(self, reaction, user):
-        await self.bot.say('test')
-        await self.bot.say(reaction.message)
 
 class TriviaSession():
     def __init__(self, message, settings):

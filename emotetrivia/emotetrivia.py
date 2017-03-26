@@ -29,7 +29,7 @@ class EmoteTrivia:
             msg += "```\nSee {}help emotetriviaset to edit the settings".format(ctx.prefix)
             await self.bot.say(msg)
 
-    @triviaset.command()
+    @etriviaset.command()
     async def maxscore(self, score : int):
         """Points required to win"""
         if score > 0:
@@ -39,7 +39,7 @@ class EmoteTrivia:
         else:
             await self.bot.say("Score must be superior to 0.")
 
-    @triviaset.command()
+    @etriviaset.command()
     async def timelimit(self, seconds : int):
         """Maximum seconds to answer"""
         if seconds > 4:
@@ -49,7 +49,7 @@ class EmoteTrivia:
         else:
             await self.bot.say("Seconds must be at least 5.")
 
-    @triviaset.command()
+    @etriviaset.command()
     async def botplays(self):
         """Red gains points"""
         if self.settings["TRIVIA_BOT_PLAYS"] is True:

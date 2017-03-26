@@ -242,8 +242,8 @@ class TriviaSession():
         await trivia_manager.bot.say(t)
 
     async def check_answer(self, reaction, user):
+        await self.bot.say(reaction.emoji)
         if user.id != trivia_manager.bot.user.id:
-            await self.bot.say(reaction.emoji)
             self.timeout = time.perf_counter()
             if self.current_q is not None:
                 for answer in self.current_q["ANSWERS"]:
@@ -282,14 +282,12 @@ async def check_messages(reaction, user):
             trvsession = await get_trivia_by_channel(reaction.message.channel)
             await trvsession.check_answer(reaction, user)
 
-
 def check_folders():
     folders = ("data", "data/emotetrivia/")
     for folder in folders:
         if not os.path.exists(folder):
             print("Creating " + folder + " folder...")
             os.makedirs(folder)
-
 
 def check_files():
     settings = {"TRIVIA_MAX_SCORE" : 10, "TRIVIA_TIMEOUT" : 120,  "TRIVIA_DELAY" : 15, "TRIVIA_BOT_PLAYS" : False}
@@ -305,4 +303,4 @@ def setup(bot):
     check_files()
     trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)
-    bot.add_listener(check_messages, "on_reaction_add")
+    bot.add_listener(EmoteTrivia.check_answer, "on_reaction_add")

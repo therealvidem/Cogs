@@ -107,6 +107,9 @@ class EmoteTrivia:
                 await self.bot.say("There are no trivia lists available.")
         else:
             await self.bot.say("There are no trivia lists available.")
+            
+    async def test(self, reaction, user):
+        await self.bot.say(reaction.emoji)
 
 class TriviaSession():
     def __init__(self, message, settings):
@@ -242,7 +245,6 @@ class TriviaSession():
         await trivia_manager.bot.say(t)
 
     async def check_answer(self, reaction, user):
-        await self.bot.say(reaction.emoji)
         if user.id != trivia_manager.bot.user.id:
             self.timeout = time.perf_counter()
             if self.current_q is not None:
@@ -303,4 +305,4 @@ def setup(bot):
     check_files()
     trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)
-    bot.add_listener(TriviaSession.check_answer, "on_reaction_add")
+    bot.add_listener(EmoteTrivia.test, "on_reaction_add")

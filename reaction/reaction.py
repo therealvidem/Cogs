@@ -5,20 +5,18 @@ import asyncio
 class reaction:
 	def __init__(self, bot):
 		self.bot = bot
-		self.listensub = {
+		self.listenstart = {
 			'sara': 'Ew!',
 			'omg': '0 milligrams?',
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
-			'ppap': '*bans ',
-			'kys': 'Kind your self?',
-			'secret code': 'mewmewmew'
+			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif'
 		}
-		self.listenstart = {
-			'hayy': 'Harambe!',
+		self.listensub = {
 			'japanese': 'I\'m sorry, I don\'t speak Japanese.',
-			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
+			'kys': 'Kind your self?',
+			'secret code': 'mewmewmew',
 			'woah': 'whoa*,  you uneducated swine.'
 		}
 		
@@ -27,7 +25,7 @@ class reaction:
 			if self.bot.user.id == '224328344769003520':
 				container = ''
 				for k, v in self.listensub.items():
-					if message.content[0:len(k)].lower() == k:
+					if message.content[:len(k)].lower() == k:
 						if k == 'ppap':
 							container = message.author.name + '*'
 						await self.bot.send_message(message.channel, v + container)

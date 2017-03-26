@@ -304,6 +304,6 @@ def setup(bot):
     global trivia_manager
     check_folders()
     check_files()
-    bot.add_listener(check_messages, "on_reaction_add")
     trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)
+    bot.add_listener(check_messages, "on_reaction_add")

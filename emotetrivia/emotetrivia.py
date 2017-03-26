@@ -277,6 +277,7 @@ async def get_trivia_by_channel(channel):
         return False
 
 async def check_messages(reaction, user):
+    await self.bot.say('test')
     if user.id != trivia_manager.bot.user.id:
         if await get_trivia_by_channel(reaction.message.channel):
             trvsession = await get_trivia_by_channel(reaction.message.channel)

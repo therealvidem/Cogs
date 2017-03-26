@@ -278,8 +278,8 @@ async def get_trivia_by_channel(channel):
 
 async def check_messages(reaction, user):
     if user.id != trivia_manager.bot.user.id:
-        if await get_trivia_by_channel(message.channel):
-            trvsession = await get_trivia_by_channel(message.channel)
+        if await get_trivia_by_channel(reaction.message.channel):
+            trvsession = await get_trivia_by_channel(reaction.message.channel)
             await trvsession.check_answer(reaction, user)
 
 

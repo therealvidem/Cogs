@@ -303,4 +303,4 @@ def setup(bot):
     check_files()
     trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)
-    bot.add_listener(EmoteTrivia.check_answer, "on_reaction_add")
+    bot.add_listener(TriviaSession.check_answer, "on_reaction_add")

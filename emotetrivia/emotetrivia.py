@@ -10,7 +10,7 @@ import os
 import asyncio
 import chardet
 
-class Trivia:
+class EmoteTrivia:
     """General commands."""
     def __init__(self, bot):
         self.bot = bot
@@ -303,5 +303,5 @@ def setup(bot):
     check_folders()
     check_files()
     bot.add_listener(check_messages, "on_reaction_add")
-    trivia_manager = Trivia(bot)
+    trivia_manager = EmoteTrivia(bot)
     bot.add_cog(trivia_manager)

@@ -230,7 +230,9 @@ class test:
 		else:
 			if n > 650:
 				await self.bot.say('That\'s too many pats!')
-			elif n <= 0:
+			elif n == -1:
+				await self.bot.say(member.mention + ' *' + ('pat' * 650) + '*')
+			elif n < -1:
 				await self.bot.say('I don\'t know how to pat you that many times.')
 			else:
 				await self.bot.say('wat')
@@ -242,7 +244,9 @@ class test:
 		else:
 			if n > 1987:
 				await self.bot.say('That\'s too loud, calm down!')
-			elif n <= 0:
+			elif n == -1:
+				await self.bot.say(member.mention + ' *' + ('pat' * 1987) + '*')
+			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:
 				await self.bot.say('wat')

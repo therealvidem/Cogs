@@ -222,13 +222,13 @@ class test:
 	@commands.command(pass_context=True)
 	async def pat(self, context, member: discord.Member=None, n: int=3):
 		member = member or context.message.author
-		if n and n <= 500 and n > 0:
+		if n and n <= 1000 and n > 0:
 			if member.id != self.bot.user.id:
 				await self.bot.say(member.mention + ' *' + ('pat' * n) + '*')
 			else:
 				await self.bot.say('*eternally pats self*')
 		else:
-			if n > 500:
+			if n > 1000:
 				await self.bot.say('That\'s too many pats!')
 			elif n <= 0:
 				await self.bot.say('I don\'t know how to pat you that many times.')
@@ -237,10 +237,10 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def aaa(self, context, n: int=10):
-		if n and n <= 1000 and n > 0:
+		if n and n <= 2000 and n > 0:
 			await self.bot.say('***' + ('A' * n) + '***')
 		else:
-			if n > 1000:
+			if n > 2000:
 				await self.bot.say('That\'s too loud, calm down!')
 			elif n <= 0:
 				await self.bot.say('Are you silent?')

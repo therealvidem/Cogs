@@ -245,7 +245,7 @@ class test:
 			if n > 1987:
 				await self.bot.say('That\'s too loud, calm down!')
 			elif n == -1:
-				await self.bot.say(member.mention + ' *' + ('pat' * 1987) + '*')
+				await self.bot.say('***' + ('A' * 1987) + '***')
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

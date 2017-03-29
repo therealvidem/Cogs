@@ -216,8 +216,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def stab(self, context, *, member: discord.Member=None):
 		obj = random.choice(self.stabbingobjects['objects'])
-		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects", "thrusts", "knifes", "punctures", "jabs",
-				      "lunges at", "prods"]
+		word = random.choice(["shanks", "stabs", "shoves", "impales", "injects", "thrusts", "knifes", "punctures", "jabs", "lunges at", "prods"]
 		await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
 		
 	@commands.command(pass_context=True)

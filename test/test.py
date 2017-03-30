@@ -8,10 +8,6 @@ import operator
 import urllib.request
 import simplejson
 from io import StringIO
-try:
-    from cleverbot import Cleverbot as Clv
-except:
-    Clv = False
 from .utils.dataIO import dataIO
 from __main__ import send_cmd_help, user_allowed
 import os, os.path
@@ -246,6 +242,20 @@ class test:
 				await self.bot.say('That\'s too loud, calm down!')
 			elif n == -1:
 				await self.bot.say('***' + ('A' * 1987) + '***')
+			elif n < -1:
+				await self.bot.say('Are you silent?')
+			else:
+				await self.bot.say('wat')
+				
+	@commands.command(pass_context=True)
+	async def ooo(self, context, n: int=10):
+		if n and n <= 1987 and n > 0:
+			await self.bot.say('***' + ('O' * n) + '***')
+		else:
+			if n > 1987:
+				await self.bot.say('That\'s too loud, calm down!')
+			elif n == -1:
+				await self.bot.say('***' + ('O' * 1987) + '***')
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

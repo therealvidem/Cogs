@@ -248,6 +248,20 @@ class test:
 				await self.bot.say('wat')
 				
 	@commands.command(pass_context=True)
+	async def triggered(self, context, n: int=1):
+		if n and n <= 100 and n > 0:
+			await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')
+		else:
+			if n > 100:
+				await self.bot.say('You\'re triggered too much! Calm down!')
+			elif n == -1:
+				await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 100) + '***')
+			elif n < -1:
+				await self.bot.say('Are you actually triggered tho?')
+			else:
+				await self.bot.say('wat')
+				
+	@commands.command(pass_context=True)
 	async def ooo(self, context, n: int=10):
 		if n and n <= 1987 and n > 0:
 			await self.bot.say('***' + ('O' * n) + '***')

@@ -249,10 +249,10 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def triggered(self, context, n: int=1):
-		if n and n <= 100 and n > 0:
+		if n and n <= 31 and n > 0:
 			await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')
 		else:
-			if n > 100:
+			if n > 31:
 				await self.bot.say('You\'re triggered too much! Calm down!')
 			elif n == -1:
 				await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 100) + '***')

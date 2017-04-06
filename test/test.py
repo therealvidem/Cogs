@@ -255,7 +255,7 @@ class test:
 			if n > 31:
 				await self.bot.say('You\'re triggered too much! Calm down!')
 			elif n == -1:
-				await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 100) + '***')
+				await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 31) + '***')
 			elif n < -1:
 				await self.bot.say('Are you actually triggered tho?')
 			else:

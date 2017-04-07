@@ -14,7 +14,6 @@ class reaction:
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif'
 		}
 		self.listensub = {
-			'japanese': 'I\'m sorry, I don\'t speak Japanese.',
 			'kys': 'Kind your self?',
 			'secret code': 'mewmewmew',
 			'woah': 'whoa*,  you uneducated swine.'

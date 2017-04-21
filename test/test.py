@@ -57,7 +57,6 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 
 	@commands.command(pass_context=True)
-	@checks.admin()
 	async def addvp(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
@@ -72,7 +71,6 @@ class test:
 			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
-	@checks.admin()
 	async def addvb(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:
@@ -87,7 +85,6 @@ class test:
 			await self.bot.say('Unable to add emote.')
 		
 	@commands.command(pass_context=True)
-	@checks.admin()
 	async def addvm(self, context, url):
 		r = requests.get(url, stream=True)
 		if r.status_code == 200:

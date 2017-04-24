@@ -245,6 +245,20 @@ class test:
 				await self.bot.say('wat')
 				
 	@commands.command(pass_context=True)
+	async def ha(self, context, n: int=10):
+		if n and n <= 995 and n > 0:
+			await self.bot.say('***' + ('HA' * n) + '***')
+		else:
+			if n > 995:
+				await self.bot.say('That\'s too loud, calm down!')
+			elif n == -1:
+				await self.bot.say('***' + ('HA' * 1987) + '***')
+			elif n < -1:
+				await self.bot.say('Are you silent?')
+			else:
+				await self.bot.say('wat')
+				
+	@commands.command(pass_context=True)
 	async def triggered(self, context, n: int=1):
 		if n and n <= 31 and n > 0:
 			await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')

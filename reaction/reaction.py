@@ -16,7 +16,8 @@ class reaction:
 		self.listensub = {
 			'kys': 'Kind your self?',
 			'secret code': 'mewmewmew',
-			'woah': 'whoa*,  you uneducated swine.'
+			'woah': 'whoa*,  you uneducated swine.',
+			'thx': 'https://www.youtube.com/watch?v=FWkJ86JqlPA'
 		}
 		
 	async def listener(self, message):

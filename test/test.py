@@ -246,10 +246,10 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def ha(self, context, n: int=10):
-		if n and n <= 950 and n > 0:
+		if n and n <= 900 and n > 0:
 			await self.bot.say('***' + ('HA' * n) + '***')
 		else:
-			if n > 950:
+			if n > 900:
 				await self.bot.say('That\'s too loud, calm down!')
 			elif n == -1:
 				await self.bot.say('***' + ('HA' * 1987) + '***')

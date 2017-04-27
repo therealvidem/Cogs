@@ -289,13 +289,13 @@ class test:
 	@commands.command(pass_context=True)
 	async def happy(self, context, n: int=10):
 		happyemote = ':smile:'
-		if n and n * len(happyemote) < 2000 and n > 0:
-			await self.bot.say(':happy:' * n)
+		if n and abs(n) * len(happyemote) < 2000 and n > 0:
+			await self.bot.say(':smile:' * n)
 		else:
-			if n > n * len(happyemote):
+			if n > abs(n) * len(happyemote):
 				await self.bot.say('You\'re a bit too happy there, bud.')
 			elif n == -1:
-				await self.bot.say(':happy:' * 280)
+				await self.bot.say(':smile:' * 280)
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

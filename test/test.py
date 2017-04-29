@@ -311,7 +311,7 @@ class test:
 			if n > 1990:
 				await self.bot.say('wew that\'s a lot of vae')
 			elif n == -1:
-				await self.bot.say('***' + (begintext + ('e' * (1990 / (len(begintext) + len(endtext)))) + endtext) + '***')
+				await self.bot.say('***' + (begintext + ('e' * int((1990 / (len(begintext) + len(endtext))))) + endtext) + '***')
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

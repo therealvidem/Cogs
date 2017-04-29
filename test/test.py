@@ -306,12 +306,12 @@ class test:
 		begintext = 'VA'
 		endtext = ' LMAO'
 		if n and n > 0 and len(begintext) + n + endtext < 1990:
-			await self.bot.say('***' + (begintext + ('e' * n) + endtext) + '***')
+			await self.bot.say('***' + (begintext + ('E' * n) + endtext) + '***')
 		else:
 			if n > 1990:
 				await self.bot.say('wew that\'s a lot of vae')
 			elif n == -1:
-				await self.bot.say('***' + (begintext + ('e' * int((1990 / (len(begintext) + len(endtext))))) + endtext) + '***')
+				await self.bot.say('***' + (begintext + ('E' * int((1990 - (len(begintext) + len(endtext))))) + endtext) + '***')
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

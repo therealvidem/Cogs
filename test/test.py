@@ -300,6 +300,22 @@ class test:
 				await self.bot.say('Are you silent?')
 			else:
 				await self.bot.say('wat')
+				
+	@commands.command(pass_context=True)
+	async def ae(self, context, n: int=10):
+		begintext = 'VA'
+		endtext = ' LMAO'
+		if n and n > 0 and len(begintext) + n + endtext < 1990:
+			await self.bot.say('***' + (begintext + ('e' * n) + endtext) + '***')
+		else:
+			if n > 1990:
+				await self.bot.say('wew that\'s a lot of vae')
+			elif n == -1:
+				await self.bot.say('***' + (begintext + ('e' * (1990 / (len(begintext) + len(endtext)))) + endtext) + '***')
+			elif n < -1:
+				await self.bot.say('Are you silent?')
+			else:
+				await self.bot.say('wat')
 		
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):

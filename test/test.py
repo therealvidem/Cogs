@@ -303,8 +303,12 @@ class test:
 				
 	@commands.command(pass_context=True)
 	async def ae(self, context, n: int=10):
+		chance = random.randint(1, 2)
 		begintext = 'VA'
-		endtext = ' LMAO'
+		if chance == 1:
+			endtext = ' LMAO'
+		else:
+			endtext = 'YEET'
 		if n and n > 0 and len(begintext) + n + endtext < 1990:
 			await self.bot.say('***' + (begintext + ('E' * n) + endtext) + '***')
 		else:

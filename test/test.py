@@ -289,10 +289,10 @@ class test:
 	@commands.command(pass_context=True)
 	async def happy(self, context, n: int=10):
 		happyemote = ':smile:'
-		if n and abs(n) * len(happyemote) < 2000 and n > 0:
+		if n and n > 0 and n * len(happyemote) < 2000:
 			await self.bot.say(':smile:' * n)
 		else:
-			if n > abs(n) * len(happyemote):
+			if n > 2000 - len(happyemote):
 				await self.bot.say('You\'re a bit too happy there, bud.')
 			elif n == -1:
 				await self.bot.say(':smile:' * 280)
@@ -309,13 +309,28 @@ class test:
 			endtext = ' LMAO'
 		else:
 			endtext = 'YEET'
-		if n and n > 0 and len(begintext) + n + endtext < 1990:
+		if n and n > 0 and len(begintext) + n + len(endtext) < 1990:
 			await self.bot.say('***' + (begintext + ('E' * n) + endtext) + '***')
 		else:
 			if n > 1990:
 				await self.bot.say('wew that\'s a lot of vae')
 			elif n == -1:
 				await self.bot.say('***' + (begintext + ('E' * int((1990 - (len(begintext) + len(endtext))))) + endtext) + '***')
+			elif n < -1:
+				await self.bot.say('Are you silent?')
+			else:
+				await self.bot.say('wat')
+				
+	@commands.command(pass_context=True)
+	async def mmm(self, context, n: int=10):
+		text = 'M'
+		if n and n > 0 and (n * len(text)) + 6 < 2000:
+			await self.bot.say('***' + (text * n) + '***')
+		else:
+			if n >= n * len(text):
+				await self.bot.say('This is a PG-13 channel.')
+			elif n == -1:
+				await self.bot.say(text * int(1990 / len(text)))
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

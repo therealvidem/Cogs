@@ -55,6 +55,30 @@ class test:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
 		except:
 			await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
+			
+	@commands.command(pass_context=True)
+	async def removevp(self, context, num: int=None):
+		if num:
+			try:
+				os.remove(self.base + 'meme_(' + str(num) + ').png')
+			except OSError:
+				await self.bot.say('An error occured.')
+			
+	@commands.command(pass_context=True)
+	async def removevb(self, context, num: int=None):
+		if num:
+			try:
+				os.remove(self.base2 + 'meme (' + str(num) + ').png')
+			except OSError:
+				await self.bot.say('An error occured.')
+			
+	@commands.command(pass_context=True)
+	async def removevm(self, context, num: int=None):
+		if num:
+			try:
+				os.remove(self.base3 + 'meme (' + str(num) + ').png')
+			except OSError:
+				await self.bot.say('An error occured.')
 
 	@commands.command(pass_context=True)
 	async def addvp(self, context, url):

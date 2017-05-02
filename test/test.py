@@ -76,18 +76,15 @@ class test:
 	@commands.command(pass_context=True)
 	async def removevb(self, context, num: int=None):
 		if num:
-			try:
-				os.remove(self.base2 + 'meme (' + str(num) + ').png')
-				files = os.listdir(self.base2)
-				for file in files:
-					filenum = re.findall(r'\d+', file)
-					if int(filenum[0]) and int(filenum[0]) > num:
-						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
-				self.memes['vb'] = self.memes['vb'] - 1
-				dataIO.save_json('data/test/memes.json', self.memes)
-				await self.bot.say('Successfully removed emote.')
-			except OSError:
-				await self.bot.say('An error occured.')
+			os.remove(self.base2 + 'meme (' + str(num) + ').png')
+			files = os.listdir(self.base2)
+			for file in files:
+				filenum = re.findall(r'\d+', file)
+				if int(filenum[0]) and int(filenum[0]) > num:
+					os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
+			self.memes['vb'] = self.memes['vb'] - 1
+			dataIO.save_json('data/test/memes.json', self.memes)
+			await self.bot.say('Successfully removed emote.')
 			
 	@commands.command(pass_context=True)
 	async def removevm(self, context, num: int=None):

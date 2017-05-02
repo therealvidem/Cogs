@@ -15,6 +15,7 @@ import threading
 from threading import Timer
 import requests
 import shutil
+import re
 from .utils.dataIO import dataIO
 
 class test:
@@ -61,14 +62,30 @@ class test:
 		if num:
 			try:
 				os.remove(self.base + 'meme_(' + str(num) + ').png')
+				files = os.listdir(self.base)
+				for file in files:
+					filenum = re.findall(r'\d+', file.name)
+					if filenum[0] and filenum[0] > num:
+						os.rename(os.path.join(self.base, file), os.path.join(self.base, 'meme_(' + str(filenum[0] - 1) + ').png'))
+				self.memes['vp'] = self.memes['vp'] - 1
+				dataIO.save_json('data/test/memes.json', self.memes)
+				await self.bot.say('Successfully removed emote.')
 			except OSError:
 				await self.bot.say('An error occured.')
-			
+				
 	@commands.command(pass_context=True)
 	async def removevb(self, context, num: int=None):
 		if num:
 			try:
 				os.remove(self.base2 + 'meme (' + str(num) + ').png')
+				files = os.listdir(self.base2)
+				for file in files:
+					filenum = re.findall(r'\d+', file.name)
+					if filenum[0] and filenum[0] > num:
+						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(filenum[0] - 1) + ').png'))
+				self.memes['vb'] = self.memes['vb'] - 1
+				dataIO.save_json('data/test/memes.json', self.memes)
+				await self.bot.say('Successfully removed emote.')
 			except OSError:
 				await self.bot.say('An error occured.')
 			
@@ -76,7 +93,15 @@ class test:
 	async def removevm(self, context, num: int=None):
 		if num:
 			try:
-				os.remove(self.base3 + 'meme (' + str(num) + ').png')
+				os.remove(self.base + 'meme (' + str(num) + ').png')
+				files = os.listdir(self.base3)
+				for file in files:
+					filenum = re.findall(r'\d+', file.name)
+					if filenum[0] and filenum[0] > num:
+						os.rename(os.path.join(self.base3, file), os.path.join(self.base3, 'meme (' + str(filenum[0] - 1) + ').png'))
+				self.memes['vm'] = self.memes['vm'] - 1
+				dataIO.save_json('data/test/memes.json', self.memes)
+				await self.bot.say('Successfully removed emote.')
 			except OSError:
 				await self.bot.say('An error occured.')
 

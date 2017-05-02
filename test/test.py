@@ -65,8 +65,8 @@ class test:
 				files = os.listdir(self.base)
 				for file in files:
 					filenum = re.findall(r'\d+', file)
-					if filenum[0] and filenum[0] > num:
-						os.rename(os.path.join(self.base, file), os.path.join(self.base, 'meme_(' + str(filenum[0] - 1) + ').png'))
+					if int(filenum[0]) and int(filenum[0]) > num:
+						os.rename(os.path.join(self.base, file), os.path.join(self.base, 'meme_(' + str(int(filenum[0]) - 1) + ').png'))
 				self.memes['vp'] = self.memes['vp'] - 1
 				dataIO.save_json('data/test/memes.json', self.memes)
 				await self.bot.say('Successfully removed emote.')
@@ -81,8 +81,8 @@ class test:
 				files = os.listdir(self.base2)
 				for file in files:
 					filenum = re.findall(r'\d+', file)
-					if filenum[0] and filenum[0] > num:
-						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(filenum[0] - 1) + ').png'))
+					if int(filenum[0]) and int(filenum[0]) > num:
+						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
 				self.memes['vb'] = self.memes['vb'] - 1
 				dataIO.save_json('data/test/memes.json', self.memes)
 				await self.bot.say('Successfully removed emote.')
@@ -97,8 +97,8 @@ class test:
 				files = os.listdir(self.base3)
 				for file in files:
 					filenum = re.findall(r'\d+', file)
-					if filenum[0] and filenum[0] > num:
-						os.rename(os.path.join(self.base3, file), os.path.join(self.base3, 'meme (' + str(filenum[0] - 1) + ').png'))
+					if int(filenum[0]) and int(filenum[0]) > num:
+						os.rename(os.path.join(self.base3, file), os.path.join(self.base3, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
 				self.memes['vm'] = self.memes['vm'] - 1
 				dataIO.save_json('data/test/memes.json', self.memes)
 				await self.bot.say('Successfully removed emote.')

@@ -74,7 +74,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def removevb(self, context, num: int=None):
 		if num:
-			os.remove(self.base + 'meme (' + str(num) + ').png')
+			os.remove(self.base2 + 'meme (' + str(num) + ').png')
 			files = os.listdir(self.base2)
 			for file in files:
 				filenum = re.findall(r'\d+', file)
@@ -88,7 +88,7 @@ class test:
 	@commands.command(pass_context=True)
 	async def removevm(self, context, num: int=None):
 		if num:
-			os.remove(self.base + 'meme (' + str(num) + ').png')
+			os.remove(self.base3 + 'meme (' + str(num) + ').png')
 			files = os.listdir(self.base3)
 			for file in files:
 				filenum = re.findall(r'\d+', file)

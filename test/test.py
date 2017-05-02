@@ -80,7 +80,8 @@ class test:
 				os.remove(self.base2 + 'meme (' + str(num) + ').png')
 				files = os.listdir(self.base2)
 				for file in files:
-					filenum = re.findall(r'\d+', file.name)
+					await self.bot.say(file)
+					filenum = re.findall(r'\d+', file)
 					if filenum[0] and filenum[0] > num:
 						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(filenum[0] - 1) + ').png'))
 				self.memes['vb'] = self.memes['vb'] - 1

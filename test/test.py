@@ -64,7 +64,7 @@ class test:
 				os.remove(self.base + 'meme_(' + str(num) + ').png')
 				files = os.listdir(self.base)
 				for file in files:
-					filenum = re.findall(r'\d+', file.name)
+					filenum = re.findall(r'\d+', file)
 					if filenum[0] and filenum[0] > num:
 						os.rename(os.path.join(self.base, file), os.path.join(self.base, 'meme_(' + str(filenum[0] - 1) + ').png'))
 				self.memes['vp'] = self.memes['vp'] - 1
@@ -80,7 +80,6 @@ class test:
 				os.remove(self.base2 + 'meme (' + str(num) + ').png')
 				files = os.listdir(self.base2)
 				for file in files:
-					await self.bot.say(file)
 					filenum = re.findall(r'\d+', file)
 					if filenum[0] and filenum[0] > num:
 						os.rename(os.path.join(self.base2, file), os.path.join(self.base2, 'meme (' + str(filenum[0] - 1) + ').png'))
@@ -97,7 +96,7 @@ class test:
 				os.remove(self.base + 'meme (' + str(num) + ').png')
 				files = os.listdir(self.base3)
 				for file in files:
-					filenum = re.findall(r'\d+', file.name)
+					filenum = re.findall(r'\d+', file)
 					if filenum[0] and filenum[0] > num:
 						os.rename(os.path.join(self.base3, file), os.path.join(self.base3, 'meme (' + str(filenum[0] - 1) + ').png'))
 				self.memes['vm'] = self.memes['vm'] - 1

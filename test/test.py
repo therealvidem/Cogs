@@ -172,6 +172,11 @@ class test:
 			await self.bot.say(str(n) + 'C' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
 		elif n < 0 or r < 0:
 			await self.bot.say('I dunno what the means.')
+	
+	@commands.command(pass_context=True, name='invite')
+	async def _invite(self, context, botid: str=None):
+		botid = botid or '[BOTID HERE]'
+		await self.bot.say('https://discordapp.com/api/oauth2/authorize?client_id=' + botid + '&scope=bot&permissions=0')
 
 	@commands.group(pass_context=True, name='coffee')
 	async def _coffee(self, context):

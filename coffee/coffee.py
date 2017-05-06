@@ -74,10 +74,11 @@ class coffee:
             i += 1
             personname = find(lambda p: p.id == person, channel.server.members)
             if personname:
+                discriminator = personname.disriminator
                 personname = personname.name
                 score = server[person]
                 coffeetext = 'coffees' if score > 1 else 'coffee'
-                em.add_field(name=str(i) + '. ' + personname + '\a', value=str(score) + ' ' + coffeetext)
+                em.add_field(name=str(i) + '. ' + personname + '#' + discriminator + '\a', value=str(score) + ' ' + coffeetext)
         await self.bot.say(embed=em)
 
 def setup(bot):

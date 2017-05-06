@@ -175,7 +175,7 @@ class test:
 	
 	@commands.command(pass_context=True, name='invite')
 	async def _invite(self, context, botid: str=None):
-		botid = botid or '[BOTID HERE]'
+		botid = botid or '[BOTIDHERE]'
 		await self.bot.say('https://discordapp.com/api/oauth2/authorize?client_id=' + botid + '&scope=bot&permissions=0')
 
 	@commands.group(pass_context=True, name='coffee')

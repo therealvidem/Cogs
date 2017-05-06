@@ -72,7 +72,7 @@ class coffee:
         server = self.coffee[context.message.server.id]
         for person in sorted(server, key=server.__getitem__, reverse=True):
             i += 1
-            personname = find(lambda p: p.id == person, channel.server.members)
+            personname = find(lambda p: p.id == person, context.message.server.members)
             if personname:
                 discriminator = personname.disriminator
                 personname = personname.name

@@ -70,14 +70,14 @@ class coffee:
     async def _list(self, context):
         em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
         i = 0
-        for person,value in sorted(self.coffee[context.message.server.id], key=self.coffee[context.message.server.id].__getitem__, reverse=True):
+        for person in sorted(self.coffee[context.message.server.id], key=self.coffee[context.message.server.id].__getitem__, reverse=True):
             i += 1
             personname = ''
             for p in context.message.server.members:
                 if p.id == person:
                     personname = p.name
-            coffeetext = 'coffees' if value > 1 else 'coffee'
-            em.add_field(name=str(i) + '. ' + personname + '\a', value=str(value) + ' ' + coffeetext)
+            coffeetext = 'coffees' if self.coffee[context.message.server.id][person] > 1 else 'coffee'
+            em.add_field(name=str(i) + '. ' + personname + '\a', value=str(self.coffee[context.message.server.id][person]) + ' ' + coffeetext)
             await self.bot.say(embed=em)
 
 def setup(bot):

@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.utils import find
 from .utils import checks
 from .utils.dataIO import dataIO
 
@@ -71,13 +72,12 @@ class coffee:
         server = self.coffee[context.message.server.id]
         for person in sorted(server, key=server.__getitem__, reverse=True):
             i += 1
-            personname = ''
-            score = server[person]
-            for p in context.message.server.members:
-                if p.id == person:
-                    personname = p.name
-            coffeetext = 'coffees' if score > 1 else 'coffee'
-            em.add_field(name=str(i) + '. ' + personname + '\a', value=str(score) + ' ' + coffeetext)
+            personname = find(lambda p: p.id == person, channel.server.members)
+            if personname:
+                personname = personname.name
+                score = server[person]
+                coffeetext = 'coffees' if score > 1 else 'coffee'
+                em.add_field(name=str(i) + '. ' + personname + '\a', value=str(score) + ' ' + coffeetext)
         await self.bot.say(embed=em)
 
 def setup(bot):

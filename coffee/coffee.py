@@ -52,11 +52,9 @@ class coffee:
     @checks.admin()
     async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
         if member:
-            if member.id not in self.coffee[context.message.server.id]:
-                self.coffee[context.message.server.id][member.id] = 0
-                self.coffee[context.message.server.id][member.id] = numcoffee
-                dataIO.save_json('data/test/coffee.json', self.coffee)
-                await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
+            self.coffee[context.message.server.id][member.id] = numcoffee
+            dataIO.save_json('data/test/coffee.json', self.coffee)
+            await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
     @_coffee.command(pass_context=True, name='reset')
     async def _reset(self, context, member: discord.Member=None):

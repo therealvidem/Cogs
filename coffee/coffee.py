@@ -13,7 +13,7 @@ class coffee:
         if context.invoked_subcommand is None:
             if context.message.server.id not in self.coffee:
                 self.coffee[context.message.server.id] = {}
-        await self.bot.say('Do {}help coffee.'.format(context.prefix)) 
+                await self.bot.say('Do {}help coffee.'.format(context.prefix)) 
 
     @_coffee.command(pass_context=True, name='plus')
     @checks.admin()
@@ -70,15 +70,17 @@ class coffee:
     async def _list(self, context):
         em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
         i = 0
-        for person in sorted(self.coffee[context.message.server.id], key=self.coffee[context.message.server.id].__getitem__, reverse=True):
+        server = self.coffee[context.message.server.id]
+        for person in sorted(server, key=server.__getitem__, reverse=True):
             i += 1
             personname = ''
+            score = server[person]
             for p in context.message.server.members:
                 if p.id == person:
                     personname = p.name
-            coffeetext = 'coffees' if self.coffee[context.message.server.id][person] > 1 else 'coffee'
-            em.add_field(name=str(i) + '. ' + personname + '\a', value=str(self.coffee[context.message.server.id][person]) + ' ' + coffeetext)
-            await self.bot.say(embed=em)
+            coffeetext = 'coffees' if score > 1 else 'coffee'
+            em.add_field(name=str(i) + '. ' + personname + '\a', value=str(score) + ' ' + coffeetext)
+        await self.bot.say(embed=em)
 
 def setup(bot):
     n = coffee(bot)

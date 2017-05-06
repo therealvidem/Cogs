@@ -74,7 +74,7 @@ class coffee:
             i += 1
             personname = find(lambda p: p.id == person, context.message.server.members)
             if personname:
-                discriminator = personname.disriminator
+                discriminator = personname.discriminator
                 personname = personname.name
                 score = server[person]
                 coffeetext = 'coffees' if score > 1 else 'coffee'

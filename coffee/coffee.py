@@ -78,7 +78,7 @@ class coffee:
                 personname = personname.name
                 score = server[person]
                 coffeetext = 'coffees' if score > 1 else 'coffee'
-                em.add_field(name=str(i) + '. ' + personname + '#' + discriminator + '\a', value=str(score) + ' ' + coffeetext)
+                em.add_field(name=str(i) + '. ' + personname + '#' + discriminator, value=str(score) + ' ' + coffeetext, inline=False)
         await self.bot.say(embed=em)
 
 def setup(bot):

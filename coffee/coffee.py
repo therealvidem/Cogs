@@ -82,5 +82,4 @@ class coffee:
         await self.bot.say(embed=em)
 
 def setup(bot):
-    n = coffee(bot)
-    bot.add_cog(n)
+    bot.add_cog(coffee(bot))

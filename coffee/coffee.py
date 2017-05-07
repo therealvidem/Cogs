@@ -72,14 +72,24 @@ class coffee:
         server = self.coffee[context.message.server.id]
         for person in sorted(server, key=server.__getitem__, reverse=True):
             i += 1
-            personname = find(lambda p: p.id == person, context.message.server.members)
-            if personname:
-                discriminator = personname.discriminator
-                personname = personname.name
+            member = find(lambda p: p.id == person, context.message.server.members)
+            if member:
+                discriminator = member.discriminator
+                personname = member.name
                 score = server[person]
                 coffeetext = 'coffees' if score > 1 else 'coffee'
                 em.add_field(name=str(i) + '. ' + personname + '#' + discriminator, value=str(score) + ' ' + coffeetext, inline=False)
         await self.bot.say(embed=em)
+    
+    async def reaction_listener(self, reaction, user):
+        if reaction.server.id == '310510876514058241':
+            if user == self.bot.user:
+                return
+            message = reaction.message
+            emoji = reaction.emoji
+            if message.id == '310627579944108032':
+                if user.
+                self.bot.remove_reaction(message, emoji, user)
 
 def setup(bot):
     bot.add_cog(coffee(bot))

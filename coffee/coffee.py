@@ -7,7 +7,7 @@ from .utils.dataIO import dataIO
 class coffee:
     def __init__(self, bot):
         self.bot = bot
-        self.coffee = dataIO.load_json('data/test/coffee.json')
+        self.coffee = dataIO.load_json('data/coffee/coffee.json')
     
     @commands.group(pass_context=True, name='coffee')
     async def _coffee(self, context):

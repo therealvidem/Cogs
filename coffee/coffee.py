@@ -24,7 +24,7 @@ class coffee:
                 self.coffee[context.message.server.id][member.id] = 0
             numcoffee = self.coffee[context.message.server.id][member.id] + 1
             self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/test/coffee.json', self.coffee)
+            dataIO.save_json('data/coffee/coffee.json', self.coffee)
             await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
 	
     @_coffee.command(pass_context=True, name='subtract')
@@ -35,7 +35,7 @@ class coffee:
                 self.coffee[context.message.server.id][member.id] = 0
             numcoffee = max(0, self.coffee[context.message.server.id][member.id] - 1)
             self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/test/coffee.json', self.coffee)
+            dataIO.save_json('data/coffee/coffee.json', self.coffee)
             await self.bot.say('Took 1 coffee from ' + member.mention + '!')
 			
     @_coffee.command(pass_context=True, name='give')
@@ -46,7 +46,7 @@ class coffee:
                 self.coffee[context.message.server.id][member.id] = 0
             numcoffee = self.coffee[context.message.server.id][member.id] + n
             self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/test/coffee.json', self.coffee)
+            dataIO.save_json('data/coffee/coffee.json', self.coffee)
             await self.bot.say('Gave ' + str(n) + ' coffee to ' + member.mention + '!')
 			
     @_coffee.command(pass_context=True, name='set')
@@ -54,7 +54,7 @@ class coffee:
     async def _set(self, context, member: discord.Member=None, numcoffee: int=1):
         if member:
             self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/test/coffee.json', self.coffee)
+            dataIO.save_json('data/coffee/coffee.json', self.coffee)
             await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
     @_coffee.command(pass_context=True, name='reset')
@@ -83,3 +83,4 @@ class coffee:
 
 def setup(bot):
     bot.add_cog(coffee(bot))
+    bot.add_listener(n.reaction_listener, "on_reaction_add")

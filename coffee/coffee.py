@@ -86,9 +86,10 @@ class coffee:
             if user == self.bot.user:
                 return
             message = reaction.message
+            author = message.author
             emoji = reaction.emoji
             if message.id == '310627579944108032':
-                if user.
+                role = find(lambda r: r.name == 'Audience', author.roles)
                 self.bot.remove_reaction(message, emoji, user)
 
 def setup(bot):

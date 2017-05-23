@@ -94,4 +94,4 @@ class coffee:
 
 def setup(bot):
     bot.add_cog(coffee(bot))
-    bot.add_listener(n.reaction_listener, "on_reaction_add")
+    bot.add_listener(coffee.reaction_listener, "on_reaction_add")

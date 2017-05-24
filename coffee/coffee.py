@@ -4,7 +4,7 @@ from discord.utils import find
 from .utils import checks
 from .utils.dataIO import dataIO
 
-class coffee:
+class Coffee():
     def __init__(self, bot):
         self.bot = bot
         self.coffee = dataIO.load_json('data/coffee/coffee.json')
@@ -91,7 +91,13 @@ class coffee:
             if message.id == '310627579944108032' and next(r for r in author.roles if r.name == 'Audience') is None:
                 await self.bot.add_roles(author, next(r for r in message.server.roles if r.name == 'Audience'))
             await self.bot.remove_reaction(message, emoji, user)
+            
+def check_files():
+    f = "data/coffee/coffee.json"
+    data = {}
+    if not dataIO.is_valid_json(f):
+        dataIO.save_json(f, data)
 
 def setup(bot):
-    bot.add_cog(coffee(bot))
+    bot.add_cog(Coffee(bot))
     bot.add_listener(coffee.reaction_listener, "on_reaction_add")

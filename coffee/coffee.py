@@ -7,13 +7,13 @@ from .utils.dataIO import dataIO
 class Coffee():
     def __init__(self, bot):
         self.bot = bot
-        self.coffee = dataIO.load_json('data/coffee/coffee.json')
+        self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
     
     @commands.group(pass_context=True)
     async def coffee(self, context):
         if context.invoked_subcommand is None:
-            if context.message.server.id not in self.coffee:
-                self.coffee[context.message.server.id] = {}
+            if context.message.server.id not in self.coffeedata:
+                self.coffeedata[context.message.server.id] = {}
             await self.bot.say('Do {}help coffee.'.format(context.prefix)) 
 
     @coffee.command()
@@ -21,47 +21,47 @@ class Coffee():
     async def plus(self, member: discord.Member=None):
         if member:
             if member.id not in self.coffee[context.message.server.id]:
-                self.coffee[context.message.server.id][member.id] = 0
-            numcoffee = self.coffee[context.message.server.id][member.id] + 1
-            self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/coffee/coffee.json', self.coffee)
+                self.coffeedata[context.message.server.id][member.id] = 0
+            numcoffee = self.coffeedata[context.message.server.id][member.id] + 1
+            self.coffeedata[context.message.server.id][member.id] = numcoffee
+            dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
 	
     @coffee.command()
     @checks.admin()
     async def subtract(self, member: discord.Member=None):
         if member:
-            if member.id not in self.coffee[context.message.server.id]:
-                self.coffee[context.message.server.id][member.id] = 0
-            numcoffee = max(0, self.coffee[context.message.server.id][member.id] - 1)
-            self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/coffee/coffee.json', self.coffee)
+            if member.id not in self.coffeedata[context.message.server.id]:
+                self.coffeedata[context.message.server.id][member.id] = 0
+            numcoffee = max(0, self.coffeedata[context.message.server.id][member.id] - 1)
+            self.coffeedata[context.message.server.id][member.id] = numcoffee
+            dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Took 1 coffee from ' + member.mention + '!')
 			
     @coffee.command()
     @checks.admin()
     async def give(self, member: discord.Member=None, n: int=1):
         if member:
-            if member.id not in self.coffee[context.message.server.id]:
-                self.coffee[context.message.server.id][member.id] = 0
-            numcoffee = self.coffee[context.message.server.id][member.id] + n
-            self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/coffee/coffee.json', self.coffee)
+            if member.id not in self.coffeedata[context.message.server.id]:
+                self.coffeedata[context.message.server.id][member.id] = 0
+            numcoffee = self.coffeedata[context.message.server.id][member.id] + n
+            self.coffeedata[context.message.server.id][member.id] = numcoffee
+            dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Gave ' + str(n) + ' coffee to ' + member.mention + '!')
 			
     @coffee.command()
     @checks.admin()
     async def set(self, member: discord.Member=None, numcoffee: int=1):
         if member:
-            self.coffee[context.message.server.id][member.id] = numcoffee
-            dataIO.save_json('data/coffee/coffee.json', self.coffee)
+            self.coffeedata[context.message.server.id][member.id] = numcoffee
+            dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
     @coffee.command()
     async def reset(self, member: discord.Member=None):
         if member:
             try:
-                self.coffee[context.message.server.id].pop(member.id, None)
+                self.coffeedata[context.message.server.id].pop(member.id, None)
             except KeyError:
                 await self.bot.say('Person doesn\'t exist.')
 			
@@ -69,7 +69,7 @@ class Coffee():
     async def list(self, context):
         em = discord.Embed(title='Coffee Leaderboard', color=discord.Color.red())
         i = 0
-        server = self.coffee[context.message.server.id]
+        server = self.coffeedata[context.message.server.id]
         for person in sorted(server, key=server.__getitem__, reverse=True):
             i += 1
             member = find(lambda p: p.id == person, context.message.server.members)

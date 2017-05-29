@@ -1,5 +1,3 @@
-from datetime import timezone
-from datetime import deltatime
 import random
 import discord
 import datetime
@@ -418,12 +416,6 @@ class test:
 				await self.bot.say('An error occured.')
 		else:
 			await self.bot.say('I\'m already counting.')
-			
-	@commands.command(pass_context=True)
-	async def getcountdown(self, context, month: int=None, day: int=None, hour: int=None):
-		if month and day and hour:
-			delta = datetime.datetime(2017, month, day, hour, tzinfo=timezone('US/Pacific')) - datetime.datetime.now()
-			await self.bot.say(delta.days + ' days, ' + delta.hours + ' hours, ' + delta.minutes + ' minutes, ' + ' and ' + delta.seconds + ' seconds until ' + month + '/' + day + ' at ' + hour)
 			
 	@_count.command(pass_context=True, name='stop')
 	async def _stop(self, context):

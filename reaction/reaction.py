@@ -48,7 +48,7 @@ class reaction:
 						if ok:
 							if k == 'i' or k == "i'm" or k == "i've":
 								container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
-								asyncio.sleep(random.randint(10, 60))
+								asyncio.sleep(random.randint(1, 10))
 							await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():
 					if message.content.lower().find(k) != -1:
@@ -74,9 +74,11 @@ class reaction:
 	async def voicelistener(self, before, after):
 		if before.voice.voice_channel is None and after.voice.voice_channel:
 			channel = [c for c in after.server.channels if c.id == '132586673383931904']
+			asyncio.sleep(random.randint(1, 10))
 			await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will join the voice channel.')
 		elif before.voice.voice_channel and after.voice.voice_channel is None:
 			channel = [c for c in after.server.channels if c.id == '132586673383931904']
+			asyncio.sleep(random.randint(1, 10))
 			await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')
 				
 def setup(bot):

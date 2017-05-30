@@ -65,5 +65,5 @@ class reaction:
 def setup(bot):
 	n = reaction(bot)
 	bot.add_listener(n.listener, "on_message")
-	bod.add_listener(n.voicelistener, "on_voice_state_update")
+	bot.add_listener(n.voicelistener, "on_voice_state_update")
 	bot.add_cog(n)

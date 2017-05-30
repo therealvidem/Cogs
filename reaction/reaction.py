@@ -63,10 +63,10 @@ class reaction:
 			
 	async def voicelistener(self, before, after):
 		if before.voice.voice_channel is None and after.voice.voice_channel:
-			channel = [c for c in after.sever.channels if c.name == 'chat']
+			channel = [c for c in after.server.channels if c.name == 'chat']
 			await self.bot.send_message(channel, 'I predict that ' + after.nick + ' will join the voice channel.')
 		elif before.voice.voice_channel and after.voice.voice_channel is None:
-			channel = [c for c in after.sever.channels if c.name == 'chat']
+			channel = [c for c in after.server.channels if c.name == 'chat']
 			await self.bot.send_message(channel, 'I foresee that ' + after.nick + ' will leave the voice channel.')
 				
 def setup(bot):

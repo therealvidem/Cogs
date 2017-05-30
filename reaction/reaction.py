@@ -12,7 +12,7 @@ class reaction:
 			'syrz': 'It\'s called a dress.',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
-			'I': ''
+			'i': ''
 		}
 		self.listensub = {
 			'kys': 'Kind your self?',

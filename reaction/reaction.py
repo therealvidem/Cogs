@@ -30,15 +30,13 @@ class reaction:
 					if message.content[:len(k)].lower() == k:
 						ok = False
 						if len(message.content) > len(k):
-							print(message.content[len(k) + 1:len(k) + 2])
+							print(message.content[len(k):len(k) + 1])
 							if message.content[len(k) + 1:len(k) + 2] == ' ':
 								ok = True
 						else:
 							ok = True
 						if ok:
-							if k == 'ppap':
-								container = message.author.name + '*'
-							elif k == 'I':
+							if k == 'I':
 								container = 'I predict ' + message.author.name + ' will say, "' + message.content + '"'
 							await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():

@@ -12,7 +12,9 @@ class reaction:
 			'syrz': 'It\'s called a dress.',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
 			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
-			'i': ''
+			'i': '',
+			"i'm": '',
+			"i've": ''
 		}
 		self.listensub = {
 			'kys': 'Kind your self?',
@@ -35,7 +37,7 @@ class reaction:
 						else:
 							ok = True
 						if ok:
-							if k == 'i':
+							if k == 'i' or k == "i'm" or k == "i've":
 								container = 'I predict ' + message.author.name + ' will say, "' + message.content + '"'
 							await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():

@@ -66,6 +66,7 @@ class reaction:
 			channel = [c for c in after.server.channels if c.id == '132586673383931904']
 			await self.bot.send_message(channel, 'I predict that ' + after.nick + ' will join the voice channel.')
 		elif before.voice.voice_channel and after.voice.voice_channel is None:
+			print(after.nick)
 			channel = [c for c in after.server.channels if c.id == '132586673383931904']
 			await self.bot.send_message(channel, 'I foresee that ' + after.nick + ' will leave the voice channel.')
 				

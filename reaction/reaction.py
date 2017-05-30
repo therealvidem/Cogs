@@ -11,7 +11,8 @@ class reaction:
 			'0mg': 'Oh my god?',
 			'syrz': 'It\'s called a dress.',
 			'darnit': 'Amethyst, and Pearl, and Steven!',
-			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif'
+			'bob': 'http://66.media.tumblr.com/5756bdebeb6a5e675ee45d68b6c09096/tumblr_ntt4qzMvQW1rz6w0do1_500.gif',
+			'I': ''
 		}
 		self.listensub = {
 			'kys': 'Kind your self?',
@@ -29,6 +30,8 @@ class reaction:
 					if message.content[:len(k)].lower() == k:
 						if k == 'ppap':
 							container = message.author.name + '*'
+						elif k == 'I':
+							container = 'I predict ' + message.author.name + ' will say, "' + message.content + '"'
 						await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():
 					if message.content.lower().find(k) != -1:
@@ -50,6 +53,14 @@ class reaction:
 				await self.bot.send_message(message.channel, 'AND WE ARE THE WEIRD QUARTET!')
 			elif message.content == 'AND WE ARE THE WEIRD QUARTET!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
 				await self.bot.send_message(message.channel, 'AND WE ARE TEH WEIRD QUARTET!')"""
+			
+	async def voicelistener(self, before, after):
+		if before.voice.voice_channel is None and after.voice.voice_channel:
+			channel = [c for c in after.sever.channels if c.name == 'chat']
+			await self.bot.send_message(channel, 'I predict that ' + after.nick + ' will join the voice channel.')
+		elif before.voice.voice_channel and after.voice.voice_channel is None:
+			channel = [c for c in after.sever.channels if c.name == 'chat']
+			await self.bot.send_message(channel, 'I foresee that ' + after.nick + ' will leave the voice channel.')
 				
 def setup(bot):
 	n = reaction(bot)

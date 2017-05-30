@@ -47,7 +47,7 @@ class reaction:
 							ok = True
 						if ok:
 							if k == 'i' or k == "i'm" or k == "i've":
-								container = 'I ' + random.choice(self.foreseelist) + ' + message.author.name + ' will say, "' + message.content + '"'
+								container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
 								asyncio.sleep(random.randint(10, 60))
 							await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():

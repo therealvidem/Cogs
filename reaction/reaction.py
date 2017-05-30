@@ -30,7 +30,7 @@ class reaction:
 			'think',
 			'anticipate',
 			'foretell',
-			'prophosy'
+			'prophesy'
 		]
 		
 	async def listener(self, message):

@@ -30,7 +30,7 @@ class reaction:
 					if message.content[:len(k)].lower() == k:
 						ok = False
 						if len(message.content) > len(k):
-							if message.content[len(k) + 1:len(k) + 2] == ' ':
+							if message.content[len(k):len(k) + 1] == ' ':
 								ok = True
 						else:
 							ok = True

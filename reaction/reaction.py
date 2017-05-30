@@ -28,11 +28,18 @@ class reaction:
 				container = ''
 				for k, v in self.listenstart.items():
 					if message.content[:len(k)].lower() == k:
-						if k == 'ppap':
-							container = message.author.name + '*'
-						elif k == 'I':
-							container = 'I predict ' + message.author.name + ' will say, "' + message.content + '"'
-						await self.bot.send_message(message.channel, v + container)
+						ok = False
+						if len(message.content) > len(k):
+							if message.content[len(k) + 1:len(k) + 2] == ' ':
+								ok = True
+						else:
+							ok = True
+						if ok:
+							if k == 'ppap':
+								container = message.author.name + '*'
+							elif k == 'I':
+								container = 'I predict ' + message.author.name + ' will say, "' + message.content + '"'
+							await self.bot.send_message(message.channel, v + container)
 				for k, v in self.listensub.items():
 					if message.content.lower().find(k) != -1:
 						await self.bot.send_message(message.channel, v)

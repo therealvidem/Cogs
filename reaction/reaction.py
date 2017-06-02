@@ -34,7 +34,7 @@ class reaction:
 		]
 		
 	async def listener(self, message):
-		if message.author.id != self.bot.user.id:
+		if not message.author.bot:
 			if self.bot.user.id == '224328344769003520':
 				container = ''
 				for k, v in self.listenstart.items():
@@ -72,14 +72,15 @@ class reaction:
 				await self.bot.send_message(message.channel, 'AND WE ARE TEH WEIRD QUARTET!')"""
 			
 	async def voicelistener(self, before, after):
-		if before.voice.voice_channel is None and after.voice.voice_channel:
-			channel = [c for c in after.server.channels if c.id == '132586673383931904']
-			await asyncio.sleep(random.randint(1, 10))
-			await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will join the voice channel.')
-		elif before.voice.voice_channel and after.voice.voice_channel is None:
-			channel = [c for c in after.server.channels if c.id == '132586673383931904']
-			await asyncio.sleep(random.randint(1, 10))
-			await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')
+		if not message.author.bot:
+			if before.voice.voice_channel is None and after.voice.voice_channel:
+				channel = [c for c in after.server.channels if c.id == '132586673383931904']
+				await asyncio.sleep(random.randint(1, 10))
+				await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will join the voice channel.')
+			elif before.voice.voice_channel and after.voice.voice_channel is None:
+				channel = [c for c in after.server.channels if c.id == '132586673383931904']
+				await asyncio.sleep(random.randint(1, 10))
+				await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')
 				
 def setup(bot):
 	n = reaction(bot)

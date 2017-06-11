@@ -287,7 +287,7 @@ class test:
 			if n > 2000 - len(emote):
 				await self.bot.say('You\'re a bit too happy there, bud.')
 			elif n == -1:
-				await self.bot.say(emote * 280)
+				await self.bot.say(emote * math.floor((2000 / len(emote)))
 			elif n < -1:
 				await self.bot.say('Are you silent?')
 			else:

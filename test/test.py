@@ -5,6 +5,7 @@ from discord.ext import commands
 from .utils import checks
 import asyncio
 import time
+import math
 import operator
 import urllib.request
 import simplejson

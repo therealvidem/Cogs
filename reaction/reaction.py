@@ -28,24 +28,23 @@ class reaction:
 		
 	async def listener(self, message):
 		if not message.author.bot:
-			if self.bot.user.id == '224328344769003520':
-				container = ''
-				for k, v in self.listenstart.items():
-					if message.content[:len(k)].lower() == k:
-						ok = False
-						if len(message.content) > len(k):
-							if message.content[len(k):len(k) + 1] == ' ':
-								ok = True
-						else:
+			container = ''
+			for k, v in self.listenstart.items():
+				if message.content[:len(k)].lower() == k:
+					ok = False
+					if len(message.content) > len(k):
+						if message.content[len(k):len(k) + 1] == ' ':
 							ok = True
-						if ok:
-							if k == 'i' or k == "i'm" or k == "i've":
-								container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
-								await asyncio.sleep(random.randint(1, 10))
-							await self.bot.send_message(message.channel, v + container)
-				for k, v in self.listensub.items():
-					if message.content.lower().find(k) != -1:
-						await self.bot.send_message(message.channel, v)
+					else:
+						ok = True
+					if ok:
+						if k == 'i' or k == "i'm" or k == "i've":
+							container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
+							await asyncio.sleep(random.randint(1, 10))
+						await self.bot.send_message(message.channel, v + container)
+			for k, v in self.listensub.items():
+				if message.content.lower().find(k) != -1:
+					await self.bot.send_message(message.channel, v)
 			"""if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':
 				await asyncio.sleep(0.5)
 				await self.bot.send_message(message.channel, 'VIDEM!')

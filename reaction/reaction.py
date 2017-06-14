@@ -63,7 +63,7 @@ class reaction:
 			elif message.content == 'AND WE ARE THE WEIRD QUARTET!' and message.author.id == '283325760851410944' and self.bot.user.id == '283327246150926336':
 				await self.bot.send_message(message.channel, 'AND WE ARE TEH WEIRD QUARTET!')"""
 			
-	async def voicelistener(self, before, after):
+	'''async def voicelistener(self, before, after):
 		if not message.author.bot:
 			if before.voice.voice_channel is None and after.voice.voice_channel:
 				channel = [c for c in after.server.channels if c.id == '132586673383931904']
@@ -72,10 +72,10 @@ class reaction:
 			elif before.voice.voice_channel and after.voice.voice_channel is None:
 				channel = [c for c in after.server.channels if c.id == '132586673383931904']
 				await asyncio.sleep(random.randint(1, 10))
-				await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')
+				await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')'''
 				
 def setup(bot):
 	n = reaction(bot)
 	bot.add_listener(n.listener, "on_message")
-	bot.add_listener(n.voicelistener, "on_voice_state_update")
+	'''bot.add_listener(n.voicelistener, "on_voice_state_update")'''
 	bot.add_cog(n)

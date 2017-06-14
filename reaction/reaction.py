@@ -15,7 +15,16 @@ class reaction:
 			'secret code': 'mewmewmew',
 			'woah': 'whoa*,  you uneducated swine.',
 			'are you ok': 'https://i.imgur.com/4hthkl5.jpg',
-			'are you gonna be ok': 'https://i.imgur.com/4hthkl5.jpg'
+			'are you gonna be ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'are u gonna b ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r u gonna be ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r you gonna b ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r you gonna be ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r u gonna b ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'are u gonna be ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'are u ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r u ok': 'https://i.imgur.com/4hthkl5.jpg',
+			'r you ok': 'https://i.imgur.com/4hthkl5.jpg'
 		}
 		self.foreseelist = [
 			'foresee',

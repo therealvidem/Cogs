@@ -330,7 +330,10 @@ class test:
 				await self.bot.say('wat')
 
 	@commands.group(pass_context=True)
-	async def repeattext(self, context, text, n: int=10):
+	async def repeattext(self, context)
+
+	@repeattext.command(pass_context=True)
+	async def regular(self, context, text, n: int=10):
 		if n > 0 and (n * len(text)) < 2000:
 			await self.bot.say(text * n)
 		else:
@@ -342,7 +345,7 @@ class test:
 				await self.bot.say('LOUDER')
 			else:
 				await self.bot.say('wat')
-				
+	
 	@repeattext.command(pass_context=True)
 	async def bold(self, context, text, n: int=10):
 		if n > 0 and (n * len(text)) + 4 < 2000:

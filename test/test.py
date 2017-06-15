@@ -328,7 +328,21 @@ class test:
 				await self.bot.say('Are you silent?')
 			else:
 				await self.bot.say('wat')
-		
+
+	@commands.command(pass_context=True)
+	async def repeat(self, context, text: str, n: int=10):
+		if n > 0 and (n * len(text)) < 2000:
+			await self.bot.say(text * n)
+		else:
+			if n >= n * len(text):
+				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+			elif n == -1:
+				await self.bot.say(text * math.floor(2000 / len(text)))
+			elif n < -1:
+				await self.bot.say('LOUDER')
+			else:
+				await self.bot.say('wat')
+
 	@commands.command(pass_context=True)
 	async def addstab(self, context, *, obj: str=None):
 		if obj and obj not in self.stabbingobjects['objects']:

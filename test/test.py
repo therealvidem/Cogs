@@ -331,6 +331,7 @@ class test:
 
 	@commands.group(pass_context=True)
 	async def repeattext(self, context):
+		return
 
 	@repeattext.command(pass_context=True)
 	async def regular(self, context, text, n: int=10):

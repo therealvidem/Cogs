@@ -330,7 +330,7 @@ class test:
 				await self.bot.say('wat')
 
 	@commands.group(pass_context=True)
-	async def repeattext(self, context)
+	async def repeattext(self, context):
 
 	@repeattext.command(pass_context=True)
 	async def regular(self, context, text, n: int=10):

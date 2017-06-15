@@ -349,7 +349,7 @@ class test:
 			await self.bot.say('**' + text * n + '**')
 		else:
 			if n == -1:
-				await self.bot.say('**' + text * math.floor(2000 / len(text) - 4) '**')
+				await self.bot.say('**' + text * math.floor(2000 / len(text) - 4) + '**')
 			elif n >= n * len(text):
 				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
 			elif n < -1:
@@ -363,7 +363,7 @@ class test:
 			await self.bot.say('*' + text * n + '*')
 		else:
 			if n == -1:
-				await self.bot.say('*' + text * math.floor(2000 / len(text) - 2) '*')
+				await self.bot.say('*' + text * math.floor(2000 / len(text) - 2) + '*')
 			elif n >= n * len(text):
 				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
 			elif n < -1:
@@ -377,7 +377,7 @@ class test:
 			await self.bot.say('***' + text * n + '***')
 		else:
 			if n == -1:
-				await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) '***')
+				await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) + '***')
 			elif n >= n * len(text):
 				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
 			elif n < -1:

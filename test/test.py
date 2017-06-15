@@ -331,6 +331,7 @@ class test:
 
 	@commands.command(pass_context=True)
 	async def repeattext(self, context, text, n: int=10):
+		print(text)
 		if n > 0 and (n * len(text)) < 2000:
 			await self.bot.say(text * n)
 		else:

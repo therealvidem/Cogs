@@ -329,14 +329,55 @@ class test:
 			else:
 				await self.bot.say('wat')
 
-	@commands.command(pass_context=True)
+	@commands.group(pass_context=True)
 	async def repeattext(self, context, text, n: int=10):
-		print(text)
 		if n > 0 and (n * len(text)) < 2000:
 			await self.bot.say(text * n)
 		else:
 			if n == -1:
 				await self.bot.say(text * math.floor(2000 / len(text)))
+			elif n >= n * len(text):
+				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+			elif n < -1:
+				await self.bot.say('LOUDER')
+			else:
+				await self.bot.say('wat')
+				
+	@repeattext.command(pass_context=True)
+	async def bold(self, context, text, n: int=10):
+		if n > 0 and (n * len(text)) + 4 < 2000:
+			await self.bot.say('**' + text * n + '**')
+		else:
+			if n == -1:
+				await self.bot.say('**' + text * math.floor(2000 / len(text) - 4) '**')
+			elif n >= n * len(text):
+				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+			elif n < -1:
+				await self.bot.say('LOUDER')
+			else:
+				await self.bot.say('wat')
+				
+	@repeattext.command(pass_context=True)
+	async def italic(self, context, text, n: int=10):
+		if n > 0 and (n * len(text)) + 2 < 2000:
+			await self.bot.say('*' + text * n + '*')
+		else:
+			if n == -1:
+				await self.bot.say('*' + text * math.floor(2000 / len(text) - 2) '*')
+			elif n >= n * len(text):
+				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+			elif n < -1:
+				await self.bot.say('LOUDER')
+			else:
+				await self.bot.say('wat')
+				
+	@repeattext.command(pass_context=True)
+	async def boldanditalic(self, context, text, n: int=10):
+		if n > 0 and (n * len(text)) + 6 < 2000:
+			await self.bot.say('***' + text * n + '***')
+		else:
+			if n == -1:
+				await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) '***')
 			elif n >= n * len(text):
 				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
 			elif n < -1:

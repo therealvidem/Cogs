@@ -334,10 +334,10 @@ class test:
 		if n > 0 and (n * len(text)) < 2000:
 			await self.bot.say(text * n)
 		else:
-			if n >= n * len(text):
-				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
-			elif n == -1:
+			if n == -1:
 				await self.bot.say(text * math.floor(2000 / len(text)))
+			elif n >= n * len(text):
+				await self.bot.say('That\'s a bit excessive, don\'t ya think?')
 			elif n < -1:
 				await self.bot.say('LOUDER')
 			else:

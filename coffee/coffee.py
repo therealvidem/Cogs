@@ -98,7 +98,7 @@ class Coffee:
                 await self.bot.remove_reaction(message, emoji, user)
     
     async def join_listener(self, member):
-        await self.bot.send_message(member.server.default_channel, "Welcome {0} to {1}!".format(member.name, member.server.name))
+        await self.bot.send_message(member.server.default_channel, "Welcome {0} to {1}!".format(member.mention, member.server.name))
             
 def check_files():
     f = "data/coffee/coffee.json"

@@ -90,7 +90,7 @@ class Coffee:
             emoji = reaction.emoji
             audiencerole = discord.utils.get(message.server.roles, name = 'Audience')
             if message.id == '329141418444455937':
-                if audiencerole not in author.roles:
+                if audiencerole not in member.roles:
                     await self.bot.add_roles(member, audiencerole)
                 await self.bot.remove_reaction(message, emoji, member)
     

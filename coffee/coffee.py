@@ -83,7 +83,7 @@ class Coffee:
         await self.bot.say(embed=em)
     
     async def reaction_listener(self, reaction, user):
-        print(reaction.emoji.name)
+        print(reaction.emoji)
         print(user.name)
         if reaction.message.server.id == '310510876514058241' and reaction.emoji == ':ophiuchus:':
             if user == self.bot.user:

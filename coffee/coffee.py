@@ -92,12 +92,12 @@ class Coffee:
             if message.id == '329141418444455937':
                 if audiencerole not in member.roles:
                     await self.bot.add_roles(member, audiencerole)
+                    await self.bot.send_message(member.server.default_channel, "Welcome {} to {}!".format(member.mention, member.server.name))
                 await self.bot.remove_reaction(message, emoji, member)
     
     async def join_listener(self, member):
         channel = discord.utils.get(member.server.channels, id='329153340044738560')
         await self.bot.send_message(channel, '<@138838298742226944>, {} joined the server.'.format(member.name))
-        await self.bot.send_message(member.server.default_channel, "Welcome {} to {}!".format(member.mention, member.server.name))
             
 def check_files():
     f = "data/coffee/coffee.json"

@@ -82,19 +82,17 @@ class Coffee:
                 em.add_field(name=str(i) + '. ' + personname + '#' + discriminator, value=str(score) + ' ' + coffeetext, inline=False)
         await self.bot.say(embed=em)
     
-    async def reaction_listener(self, reaction, user):
+    async def reaction_listener(self, reaction, member):
         if reaction.message.server.id == '310510876514058241' and reaction.emoji == '⛎':
-            if user == self.bot.user:
+            if member == self.bot.user:
                 return
             message = reaction.message
-            author = message.author
             emoji = reaction.emoji
             audiencerole = discord.utils.get(message.server.roles, name = 'Audience')
             if message.id == '329141418444455937':
-                print(author.roles)
                 if audiencerole not in author.roles:
-                    await self.bot.add_roles(author, audiencerole)
-                await self.bot.remove_reaction(message, emoji, user)
+                    await self.bot.add_roles(member, audiencerole)
+                await self.bot.remove_reaction(message, emoji, member)
     
     async def join_listener(self, member):
         await self.bot.send_message(member.server.default_channel, "Welcome {0} to {1}!".format(member.mention, member.server.name))

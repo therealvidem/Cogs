@@ -8,7 +8,6 @@ class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
-	self.listenmessage = None
     
     @commands.group(pass_context=True)
     async def coffee(self, context):

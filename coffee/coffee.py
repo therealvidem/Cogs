@@ -91,6 +91,9 @@ class Coffee():
             if message.id == '310627579944108032' and next(r for r in author.roles if r.name == 'Audience') is None:
                 await self.bot.add_roles(author, next(r for r in message.server.roles if r.name == 'Audience'))
             await self.bot.remove_reaction(message, emoji, user)
+    
+    async def join_listener(self, member):
+        await self.bot.send_message(member.server.default_channel, "Welcome {0} to {1}!".format(member.name, member.server.name))
             
 def check_files():
     f = "data/coffee/coffee.json"
@@ -101,3 +104,4 @@ def check_files():
 def setup(bot):
     bot.add_cog(Coffee(bot))
     bot.add_listener(coffee.reaction_listener, "on_reaction_add")
+    bod.add_listener(coffee.join_listener, "on_member_join")

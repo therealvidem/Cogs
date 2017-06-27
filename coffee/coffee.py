@@ -83,14 +83,13 @@ class Coffee:
         await self.bot.say(embed=em)
     
     async def reaction_listener(self, reaction, user):
-        print(reaction.emoji)
-        print(user.name)
         if reaction.message.server.id == '310510876514058241' and reaction.emoji == ':ophiuchus:':
             if user == self.bot.user:
                 return
             message = reaction.message
             author = message.author
             emoji = reaction.emoji
+            print(message.id)
             if message.id == '329141418444455937':
                 if next(r for r in author.roles if r.name == 'Audience') is None:
                     await self.bot.add_roles(author, next(r for r in message.server.roles if r.name == 'Audience'))

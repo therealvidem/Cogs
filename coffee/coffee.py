@@ -89,9 +89,10 @@ class Coffee:
             message = reaction.message
             author = message.author
             emoji = reaction.emoji
+            audiencerole = get(message.server.roles, name = 'Audience')
             if message.id == '329141418444455937':
-                if len(author.roles) == 0:
-                    await self.bot.add_roles(author, next(r for r in message.server.roles if r.name == 'Audience'))
+                if audiencerole not in author.roles:
+                    await self.bot.add_roles(author, audiencerole)
                 await self.bot.remove_reaction(message, emoji, user)
     
     async def join_listener(self, member):
@@ -109,3 +110,5 @@ def setup(bot):
     bot.add_cog(n)
     bot.add_listener(n.reaction_listener, "on_reaction_add")
     bot.add_listener(n.join_listener, "on_member_join")
+
+    

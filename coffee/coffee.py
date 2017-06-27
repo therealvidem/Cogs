@@ -58,6 +58,7 @@ class Coffee:
             await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
     @coffee.command()
+    @checks.admin()
     async def reset(self, member: discord.Member=None):
         if member:
             try:

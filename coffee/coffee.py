@@ -4,7 +4,7 @@ from discord.utils import find
 from .utils import checks
 from .utils.dataIO import dataIO
 
-class Coffee():
+class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')

@@ -8,6 +8,7 @@ class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
+	self.listenmessage = None
     
     @commands.group(pass_context=True)
     async def coffee(self, context):
@@ -83,10 +84,7 @@ class Coffee:
         await self.bot.say(embed=em)
     
     async def reaction_listener(self, reaction, user):
-        print(reaction.emoji.name)
-        print(user.name)
-        if reaction.message.server.id == '310510876514058241':
-            print(reaction.emoji.name)
+        if reaction.message.server.id == '310510876514058241' and reaction.emoji == ':ophiuchus:':
             if user == self.bot.user:
                 return
             message = reaction.message

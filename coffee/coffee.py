@@ -104,7 +104,8 @@ def check_files():
         dataIO.save_json(f, data)
 
 def setup(bot):
+    check_files()
     n = Coffee(bot)
+    bot.add_cog(n)
     bot.add_listener(n.reaction_listener, "on_reaction_add")
     bot.add_listener(n.join_listener, "on_member_join")
-    bot.add_cog(n)

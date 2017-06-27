@@ -104,6 +104,6 @@ def check_files():
 
 def setup(bot):
     coffee = Coffee(bot)
-    bot.add_cog(coffee)
     bot.add_listener(Coffee.reaction_listener, "on_reaction_add")
     bot.add_listener(Coffee.join_listener, "on_member_join")
+    bot.add_cog(coffee)

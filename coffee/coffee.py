@@ -83,6 +83,7 @@ class Coffee:
     
     async def reaction_listener(self, reaction, user):
         if reaction.server.id == '310510876514058241':
+            print(reaction.emoji.name)
             if user == self.bot.user:
                 return
             message = reaction.message

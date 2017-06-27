@@ -89,7 +89,7 @@ class Coffee:
             message = reaction.message
             author = message.author
             emoji = reaction.emoji
-            if message.id == '310627579944108032':
+            if message.id == '329141418444455937':
                 if next(r for r in author.roles if r.name == 'Audience') is None:
                     await self.bot.add_roles(author, next(r for r in message.server.roles if r.name == 'Audience'))
                 await self.bot.remove_reaction(message, emoji, user)

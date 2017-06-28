@@ -45,19 +45,21 @@ class test:
 
     @commands.command(pass_context=True, invoke_without_command=True)
     async def bar(self, context, num='0'):
-        memenum = random.randint(1, self.memes['vb'])
-        try:
-            await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
-        except:
-            await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
+        if discord.utils.get(context.message.server.roles, name='BAR'):
+            memenum = random.randint(1, self.memes['vb'])
+            try:
+                await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
+            except:
+                await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True, invoke_without_command=True)
     async def meme(self, context, num='0'):
-        memenum = random.randint(1, self.memes['vm'])
-        try:
-            await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
-        except:
-            await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
+        if discord.utils.get(context.message.server.roles, name='BAR'):
+            memenum = random.randint(1, self.memes['vm'])
+            try:
+                await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
+            except:
+                await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True)
     async def removevp(self, context, num: int = None):
@@ -76,7 +78,7 @@ class test:
 
     @commands.command(pass_context=True)
     async def removevb(self, context, num: int = None):
-        if num:
+        if num and discord.utils.get(context.message.server.roles, name='BAR')::
             os.remove(self.base2 + 'meme (' + str(num) + ').png')
             files = os.listdir(self.base2)
             for file in files:
@@ -91,7 +93,7 @@ class test:
 
     @commands.command(pass_context=True)
     async def removevm(self, context, num: int = None):
-        if num:
+        if num and discord.utils.get(context.message.server.roles, name='BAR')::
             os.remove(self.base3 + 'meme (' + str(num) + ').png')
             files = os.listdir(self.base3)
             for file in files:
@@ -120,31 +122,33 @@ class test:
 
     @commands.command(pass_context=True)
     async def addvb(self, context, url):
-        r = requests.get(url, stream=True)
-        if r.status_code == 200:
-            count = self.memes['vb'] + 1
-            with open(self.base2 + 'meme (' + str(count) + ').png', 'wb') as f:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)
-            self.memes['vb'] = count
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully added emote as vb ' + str(count))
-        else:
-            await self.bot.say('Unable to add emote.')
+        if discord.utils.get(context.message.server.roles, name='BAR'):
+            r = requests.get(url, stream=True)
+            if r.status_code == 200:
+                count = self.memes['vb'] + 1
+                with open(self.base2 + 'meme (' + str(count) + ').png', 'wb') as f:
+                    r.raw.decode_content = True
+                    shutil.copyfileobj(r.raw, f)
+                self.memes['vb'] = count
+                dataIO.save_json('data/test/memes.json', self.memes)
+                await self.bot.say('Successfully added emote as vb ' + str(count))
+            else:
+                await self.bot.say('Unable to add emote.')
 
     @commands.command(pass_context=True)
     async def addvm(self, context, url):
-        r = requests.get(url, stream=True)
-        if r.status_code == 200:
-            count = self.memes['vm'] + 1
-            with open(self.base3 + 'meme (' + str(count) + ').png', 'wb') as f:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)
-            self.memes['vm'] = count
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully added emote as vm ' + str(count))
-        else:
-            await self.bot.say('Unable to add emote.')
+        if discord.utils.get(context.message.server.roles, name='BAR'):
+            r = requests.get(url, stream=True)
+            if r.status_code == 200:
+                count = self.memes['vm'] + 1
+                with open(self.base3 + 'meme (' + str(count) + ').png', 'wb') as f:
+                    r.raw.decode_content = True
+                    shutil.copyfileobj(r.raw, f)
+                self.memes['vm'] = count
+                dataIO.save_json('data/test/memes.json', self.memes)
+                await self.bot.say('Successfully added emote as vm ' + str(count))
+            else:
+                await self.bot.say('Unable to add emote.')
 
     @commands.command(pass_context=True)
     async def rollbetween(self, context, one, two):
@@ -179,10 +183,10 @@ class test:
             await self.bot.say('I dunno what the means.')
 
     @commands.command(pass_context=True, name='invite')
-    async def _invite(self, context, botid: str = None):
-        botid = botid or '[BOTIDHERE]'
-        await self.bot.say(
-            'https://discordapp.com/api/oauth2/authorize?client_id=' + botid + '&scope=bot&permissions=0')
+    async def _invite(self, context, botid: str = None, server: str = None):
+		if botid:
+			await self.bot.say(
+				discord.utils.oauth_url(botid, permissions=None, server=server, redirect_uri=None))
 
     @commands.command(pass_context=True)
     async def sauce(self, context):

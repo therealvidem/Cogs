@@ -184,9 +184,8 @@ class test:
 
     @commands.command(pass_context=True, name='invite')
     async def _invite(self, context, botid: str = None, server: str = None):
-		if botid:
-			await self.bot.say(
-				discord.utils.oauth_url(botid, permissions=None, server=server, redirect_uri=None))
+        if botid:
+            await self.bot.say(discord.utils.oauth_url(botid, permissions=None, server=server, redirect_uri=None))
 
     @commands.command(pass_context=True)
     async def sauce(self, context):

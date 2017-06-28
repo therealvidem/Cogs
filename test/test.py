@@ -36,12 +36,12 @@ class test:
         await self.bot.say(memetype + ' has ' + str(self.memes[memetype]) + ' emotes.')
 
     @commands.command(pass_context=True, invoke_without_command=True)
-    async def pearl(self, context, num='0'):
+    async def pearl(self, context, num: int = None):
         memenum = random.randint(1, self.memes['vp'])
         try:
-            await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(num) + ').png')
+            await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(num) + ').png')
         except:
-            await self.bot.send_file(context.message.channel, self.base + 'meme_(' + str(memenum) + ').png')
+            await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True, invoke_without_command=True)
     async def bar(self, context, num='0'):
@@ -62,57 +62,12 @@ class test:
                 await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True)
-    async def removevp(self, context, num: int = None):
-        if num:
-            os.remove(self.base + 'meme_(' + str(num) + ').png')
-            files = os.listdir(self.base)
-            for file in files:
-                filenum = re.findall(r'\d+', file)
-                if int(filenum[0]) and int(filenum[0]) > num:
-                    if not os.path.exists(os.path.join(self.base, 'meme (' + str(int(filenum[0]) - 1) + ').png')):
-                        os.rename(os.path.join(self.base, file),
-                                  os.path.join(self.base, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
-            self.memes['vp'] = self.memes['vp'] - 1
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully removed emote.')
-
-    @commands.command(pass_context=True)
-    async def removevb(self, context, num: int = None):
-        if num and discord.utils.get(context.message.server.roles, name='BAR'):
-            os.remove(self.base2 + 'meme (' + str(num) + ').png')
-            files = os.listdir(self.base2)
-            for file in files:
-                filenum = re.findall(r'\d+', file)
-                if int(filenum[0]) and int(filenum[0]) > num:
-                    if not os.path.exists(os.path.join(self.base2, 'meme (' + str(int(filenum[0]) - 1) + ').png')):
-                        os.rename(os.path.join(self.base2, file),
-                                  os.path.join(self.base2, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
-            self.memes['vb'] = self.memes['vb'] - 1
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully removed emote.')
-
-    @commands.command(pass_context=True)
-    async def removevm(self, context, num: int = None):
-        if num and discord.utils.get(context.message.server.roles, name='BAR'):
-            os.remove(self.base3 + 'meme (' + str(num) + ').png')
-            files = os.listdir(self.base3)
-            for file in files:
-                filenum = re.findall(r'\d+', file)
-                if int(filenum[0]) and int(filenum[0]) > num:
-                    if not os.path.exists(os.path.join(self.base3, 'meme (' + str(int(filenum[0]) - 1) + ').png')):
-                        os.rename(os.path.join(self.base3, file),
-                                  os.path.join(self.base3, 'meme (' + str(int(filenum[0]) - 1) + ').png'))
-            self.memes['vm'] = self.memes['vm'] - 1
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully removed emote.')
-
-    @commands.command(pass_context=True)
     async def addvp(self, context, url):
         if discord.utils.get(context.message.server.roles, name='BAR'):
             r = requests.get(url, stream=True)
             if r.status_code == 200:
                 count = self.memes['vp'] + 1
-                with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
+                with open(self.base + 'meme (' + str(count) + ').png', 'wb') as f:
                     r.raw.decode_content = True
                     shutil.copyfileobj(r.raw, f)
                 self.memes['vp'] = count

@@ -36,7 +36,7 @@ class test:
         await self.bot.say(memetype + ' has ' + str(self.memes[memetype]) + ' emotes.')
 
     @commands.command(pass_context=True, invoke_without_command=True)
-    async def pearl(self, context, num: int = None):
+    async def pearl(self, context, num: str = None):
         memenum = random.randint(1, self.memes['vp'])
         try:
             await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(num) + ').png')
@@ -44,7 +44,7 @@ class test:
             await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True, invoke_without_command=True)
-    async def bar(self, context, num='0'):
+    async def bar(self, context, num: str = None):
         if discord.utils.get(context.message.server.roles, name='BAR'):
             memenum = random.randint(1, self.memes['vb'])
             try:
@@ -53,7 +53,7 @@ class test:
                 await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
 
     @commands.command(pass_context=True, invoke_without_command=True)
-    async def meme(self, context, num='0'):
+    async def meme(self, context, num: str = None):
         if discord.utils.get(context.message.server.roles, name='BAR'):
             memenum = random.randint(1, self.memes['vm'])
             try:

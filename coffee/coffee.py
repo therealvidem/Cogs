@@ -18,7 +18,7 @@ class Coffee:
 
     @coffee.command()
     @checks.admin()
-    async def plus(self, member: discord.Member=None):
+    async def plus(self, context, member: discord.Member=None):
         if member:
             if member.id not in self.coffee[context.message.server.id]:
                 self.coffeedata[context.message.server.id][member.id] = 0
@@ -29,7 +29,7 @@ class Coffee:
 	
     @coffee.command()
     @checks.admin()
-    async def subtract(self, member: discord.Member=None):
+    async def subtract(self, context, member: discord.Member=None):
         if member:
             if member.id not in self.coffeedata[context.message.server.id]:
                 self.coffeedata[context.message.server.id][member.id] = 0
@@ -40,7 +40,7 @@ class Coffee:
 			
     @coffee.command()
     @checks.admin()
-    async def give(self, member: discord.Member=None, n: int=1):
+    async def give(self, context, member: discord.Member=None, n: int=1):
         if member:
             if member.id not in self.coffeedata[context.message.server.id]:
                 self.coffeedata[context.message.server.id][member.id] = 0
@@ -51,7 +51,7 @@ class Coffee:
 			
     @coffee.command()
     @checks.admin()
-    async def set(self, member: discord.Member=None, numcoffee: int=1):
+    async def set(self, context, member: discord.Member=None, numcoffee: int=1):
         if member:
             self.coffeedata[context.message.server.id][member.id] = numcoffee
             dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
@@ -59,7 +59,7 @@ class Coffee:
 			
     @coffee.command()
     @checks.admin()
-    async def reset(self, member: discord.Member=None):
+    async def reset(self, context, member: discord.Member=None):
         if member:
             try:
                 self.coffeedata[context.message.server.id].pop(member.id, None)

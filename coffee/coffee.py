@@ -20,7 +20,7 @@ class Coffee:
     @checks.admin()
     async def plus(self, context, member: discord.Member=None):
         if member:
-            if member.id not in self.coffee[context.message.server.id]:
+            if member.id not in self.coffeedata[context.message.server.id]:
                 self.coffeedata[context.message.server.id][member.id] = 0
             numcoffee = self.coffeedata[context.message.server.id][member.id] + 1
             self.coffeedata[context.message.server.id][member.id] = numcoffee

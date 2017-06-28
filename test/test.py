@@ -108,17 +108,18 @@ class test:
 
     @commands.command(pass_context=True)
     async def addvp(self, context, url):
-        r = requests.get(url, stream=True)
-        if r.status_code == 200:
-            count = self.memes['vp'] + 1
-            with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)
-            self.memes['vp'] = count
-            dataIO.save_json('data/test/memes.json', self.memes)
-            await self.bot.say('Successfully added emote as vp ' + str(count))
-        else:
-            await self.bot.say('Unable to add emote.')
+        if discord.utils.get(context.message.server.roles, name='BAR'):
+            r = requests.get(url, stream=True)
+            if r.status_code == 200:
+                count = self.memes['vp'] + 1
+                with open(self.base + 'meme_(' + str(count) + ').png', 'wb') as f:
+                    r.raw.decode_content = True
+                    shutil.copyfileobj(r.raw, f)
+                self.memes['vp'] = count
+                dataIO.save_json('data/test/memes.json', self.memes)
+                await self.bot.say('Successfully added emote as vp ' + str(count))
+            else:
+                await self.bot.say('Unable to add emote.')
 
     @commands.command(pass_context=True)
     async def addvb(self, context, url):

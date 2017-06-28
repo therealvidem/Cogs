@@ -78,7 +78,7 @@ class test:
 
     @commands.command(pass_context=True)
     async def removevb(self, context, num: int = None):
-        if num and discord.utils.get(context.message.server.roles, name='BAR')::
+        if num and discord.utils.get(context.message.server.roles, name='BAR'):
             os.remove(self.base2 + 'meme (' + str(num) + ').png')
             files = os.listdir(self.base2)
             for file in files:
@@ -93,7 +93,7 @@ class test:
 
     @commands.command(pass_context=True)
     async def removevm(self, context, num: int = None):
-        if num and discord.utils.get(context.message.server.roles, name='BAR')::
+        if num and discord.utils.get(context.message.server.roles, name='BAR'):
             os.remove(self.base3 + 'meme (' + str(num) + ').png')
             files = os.listdir(self.base3)
             for file in files:

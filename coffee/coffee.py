@@ -16,7 +16,7 @@ class Coffee:
                 self.coffeedata[context.message.server.id] = {}
             await self.bot.say('Do {}help coffee.'.format(context.prefix)) 
 
-    @coffee.command()
+    @coffee.command(pass_context=True)
     @checks.admin()
     async def plus(self, context, member: discord.Member=None):
         if member:
@@ -27,7 +27,7 @@ class Coffee:
             dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Gave 1 coffee to ' + member.mention + '!')
 	
-    @coffee.command()
+    @coffee.command(pass_context=True)
     @checks.admin()
     async def subtract(self, context, member: discord.Member=None):
         if member:
@@ -38,7 +38,7 @@ class Coffee:
             dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Took 1 coffee from ' + member.mention + '!')
 			
-    @coffee.command()
+    @coffee.command(pass_context=True)
     @checks.admin()
     async def give(self, context, member: discord.Member=None, n: int=1):
         if member:
@@ -49,7 +49,7 @@ class Coffee:
             dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Gave ' + str(n) + ' coffee to ' + member.mention + '!')
 			
-    @coffee.command()
+    @coffee.command(pass_context=True)
     @checks.admin()
     async def set(self, context, member: discord.Member=None, numcoffee: int=1):
         if member:
@@ -57,7 +57,7 @@ class Coffee:
             dataIO.save_json('data/coffee/coffee.json', self.coffeedata)
             await self.bot.say('Set ' + member.mention + '\'s number of coffee to ' + str(numcoffee) + '!')
 			
-    @coffee.command()
+    @coffee.command(pass_context=True)
     @checks.admin()
     async def reset(self, context, member: discord.Member=None):
         if member:

@@ -9,7 +9,7 @@ class rate:
         self.id = bot.user.id
 
     @commands.group(pass_context=True, name='rate')
-    async def _rate(self, context):
+    async def rate(self, context):
         if context.invoked_subcommand is None:
             prefix = context.prefix
             title = '**Videm\'s Robust Rating System 9000:**\n'
@@ -21,8 +21,8 @@ class rate:
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
     
-    @_rate.command(pass_context=True, name='thing')
-    async def _thing(self, context, *, thing: str=None):
+    @rate.command(pass_context=True, name='thing')
+    async def thing(self, context, *, thing: str):
         if thing:
             random.seed(str(self.id) + thing.lower())
             rate = random.randint(0, 10)
@@ -32,46 +32,47 @@ class rate:
         else:
             await self.bot.say('Do \'{}rate thing\' for more information.'.format(context.prefix))
     
-    @_rate.command(pass_context=True, name='someone')
-    async def _someone(self, context, *, member: discord.Member=None):
+    @rate.command(pass_context=True, name='someone')
+    async def someone(self, context, *, member: discord.Member):
         if member:
-            name = member.display_name
-            random.seed(str(self.id) + name.lower())
+            name = str(member)
+            random.seed(self.id + name.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
             await self.bot.say('I give **{}** {} **{}/10** {}'.format(name, article, rate, emoji))
         else:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
-            
-    @_rate.command(pass_context=True, name='ship')
-    async def _ship(self, context, member1, member2):
+    
+    @rate.command(pass_context=True, name='ship')
+    async def ship(self, context, member1, member2):
         if member1 and member2:
             listofpeople = []
-            name1 = str(member1)
-            name2 = str(member2)
             for person in context.message.server.members:
                 if member1 == person.mention or member1 == person.name:
                     name1 = person.name
-                    member1 = str(person)
+                    member1 = person
                 if member2 == person.mention or member2 == person.name:
                     name2 = person.name
-                    member2 = str(person)
-            shiplist = [member1.lower(), member2.lower()]
+                    member2 = person
+            if name1 == name2:
+                name1 = name1 + '#' + member1.discriminator
+                name2 = name2 + '#' + member2.discriminator
+            shiplist = [str(member1).lower(), str(member2).lower()]
             shiplist.sort()
             shipname = ' x '.join(shiplist)
-            random.seed(str(self.id) + shipname)
+            random.seed(self.id + shipname)
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
             await self.bot.say('I give the **{} x {}** ship {} **{}/10** {}'.format(name1, name2, article, rate, emoji))
         else:
             await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
-            
-    @_rate.command(pass_context=True, name='list')
-    async def _list(self, context, *args):
+    
+    @rate.command(pass_context=True, name='list')
+    async def list(self, context, *args):
         author = context.message.author
-        choices = list(args)
+        choices = sort(list(args))
         if len(choices) > 1:
             random.seed(str(self.id) + ', '.join(choices))
             random.shuffle(choices)

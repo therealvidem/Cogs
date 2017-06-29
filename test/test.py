@@ -57,7 +57,7 @@ class test:
             self.quotes[str(author)] = quote
             dataIO.save_json('data/test/quotes.json', self.quotes)
             await self.bot.delete_message(context.message)
-            await self.bot.say('"' + quote + '"\n -' + author.name + '\n' + datetime.now().year)
+            await self.bot.say('"' + quote + '"\n -' + author.name + '\n' + datetime.datetime.now().year)
         else:
             await self.bot.say('That quote already exists!')
 

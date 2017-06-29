@@ -45,24 +45,28 @@ class rate:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
     
     @rate.command(pass_context=True, name='ship')
-    async def ship(self, context, member1: str, member2: str):
+    async def ship(self, context, member1: discord.Member, member2: discord.Member):
         if member1 and member2:
-            listofpeople = []
-            name1 = ""
-            name2 = ""
-            for person in context.message.server.members:
-                if member1 == person.mention or member1 == person.nick or member1 == str(person) or member1 == person.name:
-                    name1 = person.name
-                    member1 = person
-                if member2 == person.mention or member2 == person.nick or member2 == str(person) or member2 == perosn.name:
-                    name2 = person.name
-                    await self.bot.say(str(person))
-                    member2 = person
-            if name1 == name2:
-                name1 = name1 + '#' + member1.discriminator
-                name2 = name2 + '#' + member2.discriminator
-            shiplist = [str(member1).lower(), str(member2).lower()]
-            shiplist.sort()
+            name1 = member1.name
+            name2 = member2.name
+            if member1.nick:
+                name1 = member1.nick
+            if member2.nick:
+                name2 = member2.nick
+            shiplist = [str(member1).lower(), str(member2).lower()].sort()
+            shipname = ' x '.join(shiplist)
+            random.seed(self.id + shipname)
+            rate = random.randint(0, 10)
+            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
+            article = 'an' if rate == 8 else 'a'
+            await self.bot.say('I give the **{} x {}** ship {} **{}/10** {}'.format(name1, name2, article, rate, emoji))
+        else:
+            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+
+    @rate.command(pass_context=True, name='regularship')
+    async def regularship(self, context, person1: str, person2: str):
+        if person1 and person2:
+            shiplist = [person1.lower(), person2.lower()].sort()
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)
             rate = random.randint(0, 10)
@@ -75,7 +79,7 @@ class rate:
     @rate.command(pass_context=True, name='list')
     async def list(self, context, *args):
         author = context.message.author
-        choices = sort(list(args))
+        choices = list(args).sort()
         if len(choices) > 1:
             random.seed(str(self.id) + ', '.join(choices))
             random.shuffle(choices)

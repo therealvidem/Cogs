@@ -92,7 +92,7 @@ class rate:
         listpeople = []
         for name in args:
             person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
-            if person:
+            if not person:
                 await self.bot.say(name + ' does not exist in this server.')
                 return
             else:

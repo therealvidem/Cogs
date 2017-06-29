@@ -440,7 +440,7 @@ class test:
                 'Do \'{0}count start <start number> [end number] [mention]\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{0}count stop\' to stop any counting operation.'.format(
                     prefix))
 
-    @_count.command()
+    @count.command()
     async def start(self, context, startnum: int = None, endnum: int = 0, mention: str = 'false'):
         if self.counting == False:
             if startnum:
@@ -494,7 +494,7 @@ class test:
         else:
             await self.bot.say('I\'m already counting.')
 
-    @_count.command()
+    @count.command()
     async def stop(self, context):
         self.counting = False
 

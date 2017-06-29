@@ -89,17 +89,17 @@ class rate:
 
     @rate.command(pass_context=True)
     async def ratepeople(self, context, *args):
-        listpeople = []
-        for name in args:
-            person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
-            if not person:
-                await self.bot.say(name + ' does not exist in this server.')
-                return
-            else:
-                listpeople.append(person)
-        author = context.message.author
-        choices = sorted([str(i) for i in listpeople])
         if len(choices) > 1:
+            listpeople = []
+            for name in args:
+                person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
+                if not person:
+                    await self.bot.say(name + ' does not exist in this server.')
+                    return
+                else:
+                    listpeople.append(person)
+            author = context.message.author
+            choices = sorted([str(i) for i in listpeople])
             random.seed(self.id + ', '.join(choices))
             random.shuffle(choices)
             em = discord.Embed(title='Choices', colour=0x2F93E0)

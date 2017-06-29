@@ -72,8 +72,8 @@ class rate:
         else:
             await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
     
-    @rate.command(pass_context=True)
-    async def rate(self, context, *args):
+    @rate.command(pass_context=True, name='rate')
+    async def _rate(self, context, *args):
         author = context.message.author
         choices = sorted(list(args))
         if len(choices) > 1:

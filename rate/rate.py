@@ -48,6 +48,8 @@ class rate:
     async def ship(self, context, member1, member2):
         if member1 and member2:
             listofpeople = []
+            name1 = ""
+            name2 = ""
             for person in context.message.server.members:
                 if member1 == person.mention or member1 == person.name:
                     name1 = person.name

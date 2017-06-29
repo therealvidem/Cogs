@@ -47,15 +47,8 @@ class rate:
     @rate.command(pass_context=True, name='ship')
     async def ship(self, context, member1: discord.Member, member2: discord.Member):
         if member1 and member2:
-            name1 = member1.name
-            name2 = member2.name
-            if member1.nick:
-                name1 = member1.nick
-            if member2.nick:
-                name2 = member2.nick
-            if name1 == name2:
-                name1 = str(member1)
-                name2 = str(member2)
+            name1 = str(member1)
+            name2 = str(member2)
             shiplist = sorted([str(member1).lower(), str(member2).lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)

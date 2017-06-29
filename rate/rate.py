@@ -53,6 +53,9 @@ class rate:
                 name1 = member1.nick
             if member2.nick:
                 name2 = member2.nick
+            if name1 == name2:
+                name1 = str(member1)
+                name2 = str(member2)
             shiplist = sorted([str(member1).lower(), str(member2).lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)

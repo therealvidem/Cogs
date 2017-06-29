@@ -91,7 +91,7 @@ class rate:
     async def ratepeople(self, context, *args):
         listpeople = []
         for name in args:
-            person = find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
+            person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
             if person:
                 await self.bot.say(name + ' does not exist in this server.')
                 return

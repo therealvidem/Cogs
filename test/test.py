@@ -45,12 +45,35 @@ class test:
     #     elif memetype and memetype not in memetypes:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
-    @commands.group()
-    async def quote(self, context, author: discord.Member, quote):
-        self.quotes[author] = quote
-        dataIO.save_json('data/test/quotes.json', self.quotes)
-        await self.bot.delete_message(context.message)
-        await self.bot.say('"' + quote + '"\n -' + author.name + '\n' + datetime.now().year)
+    @commands.group(pass_context=True)
+    async def quote(self, context):
+        return
+
+    @quote.command(pass_context=True)
+    async def add(self, context, author: discord.Member, quote):
+        if quote not in self.quotes[str(author)]:
+            self.quotes[str(author)] = quote
+            dataIO.save_json('data/test/quotes.json', self.quotes)
+            await self.bot.delete_message(context.message)
+            await self.bot.say('"' + quote + '"\n -' + author.name + '\n' + datetime.now().year)
+
+    @quote.command(pass_context=True)
+    async def remove(self, context, author: discord.Member, quotenum):
+        if quotenum < len(self.quotes[str(author)]):
+            self.quotes[str(author)].remove(self.quotes[str(author)][quotenum])
+
+    @quote.command(pass_context=True)
+    async def list(self, context, author: discord.Member):
+        if str(author) in self.quotes:
+            # objs = ''
+            # for obj in self.stabbingobjects['objects']:
+            #     objs += '**{}**\n'.format(obj)
+            # em = discord.Embed(title='My Knife Collection', color=discord.Color.green())
+            # em.add_field(name='\a', value=objs)
+            em = discord.Embed(title='Quotes from ' + author.name, colour=0x2F93E0)
+            for x in range(len(self.quotes[str(author)])):
+                em.add_field(name=x, value=self.quotes[str(author)][x])
+            await self.bot.say(embed=em)
 
     @commands.command(pass_context=True)
     async def emote(self, context, memetype):

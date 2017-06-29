@@ -21,7 +21,7 @@ class rate:
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
     
-    @rate.command(pass_context=True, name='thing')
+    @rate.command(pass_context=True)
     async def thing(self, context, *, thing: str):
         if thing:
             random.seed(str(self.id) + thing.lower())
@@ -32,7 +32,7 @@ class rate:
         else:
             await self.bot.say('Do \'{}rate thing\' for more information.'.format(context.prefix))
     
-    @rate.command(pass_context=True, name='someone')
+    @rate.command(pass_context=True)
     async def someone(self, context, *, member: discord.Member):
         if member:
             name = str(member)
@@ -44,7 +44,7 @@ class rate:
         else:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
     
-    @rate.command(pass_context=True, name='ship')
+    @rate.command(pass_context=True)
     async def ship(self, context, member1: discord.Member, member2: discord.Member):
         if member1 and member2:
             name1 = str(member1)
@@ -59,7 +59,7 @@ class rate:
         else:
             await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
 
-    @rate.command(pass_context=True, name='regularship')
+    @rate.command(pass_context=True)
     async def regularship(self, context, person1: str, person2: str):
         if person1 and person2:
             shiplist = sorted([person1.lower(), person2.lower()])
@@ -72,10 +72,25 @@ class rate:
         else:
             await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
     
-    @rate.command(pass_context=True, name='list')
-    async def list(self, context, *args):
+    @rate.command(pass_context=True)
+    async def rate(self, context, *args):
         author = context.message.author
         choices = sorted(list(args))
+        if len(choices) > 1:
+            random.seed(str(self.id) + ', '.join(choices))
+            random.shuffle(choices)
+            em = discord.Embed(title='Choices', colour=0x2F93E0)
+            em.set_author(name=str(author), icon_url=author.avatar_url)
+            for x in range(0, len(choices)):
+                em.add_field(name=str(x + 1) + "\a", value=choices[x])
+            await self.bot.send_message(context.message.channel, embed=em)
+        else:
+            await self.bot.say('Not enough choices to choose from')
+
+    @rate.command(pass_context=True)
+    async def ratepeople(self, context, *args: discord.Member)
+        author = context.message.author
+        choices = sorted([str(i) for i in args])
         if len(choices) > 1:
             random.seed(str(self.id) + ', '.join(choices))
             random.shuffle(choices)

@@ -53,7 +53,7 @@ class rate:
                 name1 = member1.nick
             if member2.nick:
                 name2 = member2.nick
-            shiplist = sort([str(member1).lower(), str(member2).lower()])
+            shiplist = sorted([str(member1).lower(), str(member2).lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)
             rate = random.randint(0, 10)
@@ -66,7 +66,7 @@ class rate:
     @rate.command(pass_context=True, name='regularship')
     async def regularship(self, context, person1: str, person2: str):
         if person1 and person2:
-            shiplist = sort([person1.lower(), person2.lower()])
+            shiplist = sorted([person1.lower(), person2.lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)
             rate = random.randint(0, 10)
@@ -79,7 +79,7 @@ class rate:
     @rate.command(pass_context=True, name='list')
     async def list(self, context, *args):
         author = context.message.author
-        choices = sort(list(args))
+        choices = sorted(list(args))
         if len(choices) > 1:
             random.seed(str(self.id) + ', '.join(choices))
             random.shuffle(choices)

@@ -89,7 +89,7 @@ class rate:
 
     @rate.command(pass_context=True)
     async def ratepeople(self, context, *args):
-        if len(choices) > 1:
+        if len(args) > 1:
             listpeople = []
             for name in args:
                 person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)

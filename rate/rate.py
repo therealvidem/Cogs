@@ -45,17 +45,18 @@ class rate:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
     
     @rate.command(pass_context=True, name='ship')
-    async def ship(self, context, member1, member2):
+    async def ship(self, context, member1: str, member2: str):
         if member1 and member2:
             listofpeople = []
             name1 = ""
             name2 = ""
             for person in context.message.server.members:
-                if member1 == person.mention or member1 == person.name:
+                if member1 == person.mention or member1 == person.nick or member1 == str(person) or member1 == person.name:
                     name1 = person.name
                     member1 = person
-                if member2 == person.mention or member2 == person.name:
+                if member2 == person.mention or member2 == person.nick or member2 == str(person) or member2 == perosn.name:
                     name2 = person.name
+                    await self.bot.say(str(person))
                     member2 = person
             if name1 == name2:
                 name1 = name1 + '#' + member1.discriminator

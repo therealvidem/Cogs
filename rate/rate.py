@@ -98,7 +98,7 @@ class rate:
             else:
                 listpeople.append(person)
         author = context.message.author
-        choices = sorted([str(i) for i in person])
+        choices = sorted([str(i) for i in listpeople])
         if len(choices) > 1:
             random.seed(self.id + ', '.join(choices))
             random.shuffle(choices)

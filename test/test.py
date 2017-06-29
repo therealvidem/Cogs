@@ -33,7 +33,6 @@ class test:
         self.base2 = 'data/test/imagesj/'
         self.base3 = 'data/test/imagesm/'
         self.stabbingobjects = dataIO.load_json('data/test/stabbingobjects.json')
-        self.coffee = dataIO.load_json('data/test/coffee.json')
         self.memes = dataIO.load_json('data/test/memes.json')
         self.quotes = dataIO.load_json('data/test/quotes.json')
         self.counting = False

@@ -88,10 +88,17 @@ class rate:
             await self.bot.say('Not enough choices to choose from')
 
     @rate.command(pass_context=True)
-    async def ratepeople(self, context, *args)
-        
+    async def ratepeople(self, context, *args):
+        listpeople = []
+        for name in args:
+            person = find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
+            if person:
+                await self.bot.say(name + ' does not exist in this server.')
+                return
+            else:
+                listpeople.append(person)
         author = context.message.author
-        choices = sorted([str(i) for i in args])
+        choices = sorted([str(i) for i in person])
         if len(choices) > 1:
             random.seed(self.id + ', '.join(choices))
             random.shuffle(choices)

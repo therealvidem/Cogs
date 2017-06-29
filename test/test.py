@@ -51,19 +51,36 @@ class test:
 
     @quote.command(pass_context=True)
     async def add(self, context, author: discord.Member, quote):
+        if str(author) not in self.quotes:
+            self.quotes[str(author)] = []
         if quote not in self.quotes[str(author)]:
             self.quotes[str(author)] = quote
             dataIO.save_json('data/test/quotes.json', self.quotes)
             await self.bot.delete_message(context.message)
             await self.bot.say('"' + quote + '"\n -' + author.name + '\n' + datetime.now().year)
+        else:
+            await self.bot.say('That quote already exists!')
 
     @quote.command(pass_context=True)
     async def remove(self, context, author: discord.Member, quotenum):
+        if str(author) not in self.quotes:
+            self.quotes[str(author)] = []
         if quotenum < len(self.quotes[str(author)]):
             self.quotes[str(author)].remove(self.quotes[str(author)][quotenum])
+        else:
+            await self.bot.say('That\'s too high of an index!')
+
+    @quote.command(pass_context=True)
+    async def removeall(self, context, author: discord.Member):
+        if str(author) in self.quotes:
+            self.quotes.remove(str(author))
+        else:
+            await self.bot.say('That person doesn\'t have any quotes!')
 
     @quote.command(pass_context=True)
     async def list(self, context, author: discord.Member):
+        if str(author) not in self.quotes:
+            self.quotes[str(author)] = []
         if str(author) in self.quotes:
             # objs = ''
             # for obj in self.stabbingobjects['objects']:

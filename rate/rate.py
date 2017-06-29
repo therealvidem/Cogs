@@ -88,11 +88,12 @@ class rate:
             await self.bot.say('Not enough choices to choose from')
 
     @rate.command(pass_context=True)
-    async def ratepeople(self, context, *args: discord.Member)
+    async def ratepeople(self, context, *args)
+        
         author = context.message.author
         choices = sorted([str(i) for i in args])
         if len(choices) > 1:
-            random.seed(str(self.id) + ', '.join(choices))
+            random.seed(self.id + ', '.join(choices))
             random.shuffle(choices)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             em.set_author(name=str(author), icon_url=author.avatar_url)

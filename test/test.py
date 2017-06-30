@@ -47,17 +47,20 @@ class test:
 
     @commands.group(pass_context=True)
     async def quote(self, context):
-        return
+        await self.bot.saY()
 
     @quote.command(pass_context=True)
-    async def add(self, context, author: discord.Member, quote: str):
+    async def add(self, context, author: discord.Member, quote: str, year: int):
         if str(author) not in self.quotes:
             self.quotes[str(author)] = []
         if quote not in self.quotes[str(author)]:
-            self.quotes[str(author)] = quote
+            if not year:
+                year = datetime.datetime.now().year
+            data = {"year": year, "quote": quote}
+            self.quotes[str(author)].append(data)
             dataIO.save_json('data/test/quotes.json', self.quotes)
             await self.bot.delete_message(context.message)
-            await self.bot.say('"' + quote + '" -' + author.name + '\n' + str(datetime.datetime.now().year))
+            await self.bot.say('"' + quote + '" -' + author.name + '\n' + str(year))
         else:
             await self.bot.say('That quote already exists!')
 
@@ -90,8 +93,8 @@ class test:
             # em.add_field(name='\a', value=objs)
             em = discord.Embed(title='Quotes from ' + author.name, colour=0x2F93E0)
             for x in range(len(self.quotes[str(author)])):
-                em.add_field(name=x, value=self.quotes[str(author)][x])
-            await self.bot.say(embed=em)
+                em.add_field(name=x, value=self.quotes[str(author)][x]["quote"] + " -" + self.quotes[str(author)][x]["year"])
+            await self.bot.say(embed=em) 
 
     @commands.command(pass_context=True)
     async def emote(self, context, memetype):

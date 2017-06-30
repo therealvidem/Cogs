@@ -47,16 +47,21 @@ class test:
 
     @commands.group(pass_context=True)
     async def quote(self, context):
-        await self.bot.saY()
+        author = random.choice(self.quote)
+        quote = random.choice(author)
+        content = quote['content']
+        name = quote['name']
+        year = quote['year']
+        await self.bot.say('"' + content + '" -' + name + '\n' + str(year))
 
     @quote.command(pass_context=True)
     async def add(self, context, author: discord.Member, quote: str, year: int):
         if str(author) not in self.quotes:
             self.quotes[str(author)] = []
-        if quote not in self.quotes[str(author)]:
+        if not [q for q in self.quotes[str(author)] if q['content'] == quote]:
             if not year:
                 year = datetime.datetime.now().year
-            data = {"year": year, "quote": quote}
+            data = {'year': year, 'content': quote, 'author': author.name}
             self.quotes[str(author)].append(data)
             dataIO.save_json('data/test/quotes.json', self.quotes)
             await self.bot.delete_message(context.message)

@@ -74,6 +74,7 @@ class test:
     async def removeall(self, context, author: discord.Member):
         if str(author) in self.quotes:
             del self.quotes[str(author)]
+            await self.bot.say('Successfully removed all quotes by ' + author.name)
         else:
             await self.bot.say('That person doesn\'t have any quotes!')
 

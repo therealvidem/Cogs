@@ -72,7 +72,7 @@ class astrology:
             if propname != 'creator':
                 if isinstance(prop, str):
                     prop = prop.lower().title()
-                em.add_field(name=propname.replace('birth_', '').title(), value=prop)
+                em.add_field(name=propname.title(), value=prop)
         await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)
@@ -86,11 +86,11 @@ class astrology:
         self.profiles[authorid][name] = {
             'creator': context.message.author.id,
             'name': name,
-            'birth_year': birth_year,
-            'birth_month': birth_month,
-            'birth_day': birth_day,
-            'birth_hour': birth_hour,
-            'birth_minute': birth_minute,
+            'year': birth_year,
+            'month': birth_month,
+            'day': birth_day,
+            'hour': birth_hour,
+            'minute': birth_minute,
             'location': location
         }
         dataIO.save_json(self.profile_path, self.profiles)
@@ -145,7 +145,7 @@ class astrology:
             return
         em = discord.Embed(title='Profiles of {}'.format(context.message.author.name), colour=0x2F93E0)
         for name, profile in self.profiles[authorid].items():
-            em.add_field(name=name, value='{}/{}/{}'.format(str(profile['birth_year']), str(profile['birth_month']), str(profile['birth_day'])))
+            em.add_field(name=name, value='{}/{}/{}'.format(str(profile['year']), str(profile['month']), str(profile['day'])))
         await self.bot.say(embed=em)
 
     async def get_chart(self, context, name, send_message=True):
@@ -155,11 +155,11 @@ class astrology:
         if name in self.chart_cache:
             return self.chart_cache[name]
         profile = self.profiles[authorid][name]
-        year = profile['birth_year']
-        month = profile['birth_month']
-        day = profile['birth_day']
-        hour = profile['birth_hour']
-        minute = profile['birth_minute']
+        year = profile['year']
+        month = profile['month']
+        day = profile['day']
+        hour = profile['hour']
+        minute = profile['minute']
         dt = datetime(year, month, day, hour, minute)
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')

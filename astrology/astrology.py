@@ -117,6 +117,16 @@ class astrology:
         profile = self.profiles[authorid][name]
         if property not in profile:
             await self.bot.say('{} does not exist as a property!'.format(property))
+            return
+        if property == 'creator':
+            await self.bot.say('You can\'t edit the creator of this profile!')
+            return
+        if isinstance(profile[property], int):
+            try:
+                int(new_value)
+            except:
+                await self.bot.say('That\'s not a proper number!')
+                return
         profile[property] = new_value
         dataIO.save_json(self.profile_path, self.profiles)
         await self.bot.say('Changed the {} of {} to {}!'.format(property, name, new_value))

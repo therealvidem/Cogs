@@ -158,12 +158,13 @@ class astrology:
         day = profile['birth_day']
         hour = profile['birth_hour']
         minute = profile['birth_minute']
+        print(year)
         dt = datetime(year, month, day, hour, minute)
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')
         location = self.locator.geocode(profile['location'])
         tz = self.locator.timezone([location.latitude, location.longitude])
-        tz_offset = tz.utcoffset(datetime()).total_seconds() / 3600
+        tz_offset = tz.utcoffset(dt).total_seconds() / 3600
         chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(location.latitude, location.longitude), IDs=const.LIST_OBJECTS)
         self.chart_cache[name] = chart
         if len(self.chart_cache) > 50:

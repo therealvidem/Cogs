@@ -166,7 +166,7 @@ class astrology:
         try:
             dt = datetime(year, month, day, hour, minute)
         except ValueError as e:
-            await self.bot.say(e.capitalize())
+            await self.bot.say(str(e).capitalize())
             return
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')

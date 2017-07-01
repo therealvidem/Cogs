@@ -23,11 +23,11 @@ class astrology:
     async def profile_exists(self, context, name: str=None, send_message: bool=True):
         if not name:
             if send_message:
-                await self.bot.say('You don\'t have any profiles! Do "{}astrology create" to create a profile!'.format(context.prefix))
+                await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
             return
         if context.message.author.id not in self.profiles:
             if send_message:
-                await self.bot.say('You don\'t have any profiles! Do "{}astrology create" to create a profile!'.format(context.prefix))
+                await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
             return
         if name not in self.profiles[context.message.author.id]:
             if send_message:
@@ -69,7 +69,8 @@ class astrology:
         profile = self.profiles[authorid][name]
         em = discord.Embed(title='{}\'s Profile'.format(name), colour=0x2F93E0)
         for propname, prop in profile.items():
-            em.add_field(name=propname.title(), value=prop)
+            if propname != 'creator':
+                em.add_field(name=propname.title(), value=prop)
         await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)
@@ -128,7 +129,7 @@ class astrology:
     async def list(self, context):
         authorid = context.message.author.id
         if not authorid in self.profiles:
-            await self.bot.say('You don\'t have any profiles! Do "{}astrology create" to create a profile!'.format(context.prefix))
+            await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
             return
         em = discord.Embed(title='Profiles of {}'.format(context.message.author.name), colour=0x2F93E0)
         for name, profile in self.profiles[authorid].items():

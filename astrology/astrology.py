@@ -163,10 +163,17 @@ class astrology:
         day = profile['day']
         hour = profile['hour']
         minute = profile['minute']
-        dt = datetime(year, month, day, hour, minute)
+        try:
+            dt = datetime(year, month, day, hour, minute)
+        except KeyError, e:
+            await self.bot.say(e)
+            return
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')
         location = self.locator.geocode(profile['location'])
+        if not location:
+            await self.bot.say('That\'s not a valid location!')
+            return
         tz = self.locator.timezone([location.latitude, location.longitude])
         tz_offset = tz.utcoffset(dt).total_seconds() / 3600
         chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(location.latitude, location.longitude), IDs=const.LIST_OBJECTS)

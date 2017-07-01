@@ -102,12 +102,12 @@ class astrology:
         dataIO.save_json(self.profile_path, self.profiles)
         await self.bot.say('Successfully removed {}\'s profile!'.format(name))
 
-    @astrology.commands(pass_context=True)
-    @checks.is_owner()
+    @astrology.command(pass_context=True)
     async def reset_all(self, context):
-        self.profiles = []
-        dataIO.save_json(self,profile_path, self.profiles)
-        await self.bot.say('Successfully resetted all profiles!')
+        if self.bot.is_owner(context.message.author.id): 
+            self.profiles = []
+            dataIO.save_json(self,profile_path, self.profiles)
+            await self.bot.say('Successfully resetted all profiles!')
 
     async def change_prop(self, context, name, property, new_value):
         if not await self.profile_exists(context, name) or not await self.is_owner(context, name):

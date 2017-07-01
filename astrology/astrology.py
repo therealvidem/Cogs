@@ -20,7 +20,9 @@ class astrology:
         self.chart_cache = collections.OrderedDict()
         self.locator = GoogleV3()
 
-    async def profile_exists(self, context, name: str=None, member: discord.Member=context.message.author, send_message: bool=True):
+    async def profile_exists(self, context, name: str=None, member: discord.Member=None, send_message: bool=True):
+        if not member:
+            member = context.message.author
         if not name:
             if send_message:
                 await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
@@ -35,7 +37,9 @@ class astrology:
             return
         return self.profiles[member.id][name]
 
-    async def is_owner(self, context, name, member: discord.Member=context.message.author, send_message: bool=True):
+    async def is_owner(self, context, name, member: discord.Member=None, send_message: bool=True):
+        if not member:
+            member = context.message.author
         profile = await self.profile_exists(context, name)
         if profile:
             if profile['creator'] != member.id:

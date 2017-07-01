@@ -158,7 +158,6 @@ class astrology:
         day = profile['birth_day']
         hour = profile['birth_hour']
         minute = profile['birth_minute']
-        print(year)
         dt = datetime(year, month, day, hour, minute)
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')

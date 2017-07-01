@@ -165,7 +165,7 @@ class astrology:
         minute = profile['minute']
         try:
             dt = datetime(year, month, day, hour, minute)
-        except KeyError as e:
+        except ValueError as e:
             await self.bot.say(e)
             return
         formatted_date = dt.strftime('%Y/%m/%d')

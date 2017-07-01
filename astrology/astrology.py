@@ -175,10 +175,10 @@ class astrology:
         chart = await self.get_chart(context, name)
         if not chart:
             return
-        em = discord.Embed(title='Planet Signs of {}'.format(name), colour=0x2F93E0)
-        for planet in const.LIST_OBJECTS:
-            sign = chart.get(planet).sign
-            em.add_field(name=planet, value=sign)
+        em = discord.Embed(title='Signs of {}'.format(name), colour=0x2F93E0)
+        for obj in chart.objects:
+            sign = chart.get(obj).sign
+            em.add_field(name=obj.id, value=sign)
         await self.bot.say(embed=em)
 
     @astrology.group(pass_context=True)
@@ -186,25 +186,25 @@ class astrology:
         return
 
     @get.command(pass_context=True)
-    async def sign(self, context, name: str, planet: str):
+    async def sign(self, context, name: str, object: str):
         chart = await self.get_chart(context, name)
         if not chart:
             return
-        planet = planet.lower().title()
+        object = (x for x in const.LIST_OBJECTS if x.lower() == object.lower()) or None
         try:
-            sign = chart.get(planet).sign
-            await self.bot.say('{}\'s sign in {} is {}.'.format(name, planet, sign))
+            sign = chart.get(object).sign
+            await self.bot.say('{}\'s sign in {} is {}.'.format(name, object, sign))
         except KeyError:
-            await self.bot.say('That\'s not a valid planet!')
+            await self.bot.say('That\'s not a valid astrological object!')
 
     @get.command(pass_context=True)
     async def house(self, context, name: str, house_num: int):
         chart = await self.get_chart(context, name)
         if not chart:
             return
-        house_string = 'house' + str(house_num)
+        house = (x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house)) or None
         try:
-            sign = chart.get(house_string).sign
+            sign = chart.get(house).sign
             await self.bot.say('{}\'s sign in House {} is {}.'.format(name, house_num, sign))
         except KeyError:
             await self.bot.say('That\'s not a valid house!')

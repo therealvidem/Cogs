@@ -123,7 +123,7 @@ class astrology:
             return
         if isinstance(profile[property], int):
             try:
-                int(new_value)
+                new_value = int(new_value)
             except:
                 await self.bot.say('That\'s not a proper number!')
                 return

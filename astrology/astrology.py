@@ -177,8 +177,7 @@ class astrology:
             return
         em = discord.Embed(title='Signs of {}'.format(name), colour=0x2F93E0)
         for obj in chart.objects:
-            sign = chart.get(obj).sign
-            em.add_field(name=obj.id, value=sign)
+            em.add_field(name=obj.id, value=obj.sign)
         await self.bot.say(embed=em)
 
     @astrology.group(pass_context=True)

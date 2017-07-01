@@ -11,7 +11,7 @@ class reaction:
 			'syrz': 'It\'s called a dress.'
 		}
 		self.listensub = {
-			'kys': 'Kind your self?',
+			'kys': 'Kind your sorrow?',
 			'secret code': 'mewmewmew',
 			'woah': 'whoa*,  you uneducated swine.',
 			'are you ok': 'https://i.imgur.com/4hthkl5.jpg',

@@ -20,25 +20,25 @@ class astrology:
         self.chart_cache = collections.OrderedDict()
         self.locator = GoogleV3()
 
-    async def profile_exists(self, context, name: str=None, send_message: bool=True):
+    async def profile_exists(self, context, name: str=None, member: discord.Member=context.message.author, send_message: bool=True):
         if not name:
             if send_message:
                 await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
             return
-        if context.message.author.id not in self.profiles:
+        if member.id not in self.profiles:
             if send_message:
                 await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
             return
-        if name not in self.profiles[context.message.author.id]:
+        if name not in self.profiles[member.id]:
             if send_message:
                 await self.bot.say('That profile doesn\'t exist!')
             return
-        return self.profiles[context.message.author.id][name]
+        return self.profiles[member.id][name]
 
-    async def is_owner(self, context, name, send_message: bool=True):
+    async def is_owner(self, context, name, member: discord.Member=context.message.author, send_message: bool=True):
         profile = await self.profile_exists(context, name)
         if profile:
-            if profile['creator'] != context.message.author.id:
+            if profile['creator'] != member.id:
                 if send_message:
                     await self.bot.say('You are not the owner of that profile!')
                 return False
@@ -149,6 +149,20 @@ class astrology:
         em = discord.Embed(title='Profiles of {}'.format(context.message.author.name), colour=0x2F93E0)
         for name, profile in self.profiles[authorid].items():
             em.add_field(name=name, value='{}/{}/{}'.format(str(profile['year']), str(profile['month']), str(profile['day'])))
+        await self.bot.say(embed=em)
+
+    @profile.command(pass_context=True)
+    async def view(self, context, member: discord.Member, name: str):
+        if not await self.profile_exists(context, name, member):
+            return
+        authorid = member.id
+        profile = self.profiles[authorid][name]
+        em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
+        for propname, prop in profile.items():
+            if propname != 'creator':
+                if isinstance(prop, str):
+                    prop = prop.lower().title()
+                em.add_field(name=propname.title(), value=prop)
         await self.bot.say(embed=em)
 
     async def get_chart(self, context, name, send_message=True):

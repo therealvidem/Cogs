@@ -50,7 +50,7 @@ class astrology:
         message = 'Welcome to videm\'s Astrology Cog!\n'
         message += 'This is a useful bot function in which you can create and store mutliple profiles on the bot to make (not draw) charts.\n\n'
         message += 'Basically, you just create a profile using several information:\n'
-        message += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [timezone] [location]\n'
+        message += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [location]\n'
         message += 'The timezone parameter is essentially how offset your timezone is to UTC; just Google: "(your timezone) utc offset", make sure to include any negative signs.\n\n'
         message += 'After you create a profile, you can view its properties by executing "{prefix}astrology profile [profile_name]".\n'
         message += 'You can then look at each of the profile\'s planet signs by executing "{prefix}astrology get sign [profile_name] [planet]".\n'

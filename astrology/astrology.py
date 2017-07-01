@@ -50,7 +50,8 @@ class astrology:
         message = 'Welcome to videm\'s Astrology Cog!\n'
         message += 'This is an astrology-centered cog in which you can create and store mutliple profiles on the bot to make (not draw) charts.\n\n'
         message += 'To create a profile, use this command:\n'
-        message += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [location]\n\n'
+        message += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [location]\n'
+        message += 'You may use a city as a location.\n\n'
         message += 'After you create a profile, you can view its properties by executing "{prefix}astrology profile [profile_name]".\n'
         message += 'You can then look at each of the profile\'s planet signs by executing "{prefix}astrology get sign [profile_name] [planet]".\n'
         message += 'Do {prefix}astrology commandlist for more information!'
@@ -122,7 +123,7 @@ class astrology:
 
     @profile.command(pass_context=True)
     async def edit(self, context, name: str, property: str, new_value):
-        change_prop(context, name, property, new_value)
+        await self.change_prop(context, name, property, new_value)
 
     @profile.command(pass_context=True)
     async def list(self, context):

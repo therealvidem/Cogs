@@ -70,7 +70,9 @@ class astrology:
         em = discord.Embed(title='{}\'s Profile'.format(name), colour=0x2F93E0)
         for propname, prop in profile.items():
             if propname != 'creator':
-                em.add_field(name=propname.replace('birth_', '').title(), value=prop.lower().title())
+                if isinstance(prop, str):
+                    prop = prop.lower().title()
+                em.add_field(name=propname.replace('birth_', '').title(), value=prop)
         await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)

@@ -67,7 +67,7 @@ class astrology:
             return
         authorid = context.message.author.id
         profile = self.profiles[authorid][name]
-        em = discord.Embed(title='{}\'s Profile'.format(name), colour=0x2F93E0)
+        em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
         for propname, prop in profile.items():
             if propname != 'creator':
                 if isinstance(prop, str):
@@ -93,6 +93,9 @@ class astrology:
             'minute': birth_minute,
             'location': location
         }
+        if not await self.get_chart(context, name):
+            del self.profiles[authorid][name]
+            return
         dataIO.save_json(self.profile_path, self.profiles)
         await self.bot.say('Successfully created profile for {}'.format(name))
 

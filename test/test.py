@@ -18,6 +18,7 @@ from threading import Timer
 import requests
 import shutil
 import re
+import names
 from .utils.dataIO import dataIO
 
 class test:
@@ -44,6 +45,18 @@ class test:
     #         if ()
     #     elif memetype and memetype not in memetypes:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
+
+    @commands.group(pass_context=True, invoke_without_command=True)
+    async def randomname(self, context):
+        await self.bot.say(names.get_full_name())
+
+    @randomname.command(pass_context=True)
+    async def male(self, context):
+        await self.bot.say(names.get_full_name(gender='male'))
+
+    @randomname.command(pass_context=True)
+    async def female(self, context):
+        await self.bot.say(names.get_full_name(gender='female'))
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def quote(self, context):

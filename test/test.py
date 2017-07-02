@@ -45,7 +45,7 @@ class test:
     #     elif memetype and memetype not in memetypes:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
-    @commands.group(pass_context=True)
+    @commands.group(pass_context=True, invoke_without_command=True)
     async def quote(self, context):
         author = random.choice(self.quote)
         quote = random.choice(author)

@@ -156,7 +156,7 @@ class astrology:
         await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)
-    async def view(self, context, member: discord.Member, name: str):
+    async def view(self, context, member: discord.Member, name: str=None):
         if name:
             if not await self.profile_exists(context, name, member):
                 return

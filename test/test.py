@@ -372,7 +372,7 @@ class test:
             else:
                 await self.bot.say('wat')
 
-    @commands.group()
+    @commands.group(pass_context=True)
     async def repeattext(self, context):
         return
 
@@ -480,7 +480,7 @@ class test:
         member = member or context.message.author
         await self.bot.say(member.mention + ', eh?')
 
-    @commands.group()
+    @commands.group(pass_context=True)
     async def count(self, context):
         if context.invoked_subcommand is None:
             prefix = context.prefix

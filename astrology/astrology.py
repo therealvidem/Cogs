@@ -157,17 +157,27 @@ class astrology:
 
     @profile.command(pass_context=True)
     async def view(self, context, member: discord.Member, name: str):
-        if not await self.profile_exists(context, name, member):
-            return
-        authorid = member.id
-        profile = self.profiles[authorid][name]
-        em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
-        for propname, prop in profile.items():
-            if propname != 'creator':
-                if isinstance(prop, str):
-                    prop = prop.lower().title()
-                em.add_field(name=propname.title(), value=prop)
-        await self.bot.say(embed=em)
+        if name:
+            if not await self.profile_exists(context, name, member):
+                return
+            authorid = member.id
+            profile = self.profiles[authorid][name]
+            em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
+            for propname, prop in profile.items():
+                if propname != 'creator':
+                    if isinstance(prop, str):
+                        prop = prop.lower().title()
+                    em.add_field(name=propname.title(), value=prop)
+            await self.bot.say(embed=em)
+        else:
+            authorid = member.id
+            if not authorid in self.profiles:
+                await self.bot.say('That person doesn\'t have any profiles!'.format(context.prefix))
+                return
+            em = discord.Embed(title='Profiles of {}'.format(member.name), colour=0x2F93E0)
+            for name, profile in self.profiles[authorid].items():
+                em.add_field(name=name, value='{}/{}/{}'.format(str(profile['year']), str(profile['month']), str(profile['day'])))
+            await self.bot.say(embed=em)
 
     async def get_chart(self, context, name, send_message=True):
         authorid = context.message.author.id

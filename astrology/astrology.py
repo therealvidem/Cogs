@@ -242,7 +242,7 @@ class astrology:
         chart = await self.get_chart(context, name)
         if not chart:
             return
-        house = (x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house)) or None
+        house = next([x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house)]) or None
         try:
             sign = chart.get(house).sign
             await self.bot.say('{}\'s sign in House {} is {}.'.format(name, house_num, sign))

@@ -47,16 +47,37 @@ class test:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
     @commands.group(pass_context=True, invoke_without_command=True)
-    async def randomname(self, context):
-        await self.bot.say(names.get_full_name())
+    @commands.cooldown(3, 5)
+    async def randomname(self, context, num: int=1):
+        if num > 10:
+            await self.bot.say('You may only print ten names at a time!')
+            return
+        msg = names.get_full_name()
+        for i in range(1, num):
+            msg += ', ' + names.get_full_name()
+        await self.bot.say(msg)    
 
     @randomname.command(pass_context=True)
-    async def male(self, context):
-        await self.bot.say(names.get_full_name(gender='male'))
+    @commands.cooldown(3, 5)
+    async def male(self, context, num: int=1):
+        if num > 10:
+            await self.bot.say('You may only print ten names at a time!')
+            return
+        msg = names.get_full_name(gender='male')
+        for i in range(1, num):
+            msg += ', ' + names.get_full_name(gender='male')
+        await self.bot.say(msg)
 
     @randomname.command(pass_context=True)
+    @commands.cooldown(3, 5)
     async def female(self, context):
-        await self.bot.say(names.get_full_name(gender='female'))
+        if num > 10:
+            await self.bot.say('You may only print ten names at a time!')
+            return
+        msg = names.get_full_name(gender='female')
+        for i in range(1, num):
+            msg += ', ' + names.get_full_name(gender='female')
+        await self.bot.say(msg)
 
     @commands.group(pass_context=True, invoke_without_command=True)
     async def quote(self, context):

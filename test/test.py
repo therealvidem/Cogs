@@ -70,7 +70,7 @@ class test:
 
     @randomname.command(pass_context=True)
     @commands.cooldown(3, 5)
-    async def female(self, context):
+    async def female(self, context, num: int=1):
         if num > 10:
             await self.bot.say('You may only print ten names at a time!')
             return

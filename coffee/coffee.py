@@ -9,6 +9,7 @@ class Coffee:
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
         print(self.bot.get_all_channels())
+        
         # self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
         # self.read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
     

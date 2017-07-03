@@ -8,7 +8,7 @@ class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
-        self.read_me_channel = discord.utils.get(message.server.channels, id='310620886476783616')
+        self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
         self.read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
     
     @commands.group(pass_context=True)

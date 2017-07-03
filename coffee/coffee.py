@@ -83,7 +83,7 @@ class Coffee:
         await self.bot.say(embed=em)
     
     async def reaction_listener(self, reaction, member):
-        if reaction.message.server.id == '310510876514058241' and reaction.emoji == '⛎':
+        if reaction.message.server.id == '310510876514058241':
             if member == self.bot.user or member.id == '138838298742226944':
                 return
             message = reaction.message
@@ -92,7 +92,7 @@ class Coffee:
             read_me_channel = discord.utils.get(message.server.channels, id='310620886476783616')
             read_me_message = self.bot.get_message('329141418444455937')
             if read_me_message:
-                if audiencerole not in member.roles:
+                if audiencerole not in member.roles and reaction.emoji == '⛎':
                     await self.bot.add_roles(member, audiencerole)
                     await self.bot.send_message(member.server.default_channel, "Welcome {} to {}!".format(member.mention, member.server.name))
                 await self.bot.remove_reaction(message, emoji, member)

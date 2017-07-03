@@ -9,7 +9,6 @@ class Coffee:
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
         print(self.bot.get_all_channels())
-        
         # self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
         # self.read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
     
@@ -119,6 +118,6 @@ def setup(bot):
     check_files()
     n = Coffee(bot)
     bot.add_cog(n)
-    bot.add_listener(n.reaction_listener, "on_reaction_add")
+    bot.add_listener(n.join_listener, "on_member_join")
 
     

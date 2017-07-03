@@ -8,6 +8,8 @@ class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
+        self.read_me_channel = discord.utils.get(message.server.channels, id='310620886476783616')
+        self.read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
     
     @commands.group(pass_context=True)
     async def coffee(self, context):
@@ -81,21 +83,25 @@ class Coffee:
                 coffeetext = 'coffees' if score > 1 else 'coffee'
                 em.add_field(name=str(i) + '. ' + personname + '#' + discriminator, value=str(score) + ' ' + coffeetext, inline=False)
         await self.bot.say(embed=em)
-    
-    async def reaction_listener(self, reaction, member):
-        if reaction.message.server.id == '310510876514058241':
-            if member == self.bot.user or member.id == '138838298742226944':
-                return
-            message = reaction.message
-            emoji = reaction.emoji
-            audiencerole = discord.utils.get(message.server.roles, name='Audience')
-            read_me_channel = discord.utils.get(message.server.channels, id='310620886476783616')
-            read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
-            if read_me_message:
-                if audiencerole not in member.roles and reaction.emoji == '⛎':
+
+    async def wait_for_reaction(self, reaction=None, member=None):
+        if self.read_me_channel and self.read_me_message:
+            if reaction and user and reaction.message.server.id == '310510876514058241':
+                if member == self.bot.user or member.id == '138838298742226944':
+                    return
+                audiencerole = discord.utils.get(message.server.roles, name='Audience')
+                message = reaction.message
+                emoji = reacton.emoji
+                if audiencerole not in member.roles and emoji == '⛎':
                     await self.bot.add_roles(member, audiencerole)
-                    await self.bot.send_message(member.server.default_channel, "Welcome {} to {}!".format(member.mention, member.server.name))
+                    await self.bot.send_message(message.server.default_channel, "Welcome {} to {}!".format(member.mention, message.server.name))
                 await self.bot.remove_reaction(message, emoji, member)
+            res = await self.bot.wait_for_reaction('⛎', message=self.read_me_message, check=self.wait_for_reaction)
+        else:
+            print('Something went wrong when trying to find the channel and message!')
+
+    async def on_ready(self, context):
+        wait_for_reaction()
     
     async def join_listener(self, member):
         channel = discord.utils.get(member.server.channels, id='329153340044738560')

@@ -90,7 +90,7 @@ class Coffee:
             emoji = reaction.emoji
             audiencerole = discord.utils.get(message.server.roles, name='Audience')
             read_me_channel = discord.utils.get(message.server.channels, id='310620886476783616')
-            read_me_message = read_me_channel.get_message('329141418444455937')
+            read_me_message = self.bot.get_message('329141418444455937')
             if read_me_message:
                 if audiencerole not in member.roles:
                     await self.bot.add_roles(member, audiencerole)

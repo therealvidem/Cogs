@@ -8,11 +8,10 @@ class Coffee:
     def __init__(self, bot):
         self.bot = bot
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
-        print(self.bot.get_all_channels())
-        
-        # self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
-        # self.read_me_message = self.bot.get_message(read_me_channel, '329141418444455937')
-    
+        self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
+        self.read_me_message = self.bot.get_message(self.read_me_channel, '329141418444455937')
+        self.wait_reaction = bot.loop.create_task(self.wait_for_reaction())
+
     @commands.group(pass_context=True)
     async def coffee(self, context):
         if context.invoked_subcommand is None:
@@ -87,6 +86,7 @@ class Coffee:
         await self.bot.say(embed=em)
 
     async def wait_for_reaction(self, reaction=None, member=None):
+        print('test')
         if self.read_me_channel and self.read_me_message:
             if reaction and user and reaction.message.server.id == '310510876514058241':
                 if member == self.bot.user or member.id == '138838298742226944':
@@ -101,13 +101,13 @@ class Coffee:
             res = await self.bot.wait_for_reaction('⛎', message=self.read_me_message, check=self.wait_for_reaction)
         else:
             print('Something went wrong when trying to find the channel and message!')
-
-    async def on_ready(self, context):
-        wait_for_reaction()
     
     async def join_listener(self, member):
-        channel = discord.utils.get(member.server.channels, id='329153340044738560')
+        channel = discord.utils.get(member.server.channels, id='329153340044738560'
         await self.bot.send_message(channel, '<@138838298742226944>, {} joined the server.'.format(member.name))
+
+    def __unload(self):
+        self.wait_for_reaction.cancel()
             
 def check_files():
     f = "data/coffee/coffee.json"
@@ -120,5 +120,3 @@ def setup(bot):
     n = Coffee(bot)
     bot.add_cog(n)
     bot.add_listener(n.join_listener, "on_member_join")
-
-    

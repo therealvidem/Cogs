@@ -88,8 +88,8 @@ class Coffee:
     async def wait_for_reaction(self, reaction=None, member=None):
         if self.read_me_channel and self.read_me_message:
             if reaction and user and reaction.message.server.id == '310510876514058241':
-                if member == self.bot.user or member.id == '138838298742226944':
-                    return
+                # if member == self.bot.user or member.id == '138838298742226944':
+                    # return
                 audiencerole = discord.utils.get(message.server.roles, name='Audience')
                 message = reaction.message
                 emoji = reacton.emoji

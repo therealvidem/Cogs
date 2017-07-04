@@ -10,7 +10,7 @@ class Coffee:
         self.coffeedata = dataIO.load_json('data/coffee/coffee.json')
         self.read_me_channel = discord.utils.get(self.bot.get_all_channels(), id='310620886476783616')
         self.read_me_message = self.bot.get_message(self.read_me_channel, '329141418444455937')
-        self.wait_reaction = bot.loop.create_task(self.wait_for_reaction())
+        self.reaction_task = bot.loop.create_task(self.check_reaction())
 
     @commands.group(pass_context=True)
     async def coffee(self, context):
@@ -86,7 +86,6 @@ class Coffee:
         await self.bot.say(embed=em)
 
     async def wait_for_reaction(self, reaction=None, member=None):
-        print('test')
         if self.read_me_channel and self.read_me_message:
             if reaction and user and reaction.message.server.id == '310510876514058241':
                 if member == self.bot.user or member.id == '138838298742226944':
@@ -98,9 +97,11 @@ class Coffee:
                     await self.bot.add_roles(member, audiencerole)
                     await self.bot.send_message(message.server.default_channel, "Welcome {} to {}!".format(member.mention, message.server.name))
                 await self.bot.remove_reaction(message, emoji, member)
-            res = await self.bot.wait_for_reaction('⛎', message=self.read_me_message, check=self.wait_for_reaction)
         else:
             print('Something went wrong when trying to find the channel and message!')
+
+    async def check_reaction(self):
+        res = await self.bot.wait_for_reaction('⛎', message=self.read_me_message, check=self.wait_for_reaction)
     
     async def join_listener(self, member):
         channel = discord.utils.get(member.server.channels, id='329153340044738560')

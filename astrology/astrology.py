@@ -12,9 +12,13 @@ from flatlib.datetime import Datetime
 from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
 from flatlib import const
+from flatlib import angle
 from .utils.dataIO import dataIO
 
+house_nums = ['nulla', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
+
 class astrology:
+
     def __init__(self, bot):
         self.bot = bot
         self.profile_path = 'data/astrology/profiles.json'
@@ -40,79 +44,6 @@ class astrology:
             return
         return self.profiles[member.id][name]
 
-    @commands.group(pass_context=True, invoke_without_command=True)
-    async def astrology(self, context):
-        message = 'Welcome to videm\'s Astrology Cog!\n'
-        message += 'This is an astrology-centered cog in which you can create and store mutliple profiles on the bot to make (not draw) charts.\n\n'
-        message += 'To create a profile, use this command:\n'
-        message += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [location]\n'
-        message += 'You may use a city as a location.\n\n'
-        message += 'After you create a profile, you can view its properties by executing "{prefix}astrology profile [profile_name]".\n'
-        message += 'You can then look at each of the profile\'s planet signs by executing "{prefix}astrology get sign [profile_name] [planet]".\n'
-        message += 'Do {prefix}astrology commandlist for more information!'
-        message = message.format(prefix=context.prefix)
-        em = discord.Embed(title='Videm\'s Astrology Cog', colour=0xFF3E28)
-        em.set_thumbnail(url='https://www.syracusenewtimes.com/wp-content/uploads/2015/12/astrology.jpg')
-        em.add_field(name='Info:', value=message)
-        await self.bot.say(embed=em)
-
-    @astrology.group(pass_context=True, invoke_without_command=True)
-    async def profile(self, context, name: str, member: discord.Member=None):
-        if not await self.profile_exists(context, name, member):
-            return
-        if member:
-            authorid = member.id
-        else:
-            authorid = context.message.author.id
-        profile = self.profiles[authorid][name]
-        em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
-        for propname, prop in profile.items():
-            if propname != 'creator':
-                if isinstance(prop, str):
-                    prop = prop.lower().title()
-                em.add_field(name=propname.title(), value=prop)
-        await self.bot.say(embed=em)
-
-    @profile.command(pass_context=True)
-    async def create(self, context, name: str, birth_year: int, birth_month, birth_day: int, birth_hour: int, birth_minute: int, location: str):
-        authorid = context.message.author.id
-        if authorid not in self.profiles:
-            self.profiles[authorid] = {}
-        if name.lower() in [x.lower() for x in self.profiles[authorid]]:
-            await self.bot.say('That person is already exists!')
-            return
-        self.profiles[authorid][name] = {
-            'creator': context.message.author.id,
-            'name': name,
-            'year': birth_year,
-            'month': birth_month,
-            'day': birth_day,
-            'hour': birth_hour,
-            'minute': birth_minute,
-            'location': location
-        }
-        if not await self.get_chart(context, name):
-            del self.profiles[authorid][name]
-            return
-        dataIO.save_json(self.profile_path, self.profiles)
-        await self.bot.say('Successfully created profile for {}'.format(name))
-
-    @profile.command(pass_context=True)
-    async def remove(self, context, name: str):
-        if not await self.profile_exists(context, name):
-            return
-        authorid = context.message.author.id
-        del self.profiles[authorid][name]
-        dataIO.save_json(self.profile_path, self.profiles)
-        await self.bot.say('Successfully removed {}\'s profile!'.format(name))
-
-    @astrology.command(pass_context=True)
-    async def reset_all(self, context):
-        if self.bot.is_owner(context.message.author.id): 
-            self.profiles = []
-            dataIO.save_json(self,profile_path, self.profiles)
-            await self.bot.say('Successfully resetted all profiles!')
-
     async def change_prop(self, context, name, property, new_value):
         if not await self.profile_exists(context, name):
             return
@@ -128,61 +59,23 @@ class astrology:
             if new_value.lower() in [x.lower() for x in self.profiles[authorid]]:
                 await self.bot.say('You can\'t change the profile\'s to {} since there\'s already a profile named that!')
                 return
-        if new_value.isdecimal():
-            try:
-                new_value = int(new_value)
-            except:
-                await self.bot.say('That\'s not a proper number!')
-                return
         old_value = profile[property]
+        if not new_value:
+            profile[property] = ''
+            if not await self.get_chart(context, name):
+                profile[property] = old_value
+                return
+            dataIO.save_json(self.profile_path, self.profiles)
+            await self.bot.say('Successfully reset the {} of {}!'.format(property, name))
+            return
+        if new_value.isdecimal():
+            new_value = int(new_value)
         profile[property] = new_value
         if not await self.get_chart(context, name):
             profile[property] = old_value
             return
         dataIO.save_json(self.profile_path, self.profiles)
-        await self.bot.say('Changed the {} of {} to {}!'.format(property, name, new_value))
-
-    @profile.command(pass_context=True)
-    async def edit(self, context, name: str, property: str, new_value):
-        await self.change_prop(context, name, property, new_value)
-
-    @profile.command(pass_context=True)
-    async def list(self, context, member: discord.Member=None):
-        if member:
-            authorid = member.id
-        else:
-            authorid = context.message.author.id
-        if not authorid in self.profiles:
-            await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
-            return
-        em = discord.Embed(title='Profiles of {}'.format(context.message.author.name), colour=0x2F93E0)
-        for name, profile in self.profiles[authorid].items():
-            em.add_field(name=name, value='{}/{}/{}'.format(str(profile['year']), str(profile['month']), str(profile['day'])))
-        await self.bot.say(embed=em)
-
-    # @profile.command(pass_context=True)
-    # async def view(self, context, member: discord.Member, name: str=None):
-    #     if name:
-    #         if not await self.profile_exists(context, name, member):
-    #             return
-    #         authorid = member.id
-    #         profile = self.profiles[authorid][name]
-    #         em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
-    #         for propname, prop in profile.items():
-    #             if propname != 'creator':
-    #                 if isinstance(prop, str):
-    #                     prop = prop.lower().title()
-    #                 em.add_field(name=propname.title(), value=prop)
-    #         await self.bot.say(embed=em)
-    #     else:
-    #         authorid = member.id
-    #         if not authorid in self.profiles:
-    #             await self.bot.say('That person doesn\'t have any profiles!'.format(context.prefix))
-    #             return
-    #         em = discord.Embed(title='Profiles of {}'.format(member.name), colour=0x2F93E0)
-    #         for name, profile in self.profiles[authorid].items():
-    #             em.add_field(name=name, value='{}/{}/{}'.format(str(profile['year']), str(profile['month']), str(profile['day'])))
-    #         await self.bot.say(embed=em)
+        await self.bot.say('Successfully changed the {} of {} to {}!'.format(property, name, new_value))
 
     async def get_chart(self, context, name, member: discord.Member=None, send_message=True):
         authorid = None
@@ -220,11 +113,131 @@ class astrology:
             return
         tz = self.locator.timezone([location.latitude, location.longitude])
         tz_offset = tz.utcoffset(dt).total_seconds() / 3600
-        chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(location.latitude, location.longitude), IDs=const.LIST_OBJECTS, hsys=const.HOUSES_PLACIDUS)
+        latitude = location.latitude
+        longitude = location.longitude
+        if profile['latitude'] and profile['longitude']:
+            latitude = profile['latitude']
+            longitude = profile['longitude']
+        chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(latitude, longitude), IDs=const.LIST_OBJECTS, hsys=const.HOUSES_PLACIDUS)
         self.chart_cache[name] = chart
         if len(self.chart_cache) > 50:
             del self.chart_cache[0]
         return chart
+
+    @commands.group(pass_context=True, invoke_without_command=True)
+    async def astrology(self, context):
+        infomessage = 'Welcome to videm\'s Astrology Cog!\n'
+        infomessage += 'This is an astrology cog in which you can create and store mutliple profiles on the bot to make (not draw) charts.\n\n'
+        infomessage += 'To create a profile, use this command:\n'
+        infomessage += '{prefix}astrology profile create [profile name] [birthyear] [birthmonth] [birthday] [birthhour] [birthminute] [location]\n'
+        infomessage += 'You may use a city as a location.\n\n'
+        infomessage += 'Use "{prefix}astrology commandlist" for more information!'
+        infomessage = infomessage.format(prefix=context.prefix)
+        em = discord.Embed(title='Videm\'s Astrology Cog', colour=0xFF3E28)
+        em.set_thumbnail(url='https://www.syracusenewtimes.com/wp-content/uploads/2015/12/astrology.jpg')
+        em.add_field(name='Info:', value=infomessage)
+        await self.bot.say(embed=em)
+
+    @astrology.command(pass_context=True)
+    async def commandlist(self, context):
+        commandmessage = '**"{prefix}astrology profile [profile name]"** to view the properties of a profile.\n'
+        commandmessage += '**"{prefix}astrology profile list"** to view a list of your profiles.\n'
+        commandmessage += '**"{prefix}astrology profile planets [profile name]"** to view the planet/asteroid signs of the profile.\n'
+        commandmessage += '**"{prefix}astrology profile houses [profile name]"** to view the house signs of the profile.\n'
+        commandmessage += '**"{prefix}astrology profile remove [profile name]"** to remove a profile.\n'
+        commandmessage += '**"{prefix}astrology profile edit [profile name] [property name] [new value]"** to edit the property of a profile.\n'
+        commandmessage += '**"{prefix}astrology get sign [profile name] [planet]"** to get a specific planet sign.\n'
+        commandmessage += '**"{prefix}astrology get house [profile name] [house number]"** to get a specific house sign.\n'
+        commandmessage = commandmessage.format(prefix=context.prefix)
+        em = discord.Embed(title='Astrology Cog Command List', colour=0xFF3E28)
+        em.set_thumbnail(url='https://www.syracusenewtimes.com/wp-content/uploads/2015/12/astrology.jpg')
+        em.add_field(name='Commands:', value=commandmessage)
+        await self.bot.say(embed=em)
+
+    @astrology.command(pass_context=True)
+    async def reset_all(self, context):
+        if self.bot.is_owner(context.message.author.id): 
+            self.profiles = []
+            dataIO.save_json(self,profile_path, self.profiles)
+            await self.bot.say('Successfully resetted all profiles!')
+
+    @astrology.group(pass_context=True, invoke_without_command=True)
+    async def profile(self, context, name: str, member: discord.Member=None):
+        if not await self.profile_exists(context, name, member):
+            return
+        if member:
+            authorid = member.id
+        else:
+            authorid = context.message.author.id
+        profile = self.profiles[authorid][name]
+        em = discord.Embed(title='{}\'s Birth Profile'.format(name), colour=0x2F93E0)
+        for propname, prop in profile.items():
+            if propname != 'creator': 
+                if isinstance(prop, str):
+                    if not prop:
+                        prop = 'N/A'
+                    else:
+                        prop = prop.lower().title()
+                em.add_field(name=propname.title(), value=prop)
+        await self.bot.say(embed=em)
+
+    @profile.command(pass_context=True)
+    async def create(self, context, name: str, birth_year: int, birth_month, birth_day: int, birth_hour: int, birth_minute: int, *, location: str):
+        authorid = context.message.author.id
+        if authorid not in self.profiles:
+            self.profiles[authorid] = {}
+        if name.lower() in [x.lower() for x in self.profiles[authorid]]:
+            await self.bot.say('That person is already exists!')
+            return
+        if birth_month.isdecimal():
+            birth_month = int(birth_month)
+        self.profiles[authorid][name] = {
+            'creator': context.message.author.id,
+            'name': name,
+            'year': birth_year,
+            'month': birth_month,
+            'day': birth_day,
+            'hour': birth_hour,
+            'minute': birth_minute,
+            'location': location,
+            'latitude': '',
+            'longitude': ''
+        }
+        if not await self.get_chart(context, name):
+            del self.profiles[authorid][name]
+            return
+        dataIO.save_json(self.profile_path, self.profiles)
+        await self.bot.say('Successfully created profile for {}'.format(name))
+
+    @profile.command(pass_context=True)
+    async def remove(self, context, name: str):
+        if not await self.profile_exists(context, name):
+            return
+        authorid = context.message.author.id
+        del self.profiles[authorid][name]
+        dataIO.save_json(self.profile_path, self.profiles)
+        await self.bot.say('Successfully removed {}\'s profile!'.format(name))
+
+    @profile.command(pass_context=True)
+    async def edit(self, context, name: str, property: str, new_value: str=None):
+        await self.change_prop(context, name, property, new_value)
+
+    @profile.command(pass_context=True)
+    async def list(self, context, member: discord.Member=None):
+        if member:
+            authorid = member.id
+        else:
+            authorid = context.message.author.id
+        if not authorid in self.profiles:
+            await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
+            return
+        em = discord.Embed(title='Profiles of {}'.format(str(context.message.author)), colour=0x2F93E0)
+        for name, profile in self.profiles[authorid].items():
+            month = profile['month']
+            if isinstance(month, int):
+                month = list(calendar.month_name)[month]
+            em.add_field(name=name, value='{} {}, {} {}:{}'.format(month, str(profile['day']), str(profile['year']), str(profile['hour']), str(profile['minute'])))
+        await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)
     async def planets(self, context, name: str, member: discord.Member=None):
@@ -234,9 +247,19 @@ class astrology:
         em = discord.Embed(title='Signs of {}'.format(name), colour=0x2F93E0)
         for obj in const.LIST_OBJECTS:
             sign = chart.get(obj).sign
-            lon = round(chart.get(obj).lon)
-            lat = round(chart.get(obj).lat)
-            em.add_field(name=obj, value='{} | {}\' {}"'.format(sign, lon, lat))
+            angles = angle.toString(chart.get(obj).signlon).split(':')
+            em.add_field(name=obj, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
+        await self.bot.say(embed=em)
+
+    @profile.command(pass_context=True)
+    async def houses(self, context, name: str, member: discord.Member=None):
+        chart = await self.get_chart(context, name, member)
+        if not chart:
+            return
+        em = discord.Embed(title='Houses of {}'.format(name), colour=0x2F93E0)
+        for obj in const.LIST_HOUSES:
+            sign = chart.get(obj).sign
+            em.add_field(name=house_nums[int(obj[5:])], value=sign)
         await self.bot.say(embed=em)
 
     @astrology.group(pass_context=True)
@@ -251,7 +274,8 @@ class astrology:
         object = next((x for x in const.LIST_OBJECTS if x.lower() == object.lower()))
         try:
             sign = chart.get(object).sign
-            await self.bot.say('{}\'s sign in {} is {}.'.format(name, object, sign))
+            angles = angle.toString(chart.get(object).signlon).split(':')
+            await self.bot.say('{}\'s sign in {} is {} {} {}\' {}"'.format(name, object, angles[0][1:], sign, angles[1], angles[2]))
         except:
             await self.bot.say('That\'s not a valid astrological object!')
 

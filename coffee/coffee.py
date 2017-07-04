@@ -103,7 +103,7 @@ class Coffee:
             print('Something went wrong when trying to find the channel and message!')
     
     async def join_listener(self, member):
-        channel = discord.utils.get(member.server.channels, id='329153340044738560'
+        channel = discord.utils.get(member.server.channels, id='329153340044738560')
         await self.bot.send_message(channel, '<@138838298742226944>, {} joined the server.'.format(member.name))
 
     def __unload(self):

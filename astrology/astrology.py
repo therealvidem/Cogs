@@ -177,15 +177,21 @@ class astrology:
             await self.bot.say(definition)
             return
         except:
-            url = 'https://cafeastrology.com/glossaryofastrology.html'
-        word = word.replace('-', ' ')
-        try:
-            definition = soupObject.find(class_='entry-content').findAll('p')
-            p = p for p in pairs if p.find('b').get_text() == word
-            await self.bot.say(p.get_text())
-            return
-        except:
-            await self.bot.say('I could not find that word.')
+            await self.bot.say('I couldn\'t find the definition for that word.')
+        #     url = 'https://cafeastrology.com/glossaryofastrology.html'
+        #     async with aiohttp.get(url) as response:
+        #         soupObject = BeautifulSoup(await response.text(), 'html.parser')
+        # word = word.replace('-', ' ')
+        # try:
+        #     words = soupObject.find(class_='entry-content').findAll('p')
+        #     for p in words:
+        #         if p and p.find('b') and p.find('b').get_text() == word:
+        #             definition = p.find('b')
+        #             break
+        #     await self.bot.say('**{}**\n{}'.format(definition.get_text(), definition.next_sibling.capitalize()))
+        #     return
+        # except Exception as e:
+        #     await self.bot.say(str(e))
 
     @astrology.group(pass_context=True, invoke_without_command=True)
     async def profile(self, context, name: str, member: discord.Member=None):

@@ -310,7 +310,6 @@ class astrology:
 
 def check_folders():
     if not os.path.exists('data/astrology'):
-        print('test')
         os.makedirs('data/astrology')
 
 def check_files():

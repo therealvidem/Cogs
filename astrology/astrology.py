@@ -147,7 +147,7 @@ class astrology:
     async def commandlist(self, context):
         commandmessage = '**"{prefix}astrology profile [profile name]"** to view the properties of a profile.\n'
         commandmessage += '**"{prefix}astrology profile list"** to view a list of your profiles.\n'
-        commandmessage += '**"{prefix}astrology profile planets [profile name]"** to view the planet/asteroid signs of the profile.\n'
+        commandmessage += '**"{prefix}astrology profile signs [profile name]"** to view the signs of the profile.\n'
         commandmessage += '**"{prefix}astrology profile houses [profile name]"** to view the house signs of the profile.\n'
         commandmessage += '**"{prefix}astrology profile remove [profile name]"** to remove a profile.\n'
         commandmessage += '**"{prefix}astrology profile edit [profile name] [property name] [new value]"** to edit the property of a profile.\n'
@@ -175,8 +175,17 @@ class astrology:
         try:
             definition = soupObject.find(class_='blog-post').findAll('fieldset')[0].get_text()
             await self.bot.say(definition)
+            return
         except:
-            await self.bot.say('Either that definition doesn\'t exist, or something went wrong.')
+            url = 'https://cafeastrology.com/glossaryofastrology.html'
+        word = word.replace('-', ' ')
+        try:
+            definition = soupObject.find(class_='entry-content').findAll('p')
+            p = p for p in pairs if p.find('b').get_text() == word
+            await self.bot.say(p.get_text())
+            return
+        except:
+            await self.bot.say('I could not find that word.')
 
     @astrology.group(pass_context=True, invoke_without_command=True)
     async def profile(self, context, name: str, member: discord.Member=None):
@@ -257,8 +266,8 @@ class astrology:
         await self.bot.say(embed=em)
 
     @profile.command(pass_context=True)
-    async def planets(self, context, name: str, member: discord.Member=None):
-        chart = await self.get_chart(context, name, member)
+    async def signs(self, context, name: str, member: discord.Member=None):
+        chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
         em = discord.Embed(title='Signs of {}'.format(name), colour=0x2F93E0)
@@ -270,7 +279,7 @@ class astrology:
 
     @profile.command(pass_context=True)
     async def houses(self, context, name: str, member: discord.Member=None):
-        chart = await self.get_chart(context, name, member)
+        chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
         em = discord.Embed(title='Houses of {}'.format(name), colour=0x2F93E0)
@@ -284,21 +293,50 @@ class astrology:
         return
 
     @get.command(pass_context=True)
-    async def sign(self, context, name: str, object: str, member: discord.Member=None):
-        chart = await self.get_chart(context, name, member)
+    async def sign(self, context, name: str, astrological_object: str, member: discord.Member=None):
+        chart = await self.get_chart(context, name, member, False)
+        if not chart:
+            await self.bot.say('That profile does not have a valid chart! Try recreating or editing it.')
+            return
+        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
+        try:
+            sign = chart.get(astrological_object).sign
+            angles = angle.toString(chart.get(astrological_object).signlon).split(':')
+            await self.bot.say('{}\'s sign in {} is {} {} {}\' {}"'.format(name, astrological_object, angles[0][1:], sign, angles[1], angles[2]))
+        except:
+            await self.bot.say('That\'s not a valid astrological object!')
+
+    @get.command(pass_context=True)
+    async def antiscia(self, context, name: str, astrological_object: str, member: discord.Member=None):
+        chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
-        object = next(x for x in const.LIST_OBJECTS if x.lower() == object.lower())
+        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
         try:
-            sign = chart.get(object).sign
-            angles = angle.toString(chart.get(object).signlon).split(':')
-            await self.bot.say('{}\'s sign in {} is {} {} {}\' {}"'.format(name, object, angles[0][1:], sign, angles[1], angles[2]))
+            antiscia_object = chart.get(astrological_object).antiscia()
+            sign = antiscia_object.sign
+            angles = angle.toString(antiscia_object.signlon).split(':')
+            await self.bot.say('{}\'s antiscia sign in {} is {} {} {}\' {}"'.format(name, astrological_object, angles[0][1:], sign, angles[1], angles[2]))
+        except:
+            await self.bot.say('That\'s not a valid astrological object!')
+
+    @get.command(pass_context=True)
+    async def cantiscia(self, context, name: str, astrological_object: str, member: discord.Member=None):
+        chart = await self.get_chart(context, name, member, False)
+        if not chart:
+            return
+        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
+        try:
+            cantiscia_object = chart.get(astrological_object).cantiscia()
+            sign = cantiscia_object.sign
+            angles = angle.toString(cantiscia_object.signlon).split(':')
+            await self.bot.say('{}\'s cantiscia sign in {} is {} {} {}\' {}"'.format(name, astrological_object, angles[0][1:], sign, angles[1], angles[2]))
         except:
             await self.bot.say('That\'s not a valid astrological object!')
 
     @get.command(pass_context=True)
     async def house(self, context, name: str, house_num: int, member: discord.Member=None):
-        chart = await self.get_chart(context, name, member)
+        chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
         house = next(x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house_num))

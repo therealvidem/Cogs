@@ -14,6 +14,8 @@ from flatlib.geopos import GeoPos
 from flatlib import const
 from flatlib import angle
 from .utils.dataIO import dataIO
+from bs4 import BeautifulSoup
+import aiohttp
 
 house_nums = ['nulla', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
 
@@ -59,6 +61,9 @@ class astrology:
             if new_value.lower() in [x.lower() for x in self.profiles[authorid]]:
                 await self.bot.say('You can\'t change the profile\'s to {} since there\'s already a profile named that!')
                 return
+        if new_value == profile[property]:
+            await self.bot.say('Nothing was changed.')
+            return 
         old_value = profile[property]
         if not new_value:
             profile[property] = ''
@@ -160,6 +165,18 @@ class astrology:
             self.profiles = []
             dataIO.save_json(self,profile_path, self.profiles)
             await self.bot.say('Successfully resetted all profiles!')
+
+    @astrology.command(pass_context=True)
+    async def define(self, context, *, word: str):
+        word = word.replace(' ', '-')
+        url = 'http://www.astrologyweekly.com/dictionary/{}.php'.format(word)
+        async with aiohttp.get(url) as response:
+            soupObject = BeautifulSoup(await response.text(), 'html.parser')
+        try:
+            definition = soupObject.find(class_='blog-post').findAll('fieldset')[0].get_text()
+            await self.bot.say(definition)
+        except:
+            await self.bot.say('Either that definition doesn\'t exist, or something went wrong.')
 
     @astrology.group(pass_context=True, invoke_without_command=True)
     async def profile(self, context, name: str, member: discord.Member=None):
@@ -271,7 +288,7 @@ class astrology:
         chart = await self.get_chart(context, name, member)
         if not chart:
             return
-        object = next((x for x in const.LIST_OBJECTS if x.lower() == object.lower()))
+        object = next(x for x in const.LIST_OBJECTS if x.lower() == object.lower())
         try:
             sign = chart.get(object).sign
             angles = angle.toString(chart.get(object).signlon).split(':')
@@ -284,7 +301,7 @@ class astrology:
         chart = await self.get_chart(context, name, member)
         if not chart:
             return
-        house = next((x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house_num)))
+        house = next(x for x in const.LIST_HOUSES if x.lower() == 'house' + str(house_num))
         try:
             sign = chart.get(house).sign
             await self.bot.say('{}\'s sign in House {} is {}.'.format(name, house_num, sign))

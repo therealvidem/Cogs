@@ -33,7 +33,7 @@ class astrology:
             member = context.message.author
         if not name:
             if send_message:
-                await self.bot.say('You don\'t have any profiles! Do "{}astrology profile create" to create a profile!'.format(context.prefix))
+                await self.bot.say('That profile doesn\'t exist!'.format(context.prefix))
             return
         if member.id not in self.profiles:
             if send_message:
@@ -127,6 +127,28 @@ class astrology:
         self.chart_cache[name] = chart
         if len(self.chart_cache) > 50:
             del self.chart_cache[0]
+        return chart
+
+    async def get_current_chart(self, location):
+        try:
+            dt = datetime.now()
+        except ValueError as e:
+            await self.bot.say(str(e).capitalize())
+            return
+        except TypeError as e:
+            await self.bot.say('That\'s not a number!')
+            return
+        formatted_date = dt.strftime('%Y/%m/%d')
+        formatted_time = dt.strftime('%H:%M')
+        loc = self.locator.geocode(location)
+        if not loc:
+            await self.bot.say('That\'s not a valid location!')
+            return
+        tz = self.locator.timezone([loc.latitude, loc.longitude])
+        tz_offset = tz.utcoffset(dt).total_seconds() / 3600
+        latitude = loc.latitude
+        longitude = loc.longitude
+        chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(latitude, longitude), IDs=const.LIST_OBJECTS, hsys=const.HOUSES_PLACIDUS)
         return chart
 
     @commands.group(pass_context=True, invoke_without_command=True)
@@ -289,6 +311,33 @@ class astrology:
         if not chart:
             return
         em = discord.Embed(title='Houses of {}'.format(name), colour=0x2F93E0)
+        for obj in const.LIST_HOUSES:
+            sign = chart.get(obj).sign
+            em.add_field(name=house_nums[int(obj[5:])], value=sign)
+        await self.bot.say(embed=em)
+
+    @astrology.group(pass_context=True)
+    async def current(self, context):
+        return
+
+    @current.command(pass_context=True)
+    async def signs(self, context, location: str):
+        chart = await self.get_current_chart(location)
+        if not chart:
+            return
+        em = discord.Embed(title='Current Signs', colour=0x2F93E0)
+        for obj in const.LIST_OBJECTS:
+            sign = chart.get(obj).sign
+            angles = angle.toString(chart.get(obj).signlon).split(':')
+            em.add_field(name=obj, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
+        await self.bot.say(embed=em)
+
+    @current.command(pass_context=True)
+    async def houses(self, context, location: str):
+        chart = await self.get_current_chart(location)
+        if not chart:
+            return
+        em = discord.Embed(title='Current Houses', colour=0x2F93E0)
         for obj in const.LIST_HOUSES:
             sign = chart.get(obj).sign
             em.add_field(name=house_nums[int(obj[5:])], value=sign)

@@ -6,6 +6,8 @@ import os
 import calendar
 import collections
 import simplejson as json
+import pytz
+import swisseph
 from datetime import datetime
 from geopy.geocoders import GoogleV3
 from flatlib.datetime import Datetime
@@ -13,11 +15,40 @@ from flatlib.chart import Chart
 from flatlib.geopos import GeoPos
 from flatlib import const
 from flatlib import angle
+from flatlib.object import Object
+from flatlib.lists import ObjectList
 from .utils.dataIO import dataIO
 from bs4 import BeautifulSoup
 import aiohttp
 
 house_nums = ['nulla', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
+list_stuff = [const.LIST_OBJECTS + const.LIST_ANGLES]
+other_objects = {'Lilith': swisseph.AST_OFFSET + 1181}
+
+def sweObject(obj, jd):
+    """ Needed another swissempheris method to obtain objects that weren't implemented into flatlib. """
+    sweList = swisseph.calc_ut(jd, obj)
+    return {
+        'id': obj,
+        'lon': sweList[0],
+        'lat': sweList[1],
+        'lonspeed': sweList[3],
+        'latspeed': sweList[4]
+    }
+
+def getObject(ID, date):
+    """ Returns an ephemeris object. """
+    obj = sweObject(ID, date.jd)
+    _signInfo(obj)
+    return Object.fromDict(obj)
+
+def _signInfo(obj):
+    """ Appends the sign id and longitude to an object. """
+    lon = obj['lon']
+    obj.update({
+        'sign': const.LIST_SIGNS[int(lon / 30)],
+        'signlon': lon % 30
+    })
 
 class astrology:
 
@@ -130,8 +161,14 @@ class astrology:
         return chart
 
     async def get_current_chart(self, location):
+        loc = self.locator.geocode(location)
+        if not loc:
+            await self.bot.say('That\'s not a valid location!')
+            return
+        tz = self.locator.timezone([loc.latitude, loc.longitude])
         try:
-            dt = datetime.now()
+            utc = pytz.timezone('UTC')
+            dt = utc.localize(datetime.now()).astimezone(tz)
         except ValueError as e:
             await self.bot.say(str(e).capitalize())
             return
@@ -140,12 +177,7 @@ class astrology:
             return
         formatted_date = dt.strftime('%Y/%m/%d')
         formatted_time = dt.strftime('%H:%M')
-        loc = self.locator.geocode(location)
-        if not loc:
-            await self.bot.say('That\'s not a valid location!')
-            return
-        tz = self.locator.timezone([loc.latitude, loc.longitude])
-        tz_offset = tz.utcoffset(dt).total_seconds() / 3600
+        tz_offset = dt.utcoffset().total_seconds() / 3600
         latitude = loc.latitude
         longitude = loc.longitude
         chart = Chart(Datetime(formatted_date, formatted_time, tz_offset), GeoPos(latitude, longitude), IDs=const.LIST_OBJECTS, hsys=const.HOUSES_PLACIDUS)
@@ -241,7 +273,7 @@ class astrology:
         if authorid not in self.profiles:
             self.profiles[authorid] = {}
         if name.lower() in [x.lower() for x in self.profiles[authorid]]:
-            await self.bot.say('That person is already exists!')
+            await self.bot.say('That profile is already exists!')
             return
         if birth_month.isdecimal():
             birth_month = int(birth_month)
@@ -293,7 +325,7 @@ class astrology:
             em.add_field(name=name, value='{} {}, {} {}:{}'.format(month, str(profile['day']), str(profile['year']), str(profile['hour']), str(profile['minute'])))
         await self.bot.say(embed=em)
 
-    @profile.command(pass_context=True)
+    @astrology.command(pass_context=True)
     async def signs(self, context, name: str, member: discord.Member=None):
         chart = await self.get_chart(context, name, member, False)
         if not chart:
@@ -303,9 +335,13 @@ class astrology:
             sign = chart.get(obj).sign
             angles = angle.toString(chart.get(obj).signlon).split(':')
             em.add_field(name=obj, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
+        for objname, obj in other_objects.items():
+            sign = getObject(obj, chart.date).sign
+            angles = angle.toString(getObject(obj, chart.date).signlon).split(':')
+            em.add_field(name=objname, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
         await self.bot.say(embed=em)
 
-    @profile.command(pass_context=True)
+    @astrology.command(pass_context=True)
     async def houses(self, context, name: str, member: discord.Member=None):
         chart = await self.get_chart(context, name, member, False)
         if not chart:
@@ -320,8 +356,8 @@ class astrology:
     async def current(self, context):
         return
 
-    @current.command(pass_context=True)
-    async def signs(self, context, location: str):
+    @current.command(pass_context=True, name='signs')
+    async def current_signs(self, context, location: str):
         chart = await self.get_current_chart(location)
         if not chart:
             return
@@ -330,10 +366,14 @@ class astrology:
             sign = chart.get(obj).sign
             angles = angle.toString(chart.get(obj).signlon).split(':')
             em.add_field(name=obj, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
+        for objname, obj in other_objects.items():
+            sign = getObject(obj, chart.date).sign
+            angles = angle.toString(getObject(obj, chart.date).signlon).split(':')
+            em.add_field(name=objname, value='{} {} {}\' {}"'.format(angles[0][1:], sign, angles[1], angles[2]))
         await self.bot.say(embed=em)
 
-    @current.command(pass_context=True)
-    async def houses(self, context, location: str):
+    @current.command(pass_context=True, name='houses')
+    async def current_houses(self, context, location: str):
         chart = await self.get_current_chart(location)
         if not chart:
             return
@@ -341,6 +381,17 @@ class astrology:
         for obj in const.LIST_HOUSES:
             sign = chart.get(obj).sign
             em.add_field(name=house_nums[int(obj[5:])], value=sign)
+        await self.bot.say(embed=em)
+
+    @astrology.command(pass_context=True)
+    async def movements(self, context):
+        chart = await self.get_current_chart('Los Angeles')
+        if not chart:
+            return
+        em = discord.Embed(title='Planets\' Movements', colour=0x2F93E0)
+        for obj in const.LIST_OBJECTS:
+            movement = chart.get(obj).movement()
+            em.add_field(name=obj, value=movement)
         await self.bot.say(embed=em)
 
     @astrology.group(pass_context=True)
@@ -353,7 +404,7 @@ class astrology:
         if not chart:
             await self.bot.say('That profile does not have a valid chart! Try recreating or editing it.')
             return
-        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
+        astrological_object = next(x for x in list_stuff if x.lower() == astrological_object.lower())
         try:
             sign = chart.get(astrological_object).sign
             angles = angle.toString(chart.get(astrological_object).signlon).split(':')
@@ -366,7 +417,7 @@ class astrology:
         chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
-        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
+        astrological_object = next(x for x in list_stuff if x.lower() == astrological_object.lower())
         try:
             antiscia_object = chart.get(astrological_object).antiscia()
             sign = antiscia_object.sign
@@ -380,7 +431,7 @@ class astrology:
         chart = await self.get_chart(context, name, member, False)
         if not chart:
             return
-        astrological_object = next(x for x in const.LIST_OBJECTS if x.lower() == astrological_object.lower())
+        astrological_object = next(x for x in list_stuff if x.lower() == astrological_object.lower())
         try:
             cantiscia_object = chart.get(astrological_object).cantiscia()
             sign = cantiscia_object.sign

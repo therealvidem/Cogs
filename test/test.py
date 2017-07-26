@@ -46,6 +46,18 @@ class test:
     #     elif memetype and memetype not in memetypes:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
+    @commands.command(pass_context=True)
+    async def spongebob(self, context, msg):
+        capitalize = True if msg[0].isupper() else False
+        newmsg = msg
+        for i, char in enumerate(msg):
+            if capitalize:
+                newmsg[i].upper()
+            else:
+                newmsg[i].lower()
+            capitalize = not capitalize
+        await self.bot.say(newmsg)
+
     @commands.group(pass_context=True, invoke_without_command=True)
     @commands.cooldown(3, 5)
     async def randomname(self, context, num: int=1):

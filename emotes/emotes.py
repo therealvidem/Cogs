@@ -156,6 +156,11 @@ class Emotes:
         else:
             await self.bot.say('Either I could not find that emote, or there are no emotes in that category.')
 
+def check_folder():
+    f = 'data/emotes'
+    if not os.path.exists(f):
+        os.makedirs(f)
+
 def check_files():
     f = 'data/emotes/data.json'
     if not dataIO.is_valid_json(f):

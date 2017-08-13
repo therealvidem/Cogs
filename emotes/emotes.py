@@ -167,5 +167,6 @@ def check_files():
         dataIO.save_json(f, {})
 
 def setup(bot):
+    check_folder()
     check_files()
     bot.add_cog(Emotes(bot))

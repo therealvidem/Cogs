@@ -88,9 +88,6 @@ class Emotes:
         attachments = context.message.attachments
         if attachments:
             link = attachments[0]['url']
-        elif link is None:
-            await self.bot.say('Input a valid link to an image.')
-            return
         server = context.message.server
         member = context.message.author
         category_data = self.data[server.id][category]
@@ -153,6 +150,8 @@ class Emotes:
                 await self.bot.send_file(channel, emote['dir'])
             except:
                 await self.bot.say(emote['link'])
+            except:
+                await self.bot.say('An error occured while trying to send image.')
         else:
             await self.bot.say('Either I could not find that emote, or there are no emotes in that category.')
 

@@ -147,9 +147,9 @@ class Emotes:
         else:
             await self.bot.say('A terrible forecast has struck upon me; there was an error!')
 
-    @_emotes.command(pass_context=True, name='get')
+    @_emotes.command(pass_context=True, name='getserver')
     @commands.cooldown(3, 5)
-    async def _get(self, context, category: str, id: str=None, *args):
+    async def _getserver(self, context, category: str, id: str=None, *args):
         await self.check_server(context)
         if category not in self.data['global']:
             await self.bot.say('I could not find that category with my future vision!')
@@ -181,10 +181,10 @@ class Emotes:
     @commands.cooldown(3, 5)
     async def _getglobal(self, context, category: str, id: str=None, *args):
         await self.check_server(context)
-        channel = context.message.channel
         if category not in self.data['global']:
             await self.bot.say('I could not find that category with my future vision!')
             return
+        channel = context.message.channel
         category_data = self.data['global'][category]
         available_ids = await self.get_available_ids('global', category)
         try:

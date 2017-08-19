@@ -61,7 +61,7 @@ class Emotes:
     async def get_emote(self, server_id, category, id):
         category_data = self.data[server_id][category]
         try:
-            emote = category_data['emotes'][id]
+            emote = category_data['emotes'][str(id)]
         except:
             emote = None
         return emote

@@ -17,7 +17,7 @@ class Emotes:
         self.json = os.path.join(self.path, 'data.json')
         self.data = dataIO.load_json(self.json)
 
-    async def check_server(self, context, category):
+    async def check_server(self, context, category: str=None):
         server = context.message.server
         server_path = os.path.join(self.path, server_id)
         category_path = os.path.join(server_path, category)
@@ -28,7 +28,7 @@ class Emotes:
         if server.id not in self.data:
             self.data[server.id] = {}
             dataIO.save_json(self.json, self.data)
-        if category not in self.data[server.id]:
+        if category and category not in self.data[server.id]:
             self.data[server.id][category] = {'count': 0, 'emotes': []}
             dataIO.save_json(self.json, self.data)
 
@@ -60,7 +60,7 @@ class Emotes:
 
     async def get_emote(self, server_id, category, id):
         category_data = self.data[server_id][category]
-        return [e for e in category_data['emotes'] if e['id'] == id]
+        return [e for e in category_data['emotes'] if e['id'] == id][0]
 
     async def get_latest_id(self, server_id, category):
         category_data = self.data[server_id][category]
@@ -73,27 +73,12 @@ class Emotes:
 
     async def get_available_ids(self, server_id, category):
         category_data = self.data[server_id][category]
-        return [e['id'] for e in category_data['emotes']][0]
+        return [e['id'] for e in category_data['emotes']]
 
     @commands.group(pass_context=True, name='emotes')
     @commands.cooldown(3, 5)
-    async def _emotes(self, context):
-        channel = context.message.channel
-        category_data = random.choice(self.data['global'])
-        available_ids = await self.get_available_ids('global', category)
-        try:
-            id = random.choice(available_ids)
-        except:
-            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
-            return
-        emote = await self.get_emote('global', category, id)
-        if emote:
-            try:
-                await self.bot.send_file(channel, emote['dir'])
-            except:
-                await self.bot.say(emote['link'])
-        else:
-            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+    async def _emotes(self, context, category: str, id: str=None, *args):
+        pass
 
     @_emotes.command(pass_context=True, name='addserver')
     @commands.cooldown(3, 5)
@@ -164,14 +149,17 @@ class Emotes:
 
     @_emotes.command(pass_context=True, name='get')
     @commands.cooldown(3, 5)
-    async def _get(self, context, category: str, id, *args):
-        await self.check_server(context, category)
+    async def _get(self, context, category: str, id: str=None, *args):
+        await self.check_server(context)
+        if category not in self.data['global']:
+            await self.bot.say('I could not find that category with my future vision!')
+            return
         server = context.message.server
         channel = context.message.channel
         category_data = self.data[server.id][category]
         try:
             id = int(id)
-        except ValueError:
+        except:
             id = random.randint(1, category_data['count'] + 1)
         available_ids = await self.get_available_ids(server.id, category)
         if id not in available_ids:
@@ -181,6 +169,36 @@ class Emotes:
                 await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
                 return
         emote = await self.get_emote(server.id, category, id)
+        if emote:
+            try:
+                await self.bot.send_file(channel, emote['dir'])
+            except:
+                await self.bot.say(emote['link'])
+        else:
+            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+
+    @_emotes.command(pass_context=True, name='getglobal')
+    @commands.cooldown(3, 5)
+    async def _getglobal(self, context, category: str, id: str=None, *args):
+        await self.check_server(context)
+        channel = context.message.channel
+        if category not in self.data['global']:
+            await self.bot.say('I could not find that category with my future vision!')
+            return
+        category_data = self.data['global'][category]
+        available_ids = await self.get_available_ids('global', category)
+        try:
+            id = int(id)
+        except:
+            id = random.randint(1, category_data['count'] + 1)
+        available_ids = await self.get_available_ids('global', category)
+        if id not in available_ids:
+            try:
+                id = random.choice(available_ids)
+            except:
+                await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+                return
+        emote = await self.get_emote('global', category, id)
         if emote:
             try:
                 await self.bot.send_file(channel, emote['dir'])

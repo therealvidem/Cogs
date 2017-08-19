@@ -84,7 +84,7 @@ class Emotes:
         category_data = self.data[server_id][category]
         try:
             id = int(id)
-        except ValueError:
+        except:
             pass
         available_ids = await self.get_available_ids(server_id, category)
         if id not in available_ids:

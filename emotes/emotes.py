@@ -16,19 +16,18 @@ class Emotes:
         self.json = os.path.join(self.path, 'data.json')
         self.data = dataIO.load_json(self.json)
 
-    async def check_server(self, context, category):
-        server = context.message.server
+    async def check_server(self, server_id, category):
         server_path = os.path.join(self.path, server_id)
         category_path = os.path.join(server_path, category)
         if not os.path.exists(server_path):
             os.makedirs(server_path)
         if not os.path.exists(category_path):
             os.makedirs(category_path)
-        if server.id not in self.data:
-            self.data[server.id] = {}
+        if server_id not in self.data:
+            self.data[server_id] = {}
             dataIO.save_json(self.json, self.data)
-        if category and category not in self.data[server.id]:
-            self.data[server.id][category] = {'emotes': []}
+        if category and category not in self.data[server_id]:
+            self.data[server_id][category] = {'emotes': []}
             dataIO.save_json(self.json, self.data)
 
     async def get_image_from_url(self, server_id, category, link, latest_id):
@@ -147,7 +146,8 @@ class Emotes:
     @_emotes.command(pass_context=True, name='addserver')
     @commands.cooldown(3, 5)
     async def _addserver(self, context, category: str, link: str=None):
-        await self.check_server(context, category)
+        category = category.lower()
+        await self.check_server(context.message.server.id, category)
         attachments = context.message.attachments
         if attachments:
             link = attachments[0]['url']
@@ -156,6 +156,8 @@ class Emotes:
     @_emotes.command(pass_context=True, name='addglobal')
     @commands.cooldown(3, 5)
     async def _addglobal(self, context, category: str, link: str=None):
+        category = category.lower()
+        await self.check_server('global', category)
         if category not in self.data['global']:
             await self.bot.say('I could not find that category with my future vision!')
             return
@@ -167,26 +169,29 @@ class Emotes:
     @_emotes.command(pass_context=True, name='removeserver')
     @checks.admin()
     async def _removeserver(self, context, category: str, id: int):
-        await self.check_server(context, category)
+        category = category.lower()
+        await self.check_server(context.message.server.id, category)
         await self.remove_emote(context.message.server.id, category, id)
 
     @_emotes.command(pass_context=True, name='removeglobal')
     async def _removeglobal(self, context, category: str, id: int):
+        category = category.lower()
+        await self.check_server('global', category)
         if context.message.author.id == '138838298742226944':
             await self.remove_emote('global', category, id)
 
     @_emotes.command(pass_context=True, name='getserver')
     @commands.cooldown(3, 5)
     async def _getserver(self, context, category: str, id: str=None, *args):
-        await self.check_server(context)
+        category = category.lower()
+        await self.check_server(context.message.server.id, category)
         await self.post_emote(context.message.channel, context.message.server.id, category, id)
 
     @_emotes.command(pass_context=True, name='getglobal')
     @commands.cooldown(3, 5)
     async def _getglobal(self, context, category: str, id: str=None, *args):
-        if category not in self.data['global']:
-            await self.bot.say('I could not find that category with my future vision!')
-            return
+        category = category.lower()
+        await self.check_server('global', category)
         category_data = self.data['global'][category]
         if 'allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role']):
             await self.bot.say('I could not find that category with my future vision!')

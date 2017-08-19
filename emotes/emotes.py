@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord.utils import find
 from .utils import checks
 from .utils.dataIO import dataIO
-from enum import Enum
 import os
 from datetime import datetime
 import asyncio
@@ -15,13 +14,13 @@ class Emotes:
     def __init__(self, bot):
         self.bot = bot
         self.path = 'data/emotes'
-        self.json = self.path + '/data.json'
+        self.json = os.path.join(self.path, 'data.json')
         self.data = dataIO.load_json(self.json)
 
     async def check_server(self, context, category):
         server = context.message.server
-        server_path = '{}/{}'.format(self.path, server.id)
-        category_path = '{}/{}'.format(server_path, category)
+        server_path = os.path.join(self.path, server_id)
+        category_path = os.path.join(server_path, category)
         if not os.path.exists(server_path):
             os.makedirs(server_path)
         if not os.path.exists(category_path):
@@ -34,16 +33,16 @@ class Emotes:
             dataIO.save_json(self.json, self.data)
 
     async def get_image_from_url(self, server_id, category, link, latest_id):
-        category_path = '{}/{}/{}'.format(self.path, server_id, category)
+        category_path = os.path.join(self.path, server_id, category)
         try:
             r = requests.get(link, stream=True)
             if r.status_code == 200:
-                with open('{}/{}.png'.format(category_path, latest_id), 'wb') as f:
+                with open(os.path.join(category_path, latest_id + '.png'), 'wb') as f:
                     r.raw.decode_content = True
                     shutil.copyfileobj(r.raw, f)
                     return True
         except:
-            await self.bot.say('An error occured while trying to fetch the image. Try using a different link?')
+            await self.bot.say('Oh no! I could not foresee into that link! May I suggest using a different one?')
         return False
         # try:
         #     urllib.request.urlretrieve(link, category_path + '/' + filename)
@@ -69,21 +68,36 @@ class Emotes:
         for emote in category_data['emotes']:
             if emote['id'] != count:
                 return count
-            count = count + 1
+            count += 1
         return count
 
     async def get_available_ids(self, server_id, category):
         category_data = self.data[server_id][category]
-        return [e['id'] for e in category_data['emotes']]
+        return [e['id'] for e in category_data['emotes']][0]
 
     @commands.group(pass_context=True, name='emotes')
     @commands.cooldown(3, 5)
     async def _emotes(self, context):
-        pass
+        channel = context.message.channel
+        category_data = random.choice(self.data['global'])
+        available_ids = await self.get_available_ids('global', category)
+        try:
+            id = random.choice(available_ids)
+        except:
+            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+            return
+        emote = await self.get_emote('global', category, id)
+        if emote:
+            try:
+                await self.bot.send_file(channel, emote['dir'])
+            except:
+                await self.bot.say(emote['link'])
+        else:
+            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
 
-    @_emotes.command(pass_context=True, name='add')
+    @_emotes.command(pass_context=True, name='addserver')
     @commands.cooldown(3, 5)
-    async def _add(self, context, category: str, link: str=None):
+    async def _addserver(self, context, category: str, link: str=None):
         await self.check_server(context, category)
         attachments = context.message.attachments
         if attachments:
@@ -99,13 +113,37 @@ class Emotes:
                 'date_added': str(datetime.now()),
                 'creator': member.id,
                 'link': link,
-                'dir': '{}/{}/{}/{}.png'.format(self.path, server.id, category, latest_id),
+                'dir': os.path.join(self.path, server.id, category, latest_id + '.png'),
                 'category': category
             }
             category_data['emotes'].append(emote_data)
             category_data['count'] += 1
             dataIO.save_json(self.json, self.data)
-            await self.bot.say('Successfully added emote as {}emotes get {} {}.'.format(context.prefix, category, str(latest_id)))
+            await self.bot.say('I predict you want to add this emote as {}emotes get {} {}!'.format(context.prefix, category, str(latest_id)))
+
+    @_emotes.command(pass_context=True, name='addglobal')
+    @commands.cooldown(3, 5)
+    async def _addglobal(self, context, category: str, link: str=None):
+        attachments = context.message.attachments
+        if attachments:
+            link = attachments[0]['url']
+        member = context.message.author
+        category_data = self.data['global'][category]
+        latest_id = await self.get_latest_id('global', category)
+        success = await self.get_image_from_url('global', category, link, latest_id)
+        if success:
+            emote_data = {
+                'id': latest_id,
+                'date_added': str(datetime.now()),
+                'creator': member.id,
+                'link': link,
+                'dir': os.path.join(self.path, 'global', category, latest_id + '.png'),
+                'category': category
+            }
+            category_data['emotes'].append(emote_data)
+            category_data['count'] += 1
+            dataIO.save_json(self.json, self.data)
+            await self.bot.say('I predict you want to add this emote as {}emotes {} {}!'.format(context.prefix, category, str(latest_id)))
 
     @_emotes.command(pass_context=True, name='remove')
     @checks.admin()
@@ -115,15 +153,14 @@ class Emotes:
         member = context.message.author
         emote = await self.get_emote(server.id, category, id)
         if emote:
-            emote = emote[0]
             category_data = self.data[server.id][category]
             os.remove(emote['dir'])
             category_data['emotes'].remove(emote)
             category_data['count'] -= 1
             dataIO.save_json(self.json, self.data)
-            await self.bot.say('Successfully removed emote.')
+            await self.bot.say('I foresaw your command to remove this emote!')
         else:
-            await self.bot.say('That emote doesn\'t exist in this category.')
+            await self.bot.say('A terrible forecast has struck upon me; there was an error!')
 
     @_emotes.command(pass_context=True, name='get')
     @commands.cooldown(3, 5)
@@ -141,24 +178,22 @@ class Emotes:
             try:
                 id = random.choice(available_ids)
             except:
-                await self.bot.say('Either I could not find that emote, or there are no emotes in that category.')
+                await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
                 return
         emote = await self.get_emote(server.id, category, id)
         if emote:
-            emote = emote[0]
             try:
                 await self.bot.send_file(channel, emote['dir'])
             except:
                 await self.bot.say(emote['link'])
-            except:
-                await self.bot.say('An error occured while trying to send image.')
         else:
-            await self.bot.say('Either I could not find that emote, or there are no emotes in that category.')
+            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
 
 def check_folder():
     f = 'data/emotes'
     if not os.path.exists(f):
         os.makedirs(f)
+        os.makedirs(os.path.join(f, 'global'))
 
 def check_files():
     f = 'data/emotes/data.json'

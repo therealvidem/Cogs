@@ -30,11 +30,7 @@ class test:
 
     def __init__(self, bot):
         self.bot = bot
-        self.base = 'data/test/images/'
-        self.base2 = 'data/test/imagesj/'
-        self.base3 = 'data/test/imagesm/'
         self.stabbingobjects = dataIO.load_json('data/test/stabbingobjects.json')
-        self.memes = dataIO.load_json('data/test/memes.json')
         self.quotes = dataIO.load_json('data/test/quotes.json')
         self.counting = False
 
@@ -47,16 +43,16 @@ class test:
     #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
     @commands.command(pass_context=True)
-    async def spongebob(self, context, msg):
+    async def spongebob(self, context, *, msg):
         capitalize = True if msg[0].isupper() else False
-        newmsg = msg
+        newmsg = list(msg)
         for i, char in enumerate(msg):
             if capitalize:
-                newmsg[i].upper()
+                newmsg[i] = newmsg[i].upper()
             else:
-                newmsg[i].lower()
-            capitalize = not capitalize
-        await self.bot.say(newmsg)
+                newmsg[i] = newmsg[i].lower()
+            capitalize = True if not capitalize and char != ' ' else False
+        await self.bot.say(''.join(newmsg))
 
     @commands.group(pass_context=True, invoke_without_command=True)
     @commands.cooldown(3, 5)
@@ -146,84 +142,6 @@ class test:
             for x in range(len(self.quotes[str(author)])):
                 em.add_field(name=x, value=self.quotes[str(author)][x]["quote"] + " -" + self.quotes[str(author)][x]["year"])
             await self.bot.say(embed=em) 
-
-    @commands.command(pass_context=True)
-    async def emote(self, context, memetype):
-        await self.bot.say(memetype + ' has ' + str(self.memes[memetype]) + ' emotes.')
-
-    @commands.command(pass_context=True)
-    @commands.cooldown(1, 3)
-    async def pearl(self, context, num: str = None):
-        memenum = random.randint(1, self.memes['vp'])
-        try:
-            await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(num) + ').png')
-        except:
-            await self.bot.send_file(context.message.channel, self.base + 'meme (' + str(memenum) + ').png')
-
-    @commands.command(pass_context=True)
-    @commands.cooldown(1, 3)
-    async def bar(self, context, num: str = None):
-        if discord.utils.get(context.message.server.roles, name='BAR'):
-            memenum = random.randint(1, self.memes['vb'])
-            try:
-                await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(num) + ').png')
-            except:
-                await self.bot.send_file(context.message.channel, self.base2 + 'meme (' + str(memenum) + ').png')
-
-    @commands.command(pass_context=True)
-    @commands.cooldown(1, 3)
-    async def meme(self, context, num: str = None):
-        if discord.utils.get(context.message.server.roles, name='BAR'):
-            memenum = random.randint(1, self.memes['vm'])
-            try:
-                await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(num) + ').png')
-            except:
-                await self.bot.send_file(context.message.channel, self.base3 + 'meme (' + str(memenum) + ').png')
-
-    @commands.command(pass_context=True)
-    async def addvp(self, context, url):
-        if discord.utils.get(context.message.server.roles, name='BAR'):
-            r = requests.get(url, stream=True)
-            if r.status_code == 200:
-                count = self.memes['vp'] + 1
-                with open(self.base + 'meme (' + str(count) + ').png', 'wb') as f:
-                    r.raw.decode_content = True
-                    shutil.copyfileobj(r.raw, f)
-                self.memes['vp'] = count
-                dataIO.save_json('data/test/memes.json', self.memes)
-                await self.bot.say('Successfully added emote as vp ' + str(count))
-            else:
-                await self.bot.say('Unable to add emote.')
-
-    @commands.command(pass_context=True)
-    async def addvb(self, context, url):
-        if discord.utils.get(context.message.server.roles, name='BAR'):
-            r = requests.get(url, stream=True)
-            if r.status_code == 200:
-                count = self.memes['vb'] + 1
-                with open(self.base2 + 'meme (' + str(count) + ').png', 'wb') as f:
-                    r.raw.decode_content = True
-                    shutil.copyfileobj(r.raw, f)
-                self.memes['vb'] = count
-                dataIO.save_json('data/test/memes.json', self.memes)
-                await self.bot.say('Successfully added emote as vb ' + str(count))
-            else:
-                await self.bot.say('Unable to add emote.')
-
-    @commands.command(pass_context=True)
-    async def addvm(self, context, url):
-        if discord.utils.get(context.message.server.roles, name='BAR'):
-            r = requests.get(url, stream=True)
-            if r.status_code == 200:
-                count = self.memes['vm'] + 1
-                with open(self.base3 + 'meme (' + str(count) + ').png', 'wb') as f:
-                    r.raw.decode_content = True
-                    shutil.copyfileobj(r.raw, f)
-                self.memes['vm'] = count
-                dataIO.save_json('data/test/memes.json', self.memes)
-                await self.bot.say('Successfully added emote as vm ' + str(count))
-            else:
-                await self.bot.say('Unable to add emote.')
 
     @commands.command(pass_context=True)
     async def rollbetween(self, context, one, two):

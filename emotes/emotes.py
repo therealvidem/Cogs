@@ -29,7 +29,7 @@ class Emotes:
             self.data[server.id] = {}
             dataIO.save_json(self.json, self.data)
         if category and category not in self.data[server.id]:
-            self.data[server.id][category] = {'count': 0, 'emotes': []}
+            self.data[server.id][category] = {'emotes': []}
             dataIO.save_json(self.json, self.data)
 
     async def get_image_from_url(self, server_id, category, link, latest_id):
@@ -37,7 +37,7 @@ class Emotes:
         try:
             r = requests.get(link, stream=True)
             if r.status_code == 200:
-                with open(os.path.join(category_path, latest_id + '.png'), 'wb') as f:
+                with open(os.path.join(category_path, str(latest_id) + '.png'), 'wb') as f:
                     r.raw.decode_content = True
                     shutil.copyfileobj(r.raw, f)
                     return True
@@ -68,9 +68,10 @@ class Emotes:
         # return [e for e in category_data['emotes'] if e['id'] == id][0]
 
     async def get_latest_id(self, server_id, category):
-        for i in range(len(self.data[server_id][category]['emotes']) + 1):
+        category_data = self.data[server_id][category]
+        for i in range(len(category_data['emotes']) + 1):
             try:
-                category_data['emotes'][i]
+                category_data['emotes'][str(i)]
             except:
                 return i
         # count = 1
@@ -106,7 +107,7 @@ class Emotes:
     async def get_available_ids(self, server_id, category):
         return [e['id'] for e in self.data[server_id][category]['emotes'].values()]
 
-    async def add_emote(self, server_id, member_id, category: str, link: str=None):
+    async def add_emote(self, prefix, server_id, member_id, category: str, link: str=None):
         category_data = self.data[server_id][category]
         latest_id = await self.get_latest_id(server_id, category)
         success = await self.get_image_from_url(server_id, category, link, latest_id)
@@ -116,14 +117,13 @@ class Emotes:
                 'date_added': str(datetime.now()),
                 'creator': member_id,
                 'link': link,
-                'dir': os.path.join(self.path, server_id, category, latest_id + '.png'),
+                'dir': os.path.join(self.path, server_id, category, str(latest_id) + '.png'),
                 'category': category
             }
-            category_data['emotes'][latest_id] = emote_data
-            category_data['count'] += 1
+            category_data['emotes'][str(latest_id)] = emote_data
             dataIO.save_json(self.json, self.data)
-            as_command = '{}emotes getserver {} {}!' if server_id != 'global' else '{}emotes getglobal {} {}!'
-            as_command.format(context.prefix, category, str(latest_id))
+            as_command = '{}emotes getserver {} {}' if server_id != 'global' else '{}emotes getglobal {} {}'
+            as_command = as_command.format(prefix, category, str(latest_id))
             await self.bot.say('I predict you want to add this emote as {}!'.format(as_command))
 
     async def remove_emote(self, server_id, category, id):
@@ -132,7 +132,6 @@ class Emotes:
             category_data = self.data[server_id][category]
             os.remove(emote['dir'])
             del category_data['emotes'][id]
-            category_data['count'] -= 1
             dataIO.save_json(self.json, self.data)
             await self.bot.say('I foresaw your command to remove this emote!')
         else:
@@ -150,7 +149,7 @@ class Emotes:
         attachments = context.message.attachments
         if attachments:
             link = attachments[0]['url']
-        await self.add_emote(context.message.server.id, context.message.author.id, category, link)
+        await self.add_emote(context.prefix, context.message.server.id, context.message.author.id, category, link)
 
     @_emotes.command(pass_context=True, name='addglobal')
     @commands.cooldown(3, 5)
@@ -161,7 +160,7 @@ class Emotes:
         attachments = context.message.attachments
         if attachments:
             link = attachments[0]['url']
-        await self.add_emote('global', context.message.author.id, category, link)
+        await self.add_emote(context.prefix, 'global', context.message.author.id, category, link)
 
     @_emotes.command(pass_context=True, name='removeserver')
     @checks.admin()

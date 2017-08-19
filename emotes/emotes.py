@@ -89,7 +89,7 @@ class Emotes:
         available_ids = await self.get_available_ids(server_id, category)
         if id not in available_ids:
             try:
-                emote = random.choice(list(category_data['emotes'].keys))
+                emote = random.choice(list(category_data['emotes'].values()))
             except:
                 await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
                 return

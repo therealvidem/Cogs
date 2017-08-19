@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.utils import find
 from .utils import checks
 from .utils.dataIO import dataIO
 import os
@@ -130,8 +129,11 @@ class Emotes:
         emote = await self.get_emote(server_id, category, id)
         if emote:
             category_data = self.data[server_id][category]
-            os.remove(emote['dir'])
-            del category_data['emotes'][id]
+            try:
+                os.remove(emote['dir'])
+            except:
+                pass
+            del category_data['emotes'][str(id)]
             dataIO.save_json(self.json, self.data)
             await self.bot.say('I foresaw your command to remove this emote!')
         else:
@@ -183,6 +185,10 @@ class Emotes:
     @commands.cooldown(3, 5)
     async def _getglobal(self, context, category: str, id: str=None, *args):
         if category not in self.data['global']:
+            await self.bot.say('I could not find that category with my future vision!')
+            return
+        category_data = self.data['global'][category]
+        if 'allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role']):
             await self.bot.say('I could not find that category with my future vision!')
             return
         await self.post_emote(context.message.channel, 'global', category, id)

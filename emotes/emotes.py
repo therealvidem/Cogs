@@ -77,7 +77,7 @@ class Emotes:
 
     @commands.group(pass_context=True, name='emotes')
     @commands.cooldown(3, 5)
-    async def _emotes(self, context, category: str, id: str=None, *args):
+    async def _emotes(self, context):
         pass
 
     @_emotes.command(pass_context=True, name='addserver')

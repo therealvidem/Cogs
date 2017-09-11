@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import MemberConverter
+from discord.ext.commands import BadArgument
 import asyncio
 import random
 
@@ -45,11 +47,21 @@ class rate:
             await self.bot.say('Do \'{}help rate someone\' for more information.'.format(context.prefix))
     
     @rate.command(pass_context=True)
-    async def ship(self, context, member1: discord.Member, member2: discord.Member):
-        if member1 and member2:
-            name1 = str(member1)
-            name2 = str(member2)
-            shiplist = sorted([str(member1).lower(), str(member2).lower()])
+    async def ship(self, context, person1, person2):
+        if person1 and person2:
+            memberconverter1 = MemberConverter(context, person1)
+            memberconverter2 = MemberConverter(context, person2)
+            try:
+                person1 = memberconverter1.convert()
+            except BadArgument:
+                pass
+            try:
+                person2 = memberconverter2.convert()
+            except BadArgument:
+                pass
+            name1 = str(person1)
+            name2 = str(person2)
+            shiplist = sorted([str(person1).lower(), str(person2).lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + shipname)
             rate = random.randint(0, 10)

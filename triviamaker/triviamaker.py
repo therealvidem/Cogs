@@ -1,7 +1,7 @@
 import discord
 import os
 import asyncio
-from .utils.chat_formatting import pagify
+import .utils.chat_formatting as chatformat
 from discord.ext import commands
 
 class triviamaker:
@@ -67,8 +67,8 @@ class triviamaker:
         print_str = ''
         for trivia_line in trivia_list:
             print_str += '{}: {}\n'.format(trivia_line.question, trivia_line.answers)
-        for page in pagify(print_str):
-            await self.bot.say(page)
+        for page in chatformat.pagify(print_str):
+            await self.bot.say(chatformat.box(page))
             await asyncio.sleep(0.5)
     
 def check_folders():

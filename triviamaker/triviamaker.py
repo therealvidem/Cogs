@@ -67,7 +67,7 @@ class triviamaker:
         print_str = ''
         for trivia_line in trivia_list:
             print_str += '{}: {}\n'.format(trivia_line.question, trivia_line.answers)
-        for page in pagify(print_str)):
+        for page in pagify(print_str):
             await self.bot.say(page)
             await asyncio.sleep(0.5)
     

@@ -70,7 +70,7 @@ class triviamaker:
             print_str += '{}: {}\n'.format(trivia_line.question, trivia_line.answers)
         for page in chatformat.pagify(print_str):
             await self.bot.say(chatformat.box(page))
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(2)
     
 def check_folders():
     if not os.path.exists('data/triviamaker'):

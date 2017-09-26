@@ -1,6 +1,7 @@
 import discord
 import os
 from .utils.dataIO import dataIO
+from .utils.chat_formatting import pagify
 from discord.ext import commands
 
 class triviamaker:
@@ -55,6 +56,18 @@ class triviamaker:
         for trivia_line in trivia_list:
             self.trivias[authorid][trivia_line.question] = trivia_line.answers
         await self.bot.say('Successfully loaded trivia "{}"'.format(name))
+        
+    @tm.command(pass_context=True)
+    async def print(self, ctx, name):
+        authorid = ctx.message.author.id
+        trivia_list = trivia_cog.parse_trivia_list('data/trivia/{}.txt'.format(name))
+        if trivia_list is None:
+            await self.bot.say('That trivia doesn\'t exist.')
+            return
+        print_str = ''
+        for trivia_line in trivia_list:
+            print_str += '{}: {}\n'.format(trivia_line.question, trivia_line.answers)
+        await self.bot.say(pagify(print_str))
     
 def check_folders():
     if not os.path.exists('data/triviamaker'):

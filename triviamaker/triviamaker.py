@@ -46,7 +46,7 @@ class triviamaker:
             for question,answer_list in self.trivias[authorid].items():
                 f.write(question)
                 for answer in answer_list:
-                    f.write('`{}'.format(question, answer))
+                    f.write('`{}'.format(answer))
                 f.write('\n')
         await self.bot.say('Successfully uploaded {} for trivia'.format(name))
         

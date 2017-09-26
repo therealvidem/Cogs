@@ -48,7 +48,7 @@ class triviamaker:
     @tm.command(pass_context=True)
     async def load(self, ctx, name):
         authorid = ctx.message.author.id
-        trivia_list = trivia_cog.parse_trivia_list('data/trivia/{}.txt'.format(name))
+        trivia_list = self.trivia_cog.parse_trivia_list('data/trivia/{}.txt'.format(name))
         if trivia_list is None:
             await self.bot.say('That trivia doesn\'t exist.')
             return
@@ -60,7 +60,7 @@ class triviamaker:
     @tm.command(pass_context=True)
     async def print(self, ctx, name):
         authorid = ctx.message.author.id
-        trivia_list = trivia_cog.parse_trivia_list('data/trivia/{}.txt'.format(name))
+        trivia_list = self.trivia_cog.parse_trivia_list('data/trivia/{}.txt'.format(name))
         if trivia_list is None:
             await self.bot.say('That trivia doesn\'t exist.')
             return

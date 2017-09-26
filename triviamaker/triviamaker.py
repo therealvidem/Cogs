@@ -29,8 +29,10 @@ class triviamaker:
                 for answer in answers:
                     answer = answer.replace('`', '')
                     self.trivias[authorid][question].append(answer)
+                await self.bot.say('Successfully set that question to that answer.')
             else:
                 del self.trivias[authorid][question]
+                await self.bot.say('Successfully removed question.')
         except KeyError:
             await self.bot.say('Do "{}tm new" to create a new trivia.'.format(ctx.prefix))
         

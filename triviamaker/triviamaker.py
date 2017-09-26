@@ -35,7 +35,7 @@ class triviamaker:
             return
         with open('data/trivia/{}.txt'.format(name), 'w+') as f:
             for question,answer in self.trivias[ctx.message.author.id].items():
-                f.write('{} `{}'.format(question, answer))
+                f.write('{} `{}\n'.format(question, answer))
         await self.bot.say('Successfully uploaded {} for trivia'.format(name))
     
 def check_folders():

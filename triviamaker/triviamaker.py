@@ -60,8 +60,9 @@ class triviamaker:
     @tm.command(pass_context=True)
     async def print(self, ctx, name):
         authorid = ctx.message.author.id
-        trivia_list = self.trivia_cog.parse_trivia_list(name)
-        if trivia_list is None:
+        try:
+            trivia_list = self.trivia_cog.parse_trivia_list(name)
+        except FileNotFoundError:
             await self.bot.say('That trivia doesn\'t exist.')
             return
         print_str = ''

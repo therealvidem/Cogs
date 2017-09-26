@@ -27,7 +27,7 @@ class triviamaker:
                 self.trivias[authorid][question] = []
             if len(answers) > 0:
                 for answer in answers:
-                    answer = answer.replace(answer, '`', '')
+                    answer = answer.replace('`', '')
                     self.trivias[authorid][question].append(answer)
             else:
                 del self.trivias[authorid][question]

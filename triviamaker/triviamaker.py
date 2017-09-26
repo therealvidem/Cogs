@@ -1,7 +1,7 @@
 import discord
 import os
 import asyncio
-import .utils.chat_formatting as chatformat
+from .utils import chat_formatting as chatformat
 from discord.ext import commands
 
 class triviamaker:

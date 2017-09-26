@@ -32,13 +32,13 @@ class triviamaker:
             else:
                 del self.trivias[authorid][question]
         except KeyError:
-            await self.bot.say('Do "{}tm new" to create a new trivia.'.format(self.bot.prefix))
+            await self.bot.say('Do "{}tm new" to create a new trivia.'.format(ctx.prefix))
         
     @tm.command(pass_context=True)
     async def save(self, ctx, name):
         authorid = ctx.message.author.id
         if authorid not in self.trivias:
-            await self.bot.say('Do "{}tm new" to create a new trivia.'.format(self.bot.prefix))
+            await self.bot.say('Do "{}tm new" to create a new trivia.'.format(ctx.prefix))
             return
         with open('data/trivia/{}.txt'.format(name), 'w+') as f:
             for question,answer in self.trivias[authorid].items():

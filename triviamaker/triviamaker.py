@@ -1,6 +1,6 @@
 import discord
 import os
-from .utils.dataIO import dataIO
+import asyncio
 from .utils.chat_formatting import pagify
 from discord.ext import commands
 
@@ -67,7 +67,9 @@ class triviamaker:
         print_str = ''
         for trivia_line in trivia_list:
             print_str += '{}: {}\n'.format(trivia_line.question, trivia_line.answers)
-        await self.bot.say(pagify(print_str))
+        for page in pagify(print_str)):
+            await self.bot.say(page)
+            await asyncio.sleep(0.5)
     
 def check_folders():
     if not os.path.exists('data/triviamaker'):

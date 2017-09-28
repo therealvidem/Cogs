@@ -33,39 +33,40 @@ class hangman:
 			elif self.insession:
 				if len(msg) == 1:
 					if msg in self.guesses:
-						await self.bot.say('You already guessed that.')
-						await self.bot.say('The word is ' + self.guessword)
+						msg_reply = 'You already guessed a(n) "{}".'.format(msg)
+						await self.bot.say(msg_reply)
 					elif self.word.find(msg) != -1:
-						await self.bot.say('The word does contain ' + msg)
+						msg_reply = 'The word does contain a(n) "{}\n".'.format(msg)
 						for i, letter in enumerate(self.word, start = 1):
 							if letter == msg:
 								self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:len(self.guessword)]
 						self.guesses.append(msg)
 						self.guesses.sort()
 						self.numguesses = self.numguesses + 1
-						await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
+						msg_reply += 'Guesses: [%s]\n' % ', '.join(map(str, self.guesses))
 						if self.guessword.find('-') == -1:
-							await self.bot.say('You won with ' + str(self.numguesses) + ' guess(es)!')
-							await self.bot.say('The word was ' + self.word)
+							msg_reply += 'You won with {} guess(es)!\n'.format(self.numguesses)
+							msg_reply += 'The word was {}.'.format(self.word)
 							self.insession = False
 						else:
-							await self.bot.say('The word is ' + self.guessword) 
+							msg_reply += 'The word is {}'.format(self.guessword) 
+						await self.bot.say(msg_reply)
 					else:
+						msg_reply = 'There are no {}\'s\n'.format(msg)
 						self.guesses.append(msg)
 						self.guesses.sort()
-						await self.bot.say('There are no ' + msg + '\'s')
-						await self.bot.say('Guesses: [%s]' % ', '.join(map(str, self.guesses)))
-						await self.bot.say('The word is ' + self.guessword)
+						msg_reply += 'Guesses: [%s]\n' % ', '.join(map(str, self.guesses))
+						msg_reply += 'The word is {}.\n'.format(self.guessword)
+						await self.bot.say(msg_reply)
 				elif msg == 'end':
+					msg_reply = 'Ended session.'
 					self.insession = False
-					await self.bot.say('Ended session')
-					await self.bot.say('The word was ' + self.word)
+					msg_reply += 'The word was {}.'.format(self.word)
+					await self.bot.say(msg_reply)
 				elif msg == self.word:
 					await self.bot.say('You won with ' + str(self.numguesses) + ' guess(es)!')
 					self.insession = False
 				elif msg != self.word:
-					await self.bot.say('msg: ' + msg)
-					await self.bot.say('self.word: ' + self.word)
 					self.numguesses = self.numguesses + 1
 					await self.bot.say('It\'s not ' + msg)
 

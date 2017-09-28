@@ -27,18 +27,19 @@ class hangman:
                 self.word = random.choice(WORDS).lower().strip()
                 self.numguesses = 0
                 self.guesses = []
-                self.guessword = '-' * (len(self.word) - 1)
+                self.guessword = '-' * len(self.word)
                 await self.bot.say('The word is ' + self.guessword)
             elif self.insession:
                 if len(msg) == 1:
                     if msg in self.guesses:
+                        self.numguesses = self.numguesses + 1
                         msg_reply = 'You already guessed a(n) "{}".'.format(msg)
                         await self.bot.say(msg_reply)
                     elif self.word.find(msg) != -1:
                         msg_reply = 'The word does contain a(n) "{}".'.format(msg)
-                        for i, letter in enumerate(self.word):
+                        for i, letter in enumerate(self.word, start=1):
                             if letter == msg:
-                                self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:len(self.guessword)]
+                                self.guessword = self.guessword[0:i - 1] + msg + self.guessword[i:]
                         self.guesses.append(msg)
                         self.guesses.sort()
                         self.numguesses = self.numguesses + 1
@@ -52,6 +53,7 @@ class hangman:
                         await self.bot.say(msg_reply)
                     else:
                         msg_reply = 'There are no {}\'s\n'.format(msg)
+                        self.numguesses = self.numguesses + 1
                         self.guesses.append(msg)
                         self.guesses.sort()
                         msg_reply += 'Guesses: [%s]\n' % ', '.join(map(str, self.guesses))

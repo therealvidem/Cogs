@@ -48,7 +48,7 @@ class hangman:
                             msg_reply += '\nThe word was {}.'.format(self.word)
                             self.insession = False
                         else:
-                            msg_reply += 'The word is {}'.format(self.guessword) 
+                            msg_reply += '\nThe word is {}'.format(self.guessword) 
                         await self.bot.say(msg_reply)
                     else:
                         msg_reply = 'There are no {}\'s\n'.format(msg)

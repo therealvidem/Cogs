@@ -82,7 +82,7 @@ class Emotes:
     async def post_emote(self, channel, server_id, category: str, id: str=None):
         category_data = self.data[server_id][category]
         try:
-            id = int(id)
+            id = int(id) - 1
         except:
             pass
         available_ids = await self.get_available_ids(server_id, category)
@@ -102,8 +102,23 @@ class Emotes:
         else:
             await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
 
+    async def post_count(self, server_id, category):
+        original_str = category
+        category = category.lower()
+        await self.check_server('global', category)
+        count = await self.get_count(server_id, category)
+        category_data = self.data[server_id][category]
+        if 'allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role']):
+            await self.bot.say('I could not find that category with my future vision!')
+            return
+        article = 'emotes' if count > 1 else 'emote'
+        await self.bot.say('I foresee that {} has {} {}!'.format(original_str, count, article))
+
     async def get_available_ids(self, server_id, category):
         return [e['id'] for e in self.data[server_id][category]['emotes'].values()]
+
+    async def get_count(self, server_id, category):
+        return len(self.data[server_id][category]['emotes'])
 
     async def add_emote(self, prefix, server_id, member_id, category: str, link: str=None):
         category_data = self.data[server_id][category]
@@ -197,6 +212,16 @@ class Emotes:
             await self.bot.say('I could not find that category with my future vision!')
             return
         await self.post_emote(context.message.channel, 'global', category, id)
+
+    @_emotes.command(pass_context=True, name='getservercount')
+    @commands.cooldown(3, 5)
+    async def _getservercount(self, context, category: str):
+        await self.post_count(context.message.server.id, category)
+
+    @_emotes.command(pass_context=True, name='getglobalcount')
+    @commands.cooldown(3, 5)
+    async def _getglobalcount(self, context, category: str):
+        await self.post_count('global', category)
 
 def check_folder():
     f = 'data/emotes'

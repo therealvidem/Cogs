@@ -23,7 +23,7 @@ import aiohttp
 
 house_nums = ['nulla', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
 list_stuff = [const.LIST_OBJECTS + const.LIST_ANGLES]
-other_objects = {'Asteroid Lilith': swisseph.AST_OFFSET + 1181}
+other_objects = {'Mean Apogee (Dark Lilith)': swisseph.MEAN_APOG}
 
 def sweObject(obj, jd):
     """ Needed another swissempheris method to obtain objects that weren't implemented into flatlib. """

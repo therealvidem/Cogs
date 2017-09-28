@@ -57,10 +57,6 @@ class hangman:
                         msg_reply += 'Guesses: [%s]\n' % ', '.join(map(str, self.guesses))
                         msg_reply += 'The word is {}.'.format(self.guessword)
                         await self.bot.say(msg_reply)
-                elif msg == 'print':
-                    msg_reply = 'word: {}'.format(self.word)
-                    msg_reply += '\nguessword: {}'.format(self.guessword)
-                    await self.bot.say(msg_reply)
                 elif msg == 'end':
                     msg_reply = 'Ended session.'
                     self.insession = False

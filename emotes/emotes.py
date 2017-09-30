@@ -136,22 +136,29 @@ class Emotes:
             category_data['emotes'][str(latest_id)] = emote_data
             dataIO.save_json(self.json, self.data)
             as_command = '{}emotes getserver {} {}' if server_id != 'global' else '{}emotes getglobal {} {}'
-            as_command = as_command.format(prefix, category, str(latest_id))
+            as_command = as_command.format(prefix, category, str(latest_id + 1))
             await self.bot.say('I predict you want to add this emote as {}!'.format(as_command))
 
-    async def remove_emote(self, server_id, category, id):
-        emote = await self.get_emote(server_id, category, id)
+    async def remove_emote(self, author, server_id, category, id):
+        emote = await self.get_emote(server_id, category, id - 1)
         if emote:
-            category_data = self.data[server_id][category]
-            try:
-                os.remove(emote['dir'])
-            except:
-                pass
-            del category_data['emotes'][str(id)]
-            dataIO.save_json(self.json, self.data)
-            await self.bot.say('I foresaw your command to remove this emote!')
+            await self.bot.say("Are you sure you want to remove emote {}? (yes/no)".format(id))
+            answer = await self.bot.wait_for_message(timeout=15, author=author)
+            if answer is None:
+                await self.bot.say('You will say no!')
+            elif answer.content.lower().strip() == 'yes':
+                category_data = self.data[server_id][category]
+                try:
+                    os.remove(emote['dir'])
+                except:
+                    pass
+                del category_data['emotes'][str(id - 1)]
+                dataIO.save_json(self.json, self.data)
+                await self.bot.say('I foresaw your command to remove this emote!')
+            else:
+                await self.bot.say('You will say no!')
         else:
-            await self.bot.say('A terrible forecast has struck upon me; there was an error!')
+            await self.bot.say('A terrible forecast has struck upon me; that emote doesn\'t exist, or something went wrong!')
 
     @commands.group(pass_context=True, name='emotes')
     @commands.cooldown(3, 5)
@@ -186,14 +193,14 @@ class Emotes:
     async def _removeserver(self, context, category: str, id: int):
         category = category.lower()
         await self.check_server(context.message.server.id, category)
-        await self.remove_emote(context.message.server.id, category, id)
+        await self.remove_emote(context.message.author, context.message.server.id, category, id)
 
     @_emotes.command(pass_context=True, name='removeglobal')
+    @checks.is_owner()
     async def _removeglobal(self, context, category: str, id: int):
         category = category.lower()
         await self.check_server('global', category)
-        if context.message.author.id == '138838298742226944':
-            await self.remove_emote('global', category, id)
+        await self.remove_emote(context.message.author, 'global', category, id)
 
     @_emotes.command(pass_context=True, name='getserver')
     @commands.cooldown(3, 5)

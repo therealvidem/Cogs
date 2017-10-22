@@ -127,7 +127,7 @@ class rate:
         if len(args) > 1:
             listthings = sorted(list(args))
             author = context.message.author
-            random.seed(self.id + ', '.join(choices))
+            random.seed(self.id + ', '.join(listthings))
             random.shuffle(choices)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             em.set_author(name=str(author), icon_url=author.avatar_url)

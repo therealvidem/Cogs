@@ -122,6 +122,21 @@ class rate:
         else:
             await self.bot.say('Not enough choices to choose from')
 
+    @rate.command(pass_context=True)
+    async def list(self, context, *args):
+        if len(args) > 1:
+            listthings = sorted(list(args))
+            author = context.message.author
+            random.seed(self.id + ', '.join(choices))
+            random.shuffle(choices)
+            em = discord.Embed(title='Choices', colour=0x2F93E0)
+            em.set_author(name=str(author), icon_url=author.avatar_url)
+            for x in range(0, len(choices)):
+                em.add_field(name="\a" + str(x + 1), value=choices[x])
+            await self.bot.send_message(context.message.channel, embed=em)
+        else:
+            await self.bot.say('Not enough choices to choose from')
+
 def setup(bot):
     bot.add_cog(rate(bot))
 

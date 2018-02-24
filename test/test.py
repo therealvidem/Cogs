@@ -521,13 +521,14 @@ def check_folders():
     if not os.path.exists('data/test'):
         os.makedirs('data/test')
 
-def check_files():
-    f = 'data/test/stabbingobjects.json'
+def check_files(name):
+    f = 'data/test/{}.json'.format(name)
     if not dataIO.is_valid_json(f):
         dataIO.save_json(f, {})
 
 def setup(bot):
     check_folders()
-    check_files()
+    check_files('stabbingobjects')
+    check_files('quotes')
     n = test(bot)
     bot.add_cog(n)

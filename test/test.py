@@ -517,7 +517,17 @@ def rFactorial(n):
     else:
         return n * (rFactorial(n - 1))
 
+def check_folders():
+    if not os.path.exists('data/test'):
+        os.makedirs('data/test')
+
+def check_files():
+    f = 'data/test/stabbingobjects.json'
+    if not dataIO.is_valid_json(f):
+        dataIO.save_json(f, {})
 
 def setup(bot):
     n = test(bot)
+    check_folders()
+    check_files()
     bot.add_cog(n)

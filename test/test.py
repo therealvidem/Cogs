@@ -87,62 +87,6 @@ class test:
             msg += ', ' + names.get_full_name(gender='female')
         await self.bot.say(msg)
 
-    @commands.group(pass_context=True, invoke_without_command=True)
-    async def quote(self, context):
-        author = random.choice(self.quote)
-        quote = random.choice(author)
-        content = quote['content']
-        name = quote['name']
-        year = quote['year']
-        await self.bot.say('"' + content + '" -' + name + '\n' + str(year))
-
-    @quote.command(pass_context=True)
-    async def add(self, context, author: discord.Member, quote: str, year: int):
-        if str(author) not in self.quotes:
-            self.quotes[str(author)] = []
-        if not [q for q in self.quotes[str(author)] if q['content'] == quote]:
-            if not year:
-                year = datetime.datetime.now().year
-            data = {'year': year, 'content': quote, 'author': author.name}
-            self.quotes[str(author)].append(data)
-            dataIO.save_json('data/test/quotes.json', self.quotes)
-            await self.bot.delete_message(context.message)
-            await self.bot.say('"' + quote + '" -' + author.name + '\n' + str(year))
-        else:
-            await self.bot.say('That quote already exists!')
-
-    @quote.command(pass_context=True)
-    async def remove(self, context, author: discord.Member, quotenum: int):
-        if str(author) not in self.quotes:
-            self.quotes[str(author)] = []
-        if quotenum < len(self.quotes[str(author)]):
-            self.quotes[str(author)].remove(quotenum)
-        else:
-            await self.bot.say('That\'s too high of an index!')
-
-    @quote.command(pass_context=True)
-    async def removeall(self, context, author: discord.Member):
-        if str(author) in self.quotes:
-            del self.quotes[str(author)]
-            await self.bot.say('Successfully removed all quotes by ' + author.name)
-        else:
-            await self.bot.say('That person doesn\'t have any quotes!')
-
-    @quote.command(pass_context=True)
-    async def list(self, context, author: discord.Member):
-        if str(author) not in self.quotes:
-            self.quotes[str(author)] = []
-        if str(author) in self.quotes:
-            # objs = ''
-            # for obj in self.stabbingobjects['objects']:
-            #     objs += '**{}**\n'.format(obj)
-            # em = discord.Embed(title='My Knife Collection', color=discord.Color.green())
-            # em.add_field(name='\a', value=objs)
-            em = discord.Embed(title='Quotes from ' + author.name, colour=0x2F93E0)
-            for x in range(len(self.quotes[str(author)])):
-                em.add_field(name=x, value=self.quotes[str(author)][x]["quote"] + " -" + self.quotes[str(author)][x]["year"])
-            await self.bot.say(embed=em) 
-
     @commands.command(pass_context=True)
     async def rollbetween(self, context, one, two):
         choice = random.randint(int(one), int(two))

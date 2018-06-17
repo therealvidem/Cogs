@@ -21,8 +21,10 @@ class rate:
             message = 'List of commands available for {}rate:\n'.format(prefix)
             message += '``{}rate someone [member]``\n'.format(prefix)
             message += '``{}rate ship [person] [person]``\n'.format(prefix)
+            message += '``{}rate regularship [person] [person]``\n'.format(prefix)
             message += '``{}rate thing [thingy]``\n'.format(prefix)
             message += '``{}rate list [thingies]``\n'.format(prefix)
+            message += '``{}rate people [people]``\n'.format(prefix)
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
 
@@ -64,9 +66,13 @@ class rate:
                 pass
             name1 = str(person1)
             name2 = str(person2)
+            if person1 is discord.Member:
+                person1 = person1.id
+            if person2 is discord.Member:
+                person2 = person2.id
             shiplist = sorted([str(person1).lower(), str(person2).lower()])
             shipname = ' x '.join(shiplist)
-            random.seed(self.id + ' x '.join(sorted([person1.id, person2.id])))
+            random.seed(self.id + ' x '.join(sorted([person1, person2])))
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'

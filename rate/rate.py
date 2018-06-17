@@ -5,13 +5,13 @@ from discord.ext.commands import BadArgument
 import asyncio
 import random
 
-def listsort(thing):
-    return random.seed(self.id + thing)
-
 class rate:
     def __init__(self, bot):
         self.bot = bot
         self.id = bot.user.id
+
+    def listsort(self, thing):
+        return random.seed(self.id + thing)
 
     @commands.group(pass_context=True, name='rate')
     async def rate(self, context):
@@ -108,7 +108,7 @@ class rate:
                     listpeople.append(person)
             author = context.message.author
             choices = [str(i) for i in listpeople]
-            random.seed(self.id + ', '.join(sorted([i.id for i in listpeople], key=listsort)))
+            random.seed(self.id + ', '.join(sorted([i.id for i in listpeople], key=self.listsort)))
             random.shuffle(choices)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             em.set_author(name=str(author), icon_url=author.avatar_url)
@@ -121,7 +121,7 @@ class rate:
     @rate.command(pass_context=True)
     async def list(self, context, *args):
         if len(args) > 1:
-            listthings = sorted(args, key=listsort)
+            listthings = sorted(args, key=self.listsort)
             author = context.message.author
             random.seed(self.id + ', '.join(listthings))
             random.shuffle(listthings)

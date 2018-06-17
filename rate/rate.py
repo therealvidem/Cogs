@@ -11,7 +11,8 @@ class rate:
         self.id = bot.user.id
 
     def listsort(self, thing):
-        return random.seed(self.id + thing)
+        random.seed(self.id + thing.lower())
+        return random.random() * 11
 
     @commands.group(pass_context=True, name='rate')
     async def rate(self, context):
@@ -31,7 +32,7 @@ class rate:
     @rate.command(pass_context=True)
     async def thing(self, context, *, thing: str):
         if thing:
-            random.seed(str(self.id) + thing.lower())
+            random.seed(self.id + thing.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -106,14 +107,10 @@ class rate:
                     return
                 else:
                     listpeople.append(person)
-            author = context.message.author
-            choices = [str(i) for i in listpeople]
-            random.seed(self.id + ', '.join(sorted([i.id for i in listpeople], key=self.listsort)))
-            random.shuffle(choices)
+            choices = sorted(listpeople, key=lambda i: self.listsort(i.id), reverse=True)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
-            em.set_author(name=str(author), icon_url=author.avatar_url)
             for x in range(0, len(choices)):
-                em.add_field(name=str(x + 1), value=choices[x])
+                em.add_field(name=str(x + 1), value=str(choices[x]), inline=False)
             await self.bot.send_message(context.message.channel, embed=em)
         else:
             await self.bot.say('Not enough choices to choose from')
@@ -121,14 +118,11 @@ class rate:
     @rate.command(pass_context=True)
     async def list(self, context, *args):
         if len(args) > 1:
-            listthings = sorted(args, key=self.listsort)
-            author = context.message.author
-            random.seed(self.id + ', '.join(listthings))
-            random.shuffle(listthings)
+            listthings = list(args)
+            listthings.sort(key=self.listsort, reverse=True)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
-            em.set_author(name=str(author), icon_url=author.avatar_url)
             for x in range(0, len(listthings)):
-                em.add_field(name=str(x + 1), value=listthings[x])
+                em.add_field(name=str(x + 1), value=listthings[x], inline=False)
             await self.bot.send_message(context.message.channel, embed=em)
         else:
             await self.bot.say('Not enough choices to choose from')

@@ -56,21 +56,23 @@ class rate:
         if person1 and person2:
             memberconverter1 = MemberConverter(context, person1)
             memberconverter2 = MemberConverter(context, person2)
+            name1 = ''
+            name2 = ''
             try:
                 person1 = memberconverter1.convert()
+                name1 = str(person1)
+                person1 = person1.id
             except BadArgument:
+                name1 = str(person1)
                 pass
             try:
                 person2 = memberconverter2.convert()
-            except BadArgument:
-                pass
-            name1 = str(person1)
-            name2 = str(person2)
-            if person1 is discord.Member:
-                person1 = person1.id
-            if person2 is discord.Member:
+                name2 = str(person2)
                 person2 = person2.id
-            shiplist = sorted([str(person1).lower(), str(person2).lower()])
+            except BadArgument:
+                name2 = str(person2)
+                pass
+            shiplist = sorted([str(name1).lower(), str(name2).lower()])
             shipname = ' x '.join(shiplist)
             random.seed(self.id + ' x '.join(sorted([person1, person2])))
             rate = random.randint(0, 10)

@@ -51,7 +51,8 @@ class test:
                 newmsg[i] = newmsg[i].upper()
             else:
                 newmsg[i] = newmsg[i].lower()
-            capitalize = True if not capitalize and char != ' ' else False
+            if msg[i] != ' ':
+                capitalize = not capitalize
         await self.bot.say(''.join(newmsg))
 
     @commands.group(pass_context=True, invoke_without_command=True)

@@ -90,7 +90,7 @@ class Emotes:
             try:
                 emote = random.choice(list(category_data['emotes'].values()))
             except:
-                await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+                await self.bot.say('Either there are no emotes in that category, or something has interfered with my future vision!')
                 return
         else:
             emote = await self.get_emote(server_id, category, id)
@@ -100,17 +100,20 @@ class Emotes:
             except:
                 await self.bot.say(emote['link'])
         else:
-            await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
+            await self.bot.say('Either there are no emotes in that category, or something has interfered with my future vision!')
 
     async def post_count(self, context, server_id, category):
+        if not server_id in self.data:
+            await self.bot.say('I cannot foresee this server having any emotes!')
+            return
         original_str = category
         category = category.lower()
-        await self.check_server('global', category)
-        count = await self.get_count(server_id, category)
+        # await self.check_server(server_id, category) -- this is so dumb, alexa, play we are number one
         category_data = self.data[server_id][category]
         if (not category_data) or ('allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role'])):
             await self.bot.say('I could not find that category with my future vision!')
             return
+        count = await self.get_count(server_id, category)
         article = 'emotes' if count > 1 else 'emote'
         await self.bot.say('I foresee that {} has {} {}!'.format(original_str, count, article))
 
@@ -118,7 +121,10 @@ class Emotes:
         return [e['id'] for e in self.data[server_id][category]['emotes'].values()]
 
     async def get_count(self, server_id, category):
-        return len(self.data[server_id][category]['emotes'])
+        if category in self.data[server_id]:
+            return len(self.data[server_id][category]['emotes'])
+        else:
+            return None
 
     async def add_emote(self, prefix, server_id, member_id, category: str, link: str=None):
         category_data = self.data[server_id][category]

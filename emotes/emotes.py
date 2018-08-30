@@ -108,7 +108,7 @@ class Emotes:
         await self.check_server('global', category)
         count = await self.get_count(server_id, category)
         category_data = self.data[server_id][category]
-        if 'allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role']):
+        if (not category_data) or ('allow_servers_with_role' in category_data and not discord.utils.get(context.message.server.roles, name=category_data['allow_servers_with_role'])):
             await self.bot.say('I could not find that category with my future vision!')
             return
         article = 'emotes' if count > 1 else 'emote'

@@ -228,7 +228,7 @@ class Emotes:
     @_emotes.command(pass_context=True, name='getglobalcount')
     @commands.cooldown(3, 5)
     async def _getglobalcount(self, context, category: str):
-        await self.post_count('global', category)
+        await self.post_count(context, 'global', category)
 
 def check_folder():
     f = 'data/emotes'

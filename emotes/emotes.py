@@ -102,7 +102,7 @@ class Emotes:
         else:
             await self.bot.say('Either there are no emotes in that category, or something has subverted my prediction skills!')
 
-    async def post_count(self, server_id, category):
+    async def post_count(self, context, server_id, category):
         original_str = category
         category = category.lower()
         await self.check_server('global', category)
@@ -223,7 +223,7 @@ class Emotes:
     @_emotes.command(pass_context=True, name='getservercount')
     @commands.cooldown(3, 5)
     async def _getservercount(self, context, category: str):
-        await self.post_count(context.message.server.id, category)
+        await self.post_count(context, context.message.server.id, category)
 
     @_emotes.command(pass_context=True, name='getglobalcount')
     @commands.cooldown(3, 5)

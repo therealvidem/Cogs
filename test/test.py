@@ -340,6 +340,10 @@ class test:
                 await self.bot.say('LOUDER')
             else:
                 await self.bot.say('wat')
+    
+    @commands.command(pass_context=True)
+    async def scream(self, conext, *, text):
+        await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) + '***')
 
     @commands.command(pass_context=True)
     async def addstab(self, context, *, obj: str = None):

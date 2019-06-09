@@ -8,10 +8,9 @@ import random
 class rate:
     def __init__(self, bot):
         self.bot = bot
-        self.id = bot.user.id
 
     def listsort(self, thing):
-        random.seed(self.id + thing.lower())
+        random.seed(self.bot.user.id + thing.lower())
         return random.random() * 11
 
     @commands.group(pass_context=True, name='rate')
@@ -32,7 +31,7 @@ class rate:
     @rate.command(pass_context=True)
     async def thing(self, context, *, thing: str):
         if thing:
-            random.seed(self.id + thing.lower())
+            random.seed(self.bot.user.id + thing.lower())
             rate = random.randint(0, 10)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'
@@ -46,7 +45,7 @@ class rate:
             member = context.message.author
         name = str(member)
         image_url = member.avatar_url
-        random.seed(self.id + member.id)
+        random.seed(self.bot.user.id + member.id)
         rate = random.randint(0, 10)
         emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
         article = 'an' if rate == 8 else 'a'
@@ -80,7 +79,7 @@ class rate:
                 pass
             shiplist = sorted([str(name1).lower(), str(name2).lower()])
             shipname = ' x '.join(shiplist)
-            random.seed(self.id + ' x '.join(sorted([person1, person2])))
+            random.seed(self.bot.user.id + ' x '.join(sorted([person1, person2])))
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
@@ -93,7 +92,7 @@ class rate:
         if person1 and person2:
             shiplist = sorted([person1.lower(), person2.lower()])
             shipname = ' x '.join(shiplist)
-            random.seed(self.id + shipname)
+            random.seed(self.bot.user.id + shipname)
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'

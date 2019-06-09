@@ -146,43 +146,5 @@ class rate:
         else:
             await self.bot.say('Not enough choices to choose from')
 
-    @rate.command(pass_context=True)
-    async def spotify(self, context, *, member:discord.Member=None):
-        if not member:
-            member = context.message.author
-        activity = None
-        activities = member.activities
-        for i in range(0, len(activities)):
-            if activities[i].type == discord.ActivityType.listening:
-                activity = activities[i]
-        if activity:
-            track_id = activity.track_id
-            title = activity.title
-            image_url = activity.album_cover_url
-            primary_artist = activity.artists[0]
-            secondary_artists = activity.artists[1:]
-            artists_string = 'by {}'.format(primary_artist)
-            for i in range(0, len(secondary_artists)):
-                if i < len(secondary_artists) - 1:
-                    artists_string += ', ' + secondary_artists[i]
-                else:
-                    artists_string += ' and ' + secondary_artists[i]
-            if not track_id:
-                await self.bot.say('What is {} even listening to?'.format(member))
-                return
-            random.seed(self.id + track_id.lower())
-            rate = random.randint(0, 10)
-            article = 'an' if rate == 8 else 'a'
-            em = discord.Embed(
-                title=artists_string,
-                description='I give this track {} **{}/10**. {}'.format(article, rate, self.spotify_rate[rate]),
-                colour=int(0x2F93E0)
-            )
-            em.set_thumbnail(url=image_url)
-            em.set_author(name=title)
-            await self.bot.send_message(context.message.channel, embed=em)
-        else:
-            await self.bot.say('{} is not listening to anything on Spotify.'.format(member))
-
 def setup(bot):
     bot.add_cog(rate(bot))

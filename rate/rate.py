@@ -9,19 +9,6 @@ class rate:
     def __init__(self, bot):
         self.bot = bot
         self.id = bot.user.id
-        self.spotify_rate = [
-            'It couldn\'t be worse :sick:.',
-            'It\'s is pretty trash.',
-            'There are a lot of better music.',
-            'It\'s not good.',
-            'This is at least tolerable.',
-            'It could be worse.',
-            'Hm, this is a little decent.',
-            'Hey, this is pretty good!',
-            'I could get down to this!',
-            'Wow, now *this* is good music!',
-            'HOLY SHIT THIS IS AN ABSOLUTE BANGER!'
-        ]
 
     def listsort(self, thing):
         random.seed(self.id + thing.lower())

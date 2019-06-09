@@ -150,8 +150,12 @@ class rate:
     async def spotify(self, context, *, member:discord.Member=None):
         if not member:
             member = context.message.author
-        activity = member.activity
-        if activity and activity.type == discord.ActivityType.listening:
+        activity = None
+        activities = member.activities
+        for i in range(0, len(activities)):
+            if activities[i].type == discord.ActivityType.listening:
+                activity = activities[i]
+        if activity:
             track_id = activity.track_id
             title = activity.title
             image_url = activity.album_cover_url

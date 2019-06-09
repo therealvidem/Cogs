@@ -39,7 +39,6 @@ class rate:
             message += '``{}rate thing [thingy]``\n'.format(prefix)
             message += '``{}rate list [thingies]``\n'.format(prefix)
             message += '``{}rate people [people]``\n'.format(prefix)
-            message += '``{}rate spotify [member]``\n'.format(prefix)
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
             await self.bot.say(embed=em)
 

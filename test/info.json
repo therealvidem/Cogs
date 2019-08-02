@@ -1,5 +1,6 @@
 {
     "author" : ["videm#1556"],
     "description" : "test",
-    "short" : "test"
+    "short" : "test",
+    "requirements": ["names"]
 }

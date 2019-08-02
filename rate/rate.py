@@ -1,22 +1,24 @@
+from redbot.core import commands
 import discord
-from discord.ext import commands
-from discord.ext.commands import MemberConverter
+from .customconverters import BetterMemberConverter
 from discord.ext.commands import BadArgument
+from discord.ext.commands import cooldown
 import asyncio
 import random
 
-class rate:
+class Rate(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.botid = str(bot.user.id)
 
-    def listsort(self, thing):
-        random.seed(self.bot.user.id + thing.lower())
+    def list_sort(self, thing):
+        random.seed(self.botid + thing.lower())
         return random.random() * 11
 
-    @commands.group(pass_context=True, name='rate')
-    async def rate(self, context):
-        if context.invoked_subcommand is None:
-            prefix = context.prefix
+    @commands.group(name='rate', autohelp=False)
+    @cooldown(3, 10)
+    async def rate(self, ctx):
+        if ctx.invoked_subcommand is None:
+            prefix = ctx.prefix
             title = '**Videm\'s Robust Rating System 9000:**\n'
             message = 'List of commands available for {}rate:\n'.format(prefix)
             message += '``{}rate someone [member]``\n'.format(prefix)
@@ -25,111 +27,140 @@ class rate:
             message += '``{}rate thing [thingy]``\n'.format(prefix)
             message += '``{}rate list [thingies]``\n'.format(prefix)
             message += '``{}rate people [people]``\n'.format(prefix)
+            message += '``{}rate spotify [member]``\n'.format(prefix)
             em = discord.Embed(title=title, description=message, color=discord.Color.dark_blue())
-            await self.bot.say(embed=em)
+            await ctx.send(embed=em)
 
-    @rate.command(pass_context=True)
-    async def thing(self, context, *, thing: str):
-        if thing:
-            random.seed(self.bot.user.id + thing.lower())
-            rate = random.randint(0, 10)
-            emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
-            article = 'an' if rate == 8 else 'a'
-            await self.bot.say('I give **{}** {} **{}/10** {}'.format(thing, article, rate, emoji))
-        else:
-            await self.bot.say('Do \'{}rate thing\' for more information.'.format(context.prefix))
-
-    @rate.command(pass_context=True)
-    async def someone(self, context, *, member:discord.Member=None):
-        if not member:
-            member = context.message.author
-        name = str(member)
-        image_url = member.avatar_url
-        random.seed(self.bot.user.id + member.id)
+    @rate.command(name='thing')
+    @cooldown(3, 10)
+    async def thing(self, ctx, *, thing: str):
+        random.seed(self.botid + thing.lower())
         rate = random.randint(0, 10)
         emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
         article = 'an' if rate == 8 else 'a'
-        embed = discord.Embed(
-            description='I give this person {} **{}/10** {}'.format(article, rate, emoji),
-            colour=int(0x2F93E0)
-        )
-        embed.set_author(name=name, icon_url=image_url)
-        await self.bot.say(embed=embed)
+        await ctx.send('I give **{}** {} **{}/10** {}'.format(thing, article, rate, emoji))
 
-    @rate.command(pass_context=True)
-    async def ship(self, context, person1, person2):
+    @rate.command(name='someone')
+    @cooldown(3, 10)
+    async def someone(self, ctx, *, member: str=None):
+        member = await BetterMemberConverter().convert(ctx, member) if member else ctx.message.author
+        name = str(member)
+        image_url = member.avatar_url
+        random.seed(self.botid + str(member.id))
+        rate = random.randint(0, 10)
+        emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
+        article = 'an' if rate == 8 else 'a'
+        em = discord.Embed(
+            description='I give this person {} **{}/10** {}'.format(article, rate, emoji),
+            colour=0x2F93E0
+        )
+        em.set_author(name=name, icon_url=image_url)
+        await ctx.send(embed=em)
+
+    @rate.command(name='ship')
+    @cooldown(3, 10)
+    async def ship(self, ctx, person1: str, person2: str):
         if person1 and person2:
-            memberconverter1 = MemberConverter(context, person1)
-            memberconverter2 = MemberConverter(context, person2)
+            memberconverter1 = BetterMemberConverter()
+            memberconverter2 = BetterMemberConverter()
             name1 = ''
             name2 = ''
             try:
-                person1 = memberconverter1.convert()
+                person1 = await memberconverter1.convert(ctx, person1)
                 name1 = str(person1)
-                person1 = person1.id
-            except BadArgument:
-                name1 = str(person1)
+                person1 = str(person1.id)
+            except:
+                name1 = person1
                 pass
             try:
-                person2 = memberconverter2.convert()
+                person2 = await memberconverter2.convert(ctx, person2)
                 name2 = str(person2)
-                person2 = person2.id
-            except BadArgument:
-                name2 = str(person2)
+                person2 = str(person2.id)
+            except:
+                name2 = person2
                 pass
-            shiplist = sorted([str(name1).lower(), str(name2).lower()])
+            shiplist = sorted([name1.lower(), name2.lower()])
             shipname = ' x '.join(shiplist)
-            random.seed(self.bot.user.id + ' x '.join(sorted([person1, person2])))
+            random.seed(self.botid + ' x '.join(sorted([person1, person2])))
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
-            await self.bot.say('I give the **{} x {}** ship {} **{}/10** {}'.format(name1, name2, article, rate, emoji))
-        else:
-            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+            await ctx.send('I give the **{}** ship {} **{}/10** {}'.format(shipname, article, rate, emoji))
 
-    @rate.command(pass_context=True)
-    async def regularship(self, context, person1: str, person2: str):
-        if person1 and person2:
-            shiplist = sorted([person1.lower(), person2.lower()])
-            shipname = ' x '.join(shiplist)
-            random.seed(self.bot.user.id + shipname)
-            rate = random.randint(0, 10)
-            emoji = ':heart:' if rate >= 5 else ':broken_heart:'
-            article = 'an' if rate == 8 else 'a'
-            await self.bot.say('I give the **{} x {}** ship {} **{}/10** {}'.format(person1, person2, article, rate, emoji))
-        else:
-            await self.bot.say('Do \'{}help rate ship\' for more information.'.format(context.prefix))
+    @rate.command(name='regularship')
+    @cooldown(3, 10)
+    async def regularship(self, ctx, person1: str, person2: str):
+        shiplist = sorted([person1.lower(), person2.lower()])
+        shipname = ' x '.join(shiplist)
+        random.seed(self.botid + shipname)
+        rate = random.randint(0, 10)
+        emoji = ':heart:' if rate >= 5 else ':broken_heart:'
+        article = 'an' if rate == 8 else 'a'
+        await ctx.send('I give the **{} x {}** ship {} **{}/10** {}'.format(person1, person2, article, rate, emoji))
 
-    @rate.command(pass_context=True)
-    async def ratepeople(self, context, *args):
+    @rate.command(name='listpeople')
+    @cooldown(3, 10)
+    async def listpeople(self, ctx, *args):
         if len(args) > 1:
             listpeople = []
             for name in args:
-                person = discord.utils.find(lambda m: m.name == name or m.nick == name or str(m) == name, context.message.server.members)
+                person = await BetterMemberConverter().convert(ctx, name)
                 if not person:
-                    await self.bot.say(name + ' does not exist in this server.')
+                    await ctx.send(name + ' does not exist in this server.')
                     return
                 else:
                     listpeople.append(person)
-            choices = sorted(listpeople, key=lambda i: self.listsort(i.id), reverse=True)
+            choices = sorted(listpeople, key=lambda i: self.list_sort(str(i.id)), reverse=True)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             for x in range(0, len(choices)):
                 em.add_field(name=str(x + 1), value=str(choices[x]), inline=False)
-            await self.bot.send_message(context.message.channel, embed=em)
+            await ctx.send(embed=em)
         else:
-            await self.bot.say('Not enough choices to choose from')
+            await ctx.send('Not enough choices to choose from')
 
-    @rate.command(pass_context=True)
-    async def list(self, context, *args):
+    @rate.command(name='list')
+    @cooldown(3, 10)
+    async def list(self, ctx, *args):
         if len(args) > 1:
             listthings = list(args)
-            listthings.sort(key=self.listsort, reverse=True)
+            listthings.sort(key=self.list_sort, reverse=True)
             em = discord.Embed(title='Choices', colour=0x2F93E0)
             for x in range(0, len(listthings)):
                 em.add_field(name=str(x + 1), value=listthings[x], inline=False)
-            await self.bot.send_message(context.message.channel, embed=em)
+            await ctx.send(embed=em)
         else:
-            await self.bot.say('Not enough choices to choose from')
-
-def setup(bot):
-    bot.add_cog(rate(bot))
+            await ctx.send('Not enough choices to choose from')
+    
+    @rate.command(name='spotify')
+    @cooldown(3, 10)
+    async def spotify(self, ctx, *, member: str=None):
+        member = await BetterMemberConverter().convert(ctx, member) if member else ctx.message.author
+        activity = member.activity
+        if activity and activity.type == discord.ActivityType.listening:
+            track_id = activity.track_id
+            title = activity.title
+            image_url = activity.album_cover_url
+            primary_artist = activity.artists[0]
+            secondary_artists = activity.artists[1:]
+            artists_string = 'by {}'.format(primary_artist)
+            for i in range(0, len(secondary_artists)):
+                if i < len(secondary_artists) - 1:
+                    artists_string += ', ' + secondary_artists[i]
+                else:
+                    artists_string += ' and ' + secondary_artists[i]
+            if not track_id:
+                await ctx.send('What is {} even listening to?'.format(member))
+                return
+            random.seed(self.botid + track_id.lower())
+            rate = random.randint(0, 10)
+            article = 'an' if rate == 8 else 'a'
+            em = discord.Embed(
+                title=artists_string,
+                description='I give this track {} **{}/10**.'.format(article, rate),
+                colour=int(0x2F93E0)
+            )
+            em.set_thumbnail(url=image_url)
+            em.set_author(name=title)
+            await ctx.send(embed=em)
+        else:
+            await ctx.send('{} is not listening to anything on Spotify.'.format(member))

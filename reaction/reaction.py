@@ -1,11 +1,8 @@
-import discord
-from discord.ext import commands
+from redbot.core import commands
 import asyncio
-import random
 
-class reaction:
-	def __init__(self, bot):
-		self.bot = bot
+class Reaction(commands.Cog):
+	def __init__(self):
 		self.listenstart = {
 			'sara': 'Ew!',
 			'syrz': 'It\'s called a dress.'
@@ -47,13 +44,13 @@ class reaction:
 					else:
 						ok = True
 					if ok:
-						if k == 'i' or k == "i'm" or k == "i've":
-							container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
-							await asyncio.sleep(random.randint(1, 10))
-						await self.bot.send_message(message.channel, v + container)
+						# if k == 'i' or k == "i'm" or k == "i've":
+						# 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
+						# 	await asyncio.sleep(random.randint(1, 10))
+						await message.channel.send(v + container)
 			for k, v in self.listensub.items():
 				if message.content.lower().find(k) != -1:
-					await self.bot.send_message(message.channel, v)
+					await message.channel.send(v)
 			"""if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':
 				await asyncio.sleep(0.5)
 				await self.bot.send_message(message.channel, 'VIDEM!')
@@ -82,9 +79,3 @@ class reaction:
 				channel = [c for c in after.server.channels if c.id == '132586673383931904']
 				await asyncio.sleep(random.randint(1, 10))
 				await self.bot.send_message(channel[0], 'I ' + random.choice(self.foreseelist) + ' that ' + after.name + ' will leave the voice channel.')'''
-				
-def setup(bot):
-	n = reaction(bot)
-	bot.add_listener(n.listener, "on_message")
-	'''bot.add_listener(n.voicelistener, "on_voice_state_update")'''
-	bot.add_cog(n)

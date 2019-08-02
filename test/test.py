@@ -1,252 +1,232 @@
+from redbot.core import commands
+from redbot.core import Config
+from .customconverters import BetterMemberConverter
 import random
 import discord
-import datetime
-from discord.ext import commands
-from .utils import checks
 import asyncio
-import time
 import math
-import operator
-import urllib.request
-import simplejson
-from io import StringIO
-from .utils.dataIO import dataIO
-from __main__ import send_cmd_help, user_allowed
-import os, os.path
-import threading
-from threading import Timer
-import requests
-import shutil
-import re
 import names
-from .utils.dataIO import dataIO
 
-class test:
-    memetypes = [
-        "p"
-        "m"
-        "b"
-    ]
-
+class Test(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.stabbingobjects = dataIO.load_json('data/test/stabbingobjects.json')
-        self.quotes = dataIO.load_json('data/test/quotes.json')
+        self.config = Config.get_conf(self, identifier=22945132051920)
+        default_global = {
+            'stabbing_objects': []
+        }
+        self.config.register_global(**default_global)
+        self.stabbing_verbs = [
+            "shanks", 
+            "stabs", 
+            "shoves", 
+            "impales", 
+            "injects", 
+            "thrusts",
+            "knifes",
+            "punctures", 
+            "jabs", 
+            "lunges at",
+            "prods"
+        ]
+        self.stabbing_objects_value = self.config.stabbing_objects
         self.counting = False
 
     # @commands.group()
-    # async def emote(self, context, memetype, num):
+    # async def emote(self, ctx, memetype, num):
     #     if memetype and memetype in memetypes:
     #         memenum = random.randint(1, self.memes[memetype])
     #         if ()
     #     elif memetype and memetype not in memetypes:
-    #         await self.bot.say('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
+    #         await ctx.send('{} isn\'t a meme type I recognize from my stash!'.format(memetype))
 
-    @commands.command(pass_context=True)
-    async def spongebob(self, context, *, msg):
+    @commands.command()
+    async def spongebob(self, ctx, *, msg: str):
         capitalize = True if msg[0].isupper() else False
         newmsg = list(msg)
-        for i, char in enumerate(msg):
+        for i in msg:
             if capitalize:
                 newmsg[i] = newmsg[i].upper()
             else:
                 newmsg[i] = newmsg[i].lower()
             if msg[i] != ' ':
                 capitalize = not capitalize
-        await self.bot.say(''.join(newmsg))
+        await ctx.send(''.join(newmsg))
 
-    @commands.group(pass_context=True, invoke_without_command=True)
+    @commands.command(autohelp=False)
     @commands.cooldown(3, 5)
-    async def randomname(self, context, num: int=1):
+    async def randomname(self, ctx, num: int=1, gender: str=None):
+        if gender is not None and gender != 'female':
+            gender = 'male'
         if num > 10:
-            await self.bot.say('You may only print ten names at a time!')
+            await ctx.send('You may only print ten names at a time!')
             return
-        msg = names.get_full_name()
+        msg = names.get_full_name(gender=gender)
         for i in range(1, num):
             msg += ', ' + names.get_full_name()
-        await self.bot.say(msg)    
+        await ctx.send(msg)
 
-    @randomname.command(pass_context=True)
-    @commands.cooldown(3, 5)
-    async def male(self, context, num: int=1):
-        if num > 10:
-            await self.bot.say('You may only print ten names at a time!')
-            return
-        msg = names.get_full_name(gender='male')
-        for i in range(1, num):
-            msg += ', ' + names.get_full_name(gender='male')
-        await self.bot.say(msg)
+    @commands.command()
+    async def rollbetween(self, ctx, one: int, two: int):
+        choice = random.randint(one, two)
+        await ctx.send('You got a {}!'.format(choice))
 
-    @randomname.command(pass_context=True)
-    @commands.cooldown(3, 5)
-    async def female(self, context, num: int=1):
-        if num > 10:
-            await self.bot.say('You may only print ten names at a time!')
-            return
-        msg = names.get_full_name(gender='female')
-        for i in range(1, num):
-            msg += ', ' + names.get_full_name(gender='female')
-        await self.bot.say(msg)
-
-    @commands.command(pass_context=True)
-    async def rollbetween(self, context, one, two):
-        choice = random.randint(int(one), int(two))
-        await self.bot.say('You got a ' + str(choice) + '.')
-
-    @commands.command(pass_context=True)
-    async def factorial(self, context, n: int = None):
-        if n is None:
-            await self.bot.say('wat')
-        elif n > 0:
-            await self.bot.say(str(n) + '! = ' + str(rFactorial(n)))
-        elif n < 0:
-            await self.bot.say("Are you trying to find the factorial of a negative number? You're batshit crazy, lad!")
-
-    @commands.command(pass_context=True)
-    async def permutations(self, context, n: int = None, r: int = None):
-        if n is None or r is None:
-            await self.bot.say('wat')
-        elif n > 0 and r > 0:
-            await self.bot.say(str(n) + 'P' + str(r) + ' = ' + str(rFactorial(n) / rFactorial(n - r)))
-        elif n < 0 or r < 0:
-            await self.bot.say('I dunno what the means.')
-
-    @commands.command(pass_context=True)
-    async def combinations(self, context, n: int = None, r: int = None):
-        if n is None or r is None:
-            await self.bot.say('wat')
-        elif n > 0 and r > 0 and n >= r:
-            await self.bot.say(str(n) + 'C' + str(r) + ' = ' + str(rFactorial(n) / (rFactorial(n - r) * rFactorial(r))))
-        elif n < 0 or r < 0:
-            await self.bot.say('I dunno what the means.')
-
-    @commands.command(pass_context=True)
-    async def invite(self, context, botid: str = None, server: str = None):
-        if botid:
-            await self.bot.say(discord.utils.oauth_url(botid, permissions=None, server=server, redirect_uri=None))
-
-    @commands.command(pass_context=True)
+    @commands.command()
     @commands.cooldown(1, 5)
-    async def sauce(self, context):
-        await self.bot.say(
-            '***H̭̓͗̏̅͘E̳̰̠͖͓͕͊͋ͯͭ̿̔Ÿ͓̜͎̪͉́͆ͮ̇́̆̊̒̈͝ ̷̧̖̌ͮ̉̂̿ͪ͗̔V̶̯̩̤̥ͧ͊̋͊ͧ͞S̴̷̳͈̓͗̽̏̇A̶͎͈̔̍ͨ̉̚͞U̼̻͍̬̪̦ͦ͌ͩ̑͋͊̈́ͅC̺̻̪̯̗̖̖͂ͪ̈́̕Ȩ̮̤̫̯̟ͭ͌̅̒̄͘͠ͅ,̗͖̯͙͖̮̪̏́ ̶̨̫̮͎̗̣͋̍̓͟M̐͂͞͏̘̥͎̕I̴̭͉̰͎͈͎͔̗̭ͥ͒͗̊́͘C̷̗̬͙͎̠͇͊̔ͦ̆͠H̡̋͐͗́̚͝҉̫̣̳̦̥̮̗̜ͅĂ͓̹͙̽ͨ̑̋̈́̚͘͠E̢̺̘̳̬͙̅ͪͮ͒͑̒͒̇͂͞L͔̣̟̗͉̹̾͊̈́͋ͭ̑ͥ̕ ͬͯ҉̡̨͓̝̗̺H̰͕͌ͨĘ̳̟͕̹̘̠͇͎́̄͑̀ͅR͈̳ͬ̉Eͣ͞҉̳̘̦͉̞̣***')
+    async def sauce(self, ctx):
+        await ctx.send('***H̭̓͗̏̅͘E̳̰̠͖͓͕͊͋ͯͭ̿̔Ÿ͓̜͎̪͉́͆ͮ̇́̆̊̒̈͝ ̷̧̖̌ͮ̉̂̿ͪ͗̔V̶̯̩̤̥ͧ͊̋͊ͧ͞S̴̷̳͈̓͗̽̏̇A̶͎͈̔̍ͨ̉̚͞U̼̻͍̬̪̦ͦ͌ͩ̑͋͊̈́ͅC̺̻̪̯̗̖̖͂ͪ̈́̕Ȩ̮̤̫̯̟ͭ͌̅̒̄͘͠ͅ,̗͖̯͙͖̮̪̏́ ̶̨̫̮͎̗̣͋̍̓͟M̐͂͞͏̘̥͎̕I̴̭͉̰͎͈͎͔̗̭ͥ͒͗̊́͘C̷̗̬͙͎̠͇͊̔ͦ̆͠H̡̋͐͗́̚͝҉̫̣̳̦̥̮̗̜ͅĂ͓̹͙̽ͨ̑̋̈́̚͘͠E̢̺̘̳̬͙̅ͪͮ͒͑̒͒̇͂͞L͔̣̟̗͉̹̾͊̈́͋ͭ̑ͥ̕ ͬͯ҉̡̨͓̝̗̺H̰͕͌ͨĘ̳̟͕̹̘̠͇͎́̄͑̀ͅR͈̳ͬ̉Eͣ͞҉̳̘̦͉̞̣***')
 
-    @commands.command(pass_context=True)
+    @commands.command()
     @commands.cooldown(5, 3)
-    async def stab(self, context, *, member: discord.Member = None):
-        obj = random.choice(self.stabbingobjects['objects'])
-        word = random.choice(
-            ["shanks", "stabs", "shoves", "impales", "injects", "thrusts", "knifes", "punctures", "jabs", "lunges at",
-             "prods"])
-        await self.bot.say('{0} {1} {2} with {3}.'.format(context.message.author.name, word, member.mention, obj))
+    async def stab(self, ctx, *, member: str):
+        member = await BetterMemberConverter().convert(ctx, member)
+        stabbing_objects = await self.stabbing_objects_value()
+        if stabbing_objects:
+            obj = random.choice(stabbing_objects)
+            word = random.choice(self.stabbing_verbs)
+            await ctx.send('{0} {1} {2} with {3}.'.format(ctx.message.author.name, word, member.mention, obj))
+        else:
+            await ctx.send('My knife collection is empty!')
+    
+    @commands.command()
+    async def addstab(self, ctx, *, obj: str):
+        async with self.stabbing_objects_value() as stabbing_objects:
+            if obj not in stabbing_objects:
+                obj = obj.rstrip()
+                stabbing_objects.append(obj)
+                await ctx.send('Successfully added {} as a stabby stabby object.'.format(obj))
+            else:
+                await ctx.send('That\'s already in my knife collection.')
 
-    @commands.command(pass_context=True)
-    async def pat(self, context, member: discord.Member = None, n: int = 3):
-        member = member or context.message.author
+    @commands.command()
+    async def removestab(self, ctx, *, obj: str):
+        async with self.stabbing_objects_value() as stabbing_objects:
+            if obj in stabbing_objects:
+                obj = obj.rstrip()
+                stabbing_objects.remove(obj)
+                await ctx.send('Successfully removed {} as a stabby stabby object.'.format(obj))
+            else:
+                await ctx.send('I can\'t find that in my knife collection.')
+
+    @commands.command()
+    async def liststab(self, ctx):
+        objs = ''
+        stabbing_objects = await self.stabbing_objects_value()
+        for obj in stabbing_objects:
+            objs += '**{}**\n'.format(obj)
+        em = discord.Embed(
+            title='My Knife Collection', 
+            color=discord.Color.red(),
+            description=objs
+        )
+        await ctx.send(embed=em)
+
+    @commands.command()
+    async def pat(self, ctx, member: str=None, n: int=3):
+        member = await BetterMemberConverter().convert(ctx, member) if member else ctx.author
         if n and n <= 650 and n > 0:
             if member.id != self.bot.user.id:
-                await self.bot.say(member.mention + ' *' + ('pat' * n) + '*')
+                await ctx.send(member.mention + ' *' + ('pat' * n) + '*')
             else:
-                await self.bot.say('*eternally pats self*')
+                await ctx.send('*eternally pats self*')
         else:
             if n > 650:
-                await self.bot.say('That\'s too many pats!')
+                await ctx.send('That\'s too many pats!')
             elif n == -1:
-                await self.bot.say(member.mention + ' *' + ('pat' * 650) + '*')
+                await ctx.send(member.mention + ' *' + ('pat' * 650) + '*')
             elif n < -1:
-                await self.bot.say('I don\'t know how to pat you that many times.')
+                await ctx.send('I don\'t know how to pat you that many times.')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def aaa(self, context, n: int = 10):
+    @commands.command()
+    async def aaa(self, ctx, n: int=10):
         if n and n <= 1987 and n > 0:
-            await self.bot.say('***' + ('A' * n) + '***')
+            await ctx.send('***' + ('A' * n) + '***')
         else:
             if n > 1987:
-                await self.bot.say('That\'s too loud, calm down!')
+                await ctx.send('That\'s too loud, calm down!')
             elif n == -1:
-                await self.bot.say('***' + ('A' * 1987) + '***')
+                await ctx.send('***' + ('A' * 1987) + '***')
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def ha(self, context, n: int = 10):
+    @commands.command()
+    async def ha(self, ctx, n: int=10):
         if n and n <= 995 and n > 0:
-            await self.bot.say('***' + ('HA' * n) + '***')
+            await ctx.send('***' + ('HA' * n) + '***')
         else:
             if n > 995:
-                await self.bot.say('That\'s too loud, calm down!')
+                await ctx.send('That\'s too loud, calm down!')
             elif n == -1:
-                await self.bot.say('***' + ('HA' * 995) + '***')
+                await ctx.send('***' + ('HA' * 995) + '***')
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def triggered(self, context, n: int = 1):
+    @commands.command()
+    async def triggered(self, ctx, n: int=1):
         if n and n <= 31 and n > 0:
-            await self.bot.say('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')
+            await ctx.send('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')
         else:
             if n > 31:
-                await self.bot.say('You\'re triggered too much! Calm down!')
+                await ctx.send('You\'re triggered too much! Calm down!')
             elif n == -1:
-                await self.bot.say(
+                await ctx.send(
                     '***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 31) + '***')
             elif n < -1:
-                await self.bot.say('Are you actually triggered tho?')
+                await ctx.send('Are you actually triggered tho?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def ooo(self, context, n: int = 10):
+    @commands.command()
+    async def ooo(self, ctx, n: int=10):
         if n and n <= 1987 and n > 0:
-            await self.bot.say('***' + ('O' * n) + '***')
+            await ctx.send('***' + ('O' * n) + '***')
         else:
             if n > 1987:
-                await self.bot.say('That\'s too loud, calm down!')
+                await ctx.send('That\'s too loud, calm down!')
             elif n == -1:
-                await self.bot.say('***' + ('O' * 1987) + '***')
+                await ctx.send('***' + ('O' * 1987) + '***')
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def happy(self, context, n: int = 10):
+    @commands.command()
+    async def happy(self, ctx, n: int=10):
         happyemote = ':smile:'
         if n and n > 0 and n * len(happyemote) < 2000:
-            await self.bot.say(':smile:' * n)
+            await ctx.send(':smile:' * n)
         else:
             if n > 2000 - len(happyemote):
-                await self.bot.say('You\'re a bit too happy there, bud.')
+                await ctx.send('You\'re a bit too happy there, bud.')
             elif n == -1:
-                await self.bot.say(':smile:' * 280)
+                await ctx.send(':smile:' * 280)
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def ophiuchus(self, context, n: int = 10):
+    @commands.command()
+    async def ophiuchus(self, ctx, n: int=10):
         emote = ':ophiuchus:'
         if n and n > 0 and n * len(emote) < 2000:
-            await self.bot.say(emote * n)
+            await ctx.send(emote * n)
         else:
             if n > 2000 - len(emote):
-                await self.bot.say('You\'re a bit too happy there, bud.')
+                await ctx.send('You\'re a bit too happy there, bud.')
             elif n == -1:
-                await self.bot.say(emote * math.floor(2000 / len(emote)))
+                await ctx.send(emote * math.floor(2000 / len(emote)))
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def ae(self, context, n: int = 10):
+    @commands.command()
+    async def ae(self, ctx, n: int=10):
         chance = random.randint(1, 2)
         begintext = 'VA'
         if chance == 1:
@@ -254,230 +234,93 @@ class test:
         else:
             endtext = 'YEET'
         if n and n > 0 and len(begintext) + n + len(endtext) < 1990:
-            await self.bot.say('***' + (begintext + ('E' * n) + endtext) + '***')
+            await ctx.send('***' + (begintext + ('E' * n) + endtext) + '***')
         else:
             if n > 1990:
-                await self.bot.say('wew that\'s a lot of vae')
+                await ctx.send('wew that\'s a lot of vae')
             elif n == -1:
-                await self.bot.say(
+                await ctx.send(
                     '***' + (begintext + ('E' * int((1990 - (len(begintext) + len(endtext))))) + endtext) + '***')
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.command(pass_context=True)
-    async def mmm(self, context, n: int = 10):
+    @commands.command()
+    async def mmm(self, ctx, n: int=10):
         text = 'M'
         if n and n > 0 and (n * len(text)) + 6 < 2000:
-            await self.bot.say('***' + (text * n) + '***')
+            await ctx.send('***' + (text * n) + '***')
         else:
             if n >= n * len(text):
-                await self.bot.say('This is a PG-13 channel.')
+                await ctx.send('This is a PG-13 channel.')
             elif n == -1:
-                await self.bot.say(text * int(1990 / len(text)))
+                await ctx.send(text * int(1990 / len(text)))
             elif n < -1:
-                await self.bot.say('Are you silent?')
+                await ctx.send('Are you silent?')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @commands.group(pass_context=True)
-    async def repeattext(self, context):
+    @commands.group()
+    async def repeattext(self, ctx):
         return
 
-    @repeattext.command(pass_context=True)
-    async def regular(self, context, text, n: int = 10):
+    @repeattext.command()
+    async def regular(self, ctx, text, n: int=10):
         if n > 0 and (n * len(text)) < 2000:
-            await self.bot.say(text * n)
+            await ctx.send(text * n)
         else:
             if n == -1:
-                await self.bot.say(text * math.floor(2000 / len(text)))
+                await ctx.send(text * math.floor(2000 / len(text)))
             elif n >= n * len(text):
-                await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+                await ctx.send('That\'s a bit excessive, don\'t ya think?')
             elif n < -1:
-                await self.bot.say('LOUDER')
+                await ctx.send('LOUDER')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @repeattext.command(pass_context=True)
-    async def bold(self, context, text, n: int = 10):
+    @repeattext.command()
+    async def bold(self, ctx, text, n: int=10):
         if n > 0 and (n * len(text)) + 4 < 2000:
-            await self.bot.say('**' + text * n + '**')
+            await ctx.send('**' + text * n + '**')
         else:
             if n == -1:
-                await self.bot.say('**' + text * math.floor(2000 / len(text) - 4) + '**')
+                await ctx.send('**' + text * math.floor(2000 / len(text) - 4) + '**')
             elif n >= n * len(text):
-                await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+                await ctx.send('That\'s a bit excessive, don\'t ya think?')
             elif n < -1:
-                await self.bot.say('LOUDER')
+                await ctx.send('LOUDER')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @repeattext.command(pass_context=True)
-    async def italic(self, context, text, n: int = 10):
+    @repeattext.command()
+    async def italic(self, ctx, text, n: int=10):
         if n > 0 and (n * len(text)) + 2 < 2000:
-            await self.bot.say('*' + text * n + '*')
+            await ctx.send('*' + text * n + '*')
         else:
             if n == -1:
-                await self.bot.say('*' + text * math.floor(2000 / len(text) - 2) + '*')
+                await ctx.send('*' + text * math.floor(2000 / len(text) - 2) + '*')
             elif n >= n * len(text):
-                await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+                await ctx.send('That\'s a bit excessive, don\'t ya think?')
             elif n < -1:
-                await self.bot.say('LOUDER')
+                await ctx.send('LOUDER')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
 
-    @repeattext.command(pass_context=True)
-    async def boldanditalic(self, context, text, n: int = 10):
+    @repeattext.command()
+    async def boldanditalic(self, ctx, text, n: int=10):
         if n > 0 and (n * len(text)) + 6 < 2000:
-            await self.bot.say('***' + text * n + '***')
+            await ctx.send('***' + text * n + '***')
         else:
             if n == -1:
-                await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) + '***')
+                await ctx.send('***' + text * math.floor(2000 / len(text) - 6) + '***')
             elif n >= n * len(text):
-                await self.bot.say('That\'s a bit excessive, don\'t ya think?')
+                await ctx.send('That\'s a bit excessive, don\'t ya think?')
             elif n < -1:
-                await self.bot.say('LOUDER')
+                await ctx.send('LOUDER')
             else:
-                await self.bot.say('wat')
+                await ctx.send('wat')
     
-    @commands.command(pass_context=True)
-    async def scream(self, conext, *, text):
-        await self.bot.say('***' + text * math.floor(2000 / len(text) - 6) + '***')
-
-    @commands.command(pass_context=True)
-    async def addstab(self, context, *, obj: str = None):
-        if obj and obj not in self.stabbingobjects['objects']:
-            obj = obj.rstrip(".");
-            allowed = True
-            listofpeople = []
-            for person in context.message.server.members:
-                if obj == person.mention:
-                    allowed = False
-                    break
-            if allowed:
-                self.stabbingobjects['objects'].append(obj)
-                dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
-                await self.bot.say('Successfully added ' + obj + ' as a stabby stabby object.')
-            else:
-                await self.bot.say('I can\'t add mentions.')
-        else:
-            if obj in self.stabbingobjects['objects']:
-                await self.bot.say('That\'s already in my knife collection.')
-            else:
-                await self.bot.say('wat')
-
-    @commands.command(pass_context=True)
-    async def removestab(self, context, *, obj: str = None):
-        if obj and obj in self.stabbingobjects['objects']:
-            self.stabbingobjects['objects'].remove(obj)
-            dataIO.save_json('data/test/stabbingobjects.json', self.stabbingobjects)
-            await self.bot.say('Successfully removed ' + obj + ' from my knife collection.')
-        else:
-            await self.bot.say('wat')
-
-    @commands.command(pass_context=True)
-    async def liststab(self, context):
-        objs = ''
-        for obj in self.stabbingobjects['objects']:
-            objs += '**{}**\n'.format(obj)
-        em = discord.Embed(title='My Knife Collection', color=discord.Color.green())
-        em.add_field(name='\a', value=objs)
-        # em = discord.Embed(title='My Knife Collection', colour=0x2F93E0)
-        # for x in range(0, len(self.stabbingobjects['objects'])):
-        #	em.add_field(name=x + 1, value=self.stabbingobjects['objects'][x])
-        await self.bot.say(embed=em)
-
-    @commands.command(pass_context=True)
-    async def eh(self, context, member: discord.Member = None):
-        member = member or context.message.author
-        await self.bot.say(member.mention + ', eh?')
-
-    @commands.group(pass_context=True)
-    async def count(self, context):
-        if context.invoked_subcommand is None:
-            prefix = context.prefix
-            await self.bot.say(
-                'Do \'{0}count start <start number> [end number] [mention]\' (end number and mention being optional, defaulting to 0 and false, respectively) to start or \'{0}count stop\' to stop any counting operation.'.format(
-                    prefix))
-
-    @count.command(pass_context=True)
-    async def start(self, context, startnum: int = None, endnum: int = 0, mention: str = 'false'):
-        if self.counting == False:
-            if startnum:
-                chance = random.randint(1, 10)
-                if (startnum >= 0 and endnum < startnum):
-                    self.counting = True
-                    for x in range(int(startnum), endnum - 1, -1):
-                        if (self.counting == True):
-                            await self.bot.say(str(x) + ',')
-                            await asyncio.sleep(1)
-                        else:
-                            break
-                    if (chance == 10):
-                        if (str(mention) == 'true'):
-                            await self.bot.say(
-                                'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA ' + context.message.author.mention)
-                        else:
-                            await self.bot.say(
-                                'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
-                    else:
-                        if (str(mention) == 'true'):
-                            await self.bot.say('TIME! ' + context.message.author.mention)
-                        else:
-                            await self.bot.say('TIME!')
-                    self.counting = False
-                elif (startnum >= 0 and endnum > startnum):
-                    self.counting = True
-                    for x in range(int(startnum), endnum + 1):
-                        if (self.counting == True):
-                            await self.bot.say(str(x) + ',')
-                            await asyncio.sleep(1)
-                        else:
-                            break
-                    if (chance == 10):
-                        if (str(mention) == 'true'):
-                            await self.bot.say(
-                                'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA ' + context.message.author.mention)
-                        else:
-                            await self.bot.say(
-                                'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS4fQx4f2n6H0U1H8YuGbcCKFBIWAC0eCwn31Z2fbSqKyH8SB7ke_szKA')
-                    else:
-                        if (str(mention) == 'true'):
-                            await self.bot.say('TIME! ' + context.message.author.mention)
-                        else:
-                            await self.bot.say('TIME!')
-                    self.counting = False
-                else:
-                    await self.bot.say('An error occured.')
-            else:
-                await self.bot.say('An error occured.')
-        else:
-            await self.bot.say('I\'m already counting.')
-
-    @count.command(pass_context=True)
-    async def stop(self, context):
-        self.counting = False
-
-
-def rFactorial(n):
-    if (n == 0):
-        return 1
-    else:
-        return n * (rFactorial(n - 1))
-
-def check_folders():
-    if not os.path.exists('data/test'):
-        os.makedirs('data/test')
-
-def check_files(name):
-    f = 'data/test/{}.json'.format(name)
-    if not dataIO.is_valid_json(f):
-        dataIO.save_json(f, {})
-
-def setup(bot):
-    check_folders()
-    check_files('stabbingobjects')
-    check_files('quotes')
-    n = test(bot)
-    bot.add_cog(n)
+    @commands.command()
+    async def scream(self, ctx, *, text):
+        await ctx.send('***' + text * math.floor(2000 / len(text) - 6) + '***')

@@ -64,9 +64,9 @@ class Emotes(commands.Cog):
         if category is None:
             await self.check_folder(ctx, True, category_name)
             if is_global:
-                await self.config.categories.set_raw(category_name, value={})
+                await self.config.categories.set_raw(category_name, value={'emotes': {}})
             else:
-                await self.config.guild(ctx.guild).categories.set_raw(category_name, value={})
+                await self.config.guild(ctx.guild).categories.set_raw(category_name, value={'emotes': {}})
             await ctx.send('I foresee your command to add this category!')
         else:
             await ctx.send('I foresee that this category already exists!')
@@ -79,7 +79,7 @@ class Emotes(commands.Cog):
         title_str = 'Global Categories' if is_global else 'Categories in {}'.format(ctx.guild.name)
         new_embed = Embed(title=title_str)
         for category_name in categories:
-            new_embed.add_field(name=category_name, value=len(categories[category_name]), inline=False)
+            new_embed.add_field(name=category_name, value=len(categories[category_name]['emotes']), inline=False)
         await ctx.send(embed=new_embed)
     
     async def remove_category(self, ctx, is_global: bool, category_name: str):
@@ -112,18 +112,15 @@ class Emotes(commands.Cog):
             return False
 
     async def get_latest_id(self, ctx, category):
-        list_len = len(category) + 1
-        if 'allow_servers_with_role' in category:
-            list_len -= 1
-        for i in range(list_len):
+        for i in range(len(category['emotes'])):
             try:
-                category[str(i)]
+                category['emotes'][str(i)]
             except:
                 return i
         return 0
     
     async def get_available_ids(self, ctx, category):
-        return [i for i in category if i != 'allow_servers_with_role']
+        return [i for i in category['emotes']]
 
     async def post_emote(self, ctx, is_global: bool, category_name: str, str_id: str=None):
         category_value = await self.get_category(ctx, is_global, category_name.lower())
@@ -139,12 +136,12 @@ class Emotes(commands.Cog):
             available_ids = await self.get_available_ids(ctx, category)
             if str_id not in available_ids:
                 try:
-                    emote = category[random.choice(available_ids)]
+                    emote = category['emotes'][random.choice(available_ids)]
                 except:
                     await ctx.send('Either there are no emotes in that category, or something has interfered with my future vision!')
                     return
             else:
-                emote = category[str_id] if str_id in category else None
+                emote = category['emotes'][str_id] if str_id in category['emotes'] else None
             if emote:
                 await ctx.send(file=File(emote['dir']))
             else:
@@ -157,13 +154,10 @@ class Emotes(commands.Cog):
         category = await category_value()
         if category is not None:
             category = await category_value()
-            count = len(category)
-            if 'allow_servers_with_role' in category:
-                if not utils.get(ctx.guild.roles, name=category['allow_servers_with_role']):
-                    await ctx.send('I cannot find that category with my future vision!')
-                    return
-                else:
-                    count -= 1
+            if 'allow_servers_with_role' in category and not utils.get(ctx.guild.roles, name=category['allow_servers_with_role']):
+                await ctx.send('I cannot find that category with my future vision!')
+                return
+            count = len(category['emotes'])
             emote_word = 'emotes' if count != 1 else 'emote'
             await ctx.send('I foresee that {} has {} {}!'.format(category_name, count, emote_word))
         else:
@@ -186,7 +180,7 @@ class Emotes(commands.Cog):
                         'dir': os.path.join(self.path, guild_id, category_name, str(latest_id) + '.png'),
                         'category': category_name
                     }
-                    category[str(latest_id)] = emote_data
+                    category['emotes'][str(latest_id)] = emote_data
                     as_command = '{}emotes getserver {} {}' if is_global else '{}emotes getglobal {} {}'
                     as_command = as_command.format(ctx.prefix, category_name, latest_id + 1)
                     await ctx.send('I predict you want to add this emote as {}!'.format(as_command))
@@ -196,18 +190,18 @@ class Emotes(commands.Cog):
     async def remove_emote(self, ctx, is_global: bool, category_name: str, id: int):
         category_value = await self.get_category(ctx, is_global, category_name.lower())
         async with category_value() as category:
-            if category is not None and len(category) > 0:
+            if category is not None and len(category['emotes']) > 0:
                 str_id = str(id - 1)
-                if str_id in category:
+                if str_id in category['emotes']:
                     await ctx.send('Are you sure you want to remove emote {}? (yes/no)'.format(id))
                     pred = MessagePredicate.yes_or_no(ctx)
                     await ctx.bot.wait_for('message', check=pred)
                     if pred.result is True:
                         try:
-                            os.remove(category[str_id]['dir'])
+                            os.remove(category['emotes'][str_id]['dir'])
                         except:
                             pass
-                        del category[str_id]
+                        del category['emotes'][str_id]
                         await ctx.send('I foresee your command to remove this emote!')
                     else:
                         await ctx.send('You will say no!')

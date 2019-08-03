@@ -1,5 +1,6 @@
 {
     "author" : ["videm#1556"],
     "description" : "A modular approach to storing images and displaying them through certain commands.",
-    "short" : "A modular approach to storing images and displaying them through certain commands."
+    "short" : "A modular approach to storing images and displaying them through certain commands.",
+    "requirements": ["requests"]
 }

@@ -137,21 +137,24 @@ class Rate(commands.Cog):
         member = await BetterMemberConverter().convert(ctx, member) if member else ctx.message.author
         activity = member.activity
         if activity and activity.type == discord.ActivityType.listening:
-            track_id = activity.track_id
-            title = activity.title
-            image_url = activity.album_cover_url
-            primary_artist = activity.artists[0]
-            secondary_artists = activity.artists[1:]
-            artists_string = 'by {}'.format(primary_artist)
-            for i in range(0, len(secondary_artists)):
-                if i < len(secondary_artists) - 1:
-                    artists_string += ', ' + secondary_artists[i]
-                else:
-                    artists_string += ' and ' + secondary_artists[i]
-            if not track_id:
-                await ctx.send('What is {} even listening to?'.format(member))
-                return
-            random.seed(self.botid + track_id.lower())
+            if type(activity) == discord.activity.Spotify:
+                title = activity.title
+                track_id = activity.track_id
+                image_url = activity.album_cover_url
+                primary_artist = activity.artists[0]
+                secondary_artists = activity.artists[1:]
+                artists_string = 'by {}'.format(primary_artist)
+                for i in range(0, len(secondary_artists)):
+                    if i < len(secondary_artists) - 1:
+                        artists_string += ', ' + secondary_artists[i]
+                    else:
+                        artists_string += ' and ' + secondary_artists[i]
+                random.seed(self.botid + track_id.lower())
+            else:
+                artists_string = 'by {}'.format(activity.state)
+                title = activity.details
+                image_url = None
+                random.seed(self.botid + title.lower() + artists_string.lower())
             rate = random.randint(0, 10)
             article = 'an' if rate == 8 else 'a'
             em = discord.Embed(
@@ -159,8 +162,9 @@ class Rate(commands.Cog):
                 description='I give this track {} **{}/10**.'.format(article, rate),
                 colour=int(0x2F93E0)
             )
-            em.set_thumbnail(url=image_url)
             em.set_author(name=title)
+            if image_url:
+                em.set_thumbnail(url=image_url)
             await ctx.send(embed=em)
         else:
             await ctx.send('{} is not listening to anything on Spotify.'.format(member))

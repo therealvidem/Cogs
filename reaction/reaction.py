@@ -49,7 +49,7 @@ class Reaction(commands.Cog):
     
     @sub.command(name='set')
     async def sub_set(self, ctx, listen: str, reaction: str=None):
-        await self.set_function(ctx, 'set', listen, reaction)
+        await self.set_function(ctx, 'sub', listen, reaction)
     
     @start.command(name='set')
     async def start_set(self, ctx, listen: str, reaction: str=None):

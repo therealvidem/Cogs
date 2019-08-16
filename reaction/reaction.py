@@ -25,7 +25,7 @@ class Reaction(commands.Cog):
                 await listeners.set_raw(listen, value=reaction)
                 await ctx.send('Successfully set that as a reaction')
             else:
-                if listeners.get_raw(listen) is None:
+                if await listeners.get_raw(listen) is None:
                     await listeners.clear_raw(listen)
                     await ctx.send('Successfully deleted that reaction')
                 else:

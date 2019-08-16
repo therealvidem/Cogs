@@ -25,11 +25,13 @@ class Reaction(commands.Cog):
                 await listeners.set_raw(listen, value=reaction)
                 await ctx.send('Successfully set that as a reaction')
             else:
-                if await listeners.get_raw(listen) is not None:
+                try:
+                    await listeners.get_raw(listen)
+                except KeyError:
+                    await ctx.send('That reaction does not exist')
+                else:
                     await listeners.clear_raw(listen)
                     await ctx.send('Successfully deleted that reaction')
-                else:
-                    await ctx.send('That reaction does not exist')
         else:
             await ctx.send('An error occured')
     

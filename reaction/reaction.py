@@ -19,13 +19,16 @@ class Reaction(commands.Cog):
         # ]
     
     async def set_function(self, ctx, reaction_type, listen: str, reaction: str=None):
-        async with self.config.__getattr__(reaction_type) as listeners:
+        listeners = self.config.__getattr__(reaction_type)
+        if listeners:
             if reaction is not None and len(reaction) > 0:
                 listeners[listen] = reaction
                 await ctx.send('Successfully set that as a reaction')
             else:
                 del listeners[listen]
                 await ctx.send('Successfully deleted that reaction')
+        else:
+            await ctx.send('An error occured')
     
     @commands.group(name='reaction')
     async def reaction(self, ctx):

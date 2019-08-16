@@ -22,11 +22,15 @@ class Reaction(commands.Cog):
         listeners = self.config.__getattr__(reaction_type)
         if listeners:
             if reaction is not None and len(reaction) > 0:
-                listeners[listen] = reaction
+                await listeners.set_raw(listen, value=reaction)
                 await ctx.send('Successfully set that as a reaction')
             else:
-                del listeners[listen]
-                await ctx.send('Successfully deleted that reaction')
+                async with listeners.get_raw(listen)() as existing_listener:
+                    if existing_listener is None:
+                        await listeners.clear_raw(listen)
+                        await ctx.send('Successfully deleted that reaction')
+                    else:
+                        await ctx.send('That reaction does not exist')
         else:
             await ctx.send('An error occured')
     

@@ -57,8 +57,8 @@ class Reaction(commands.Cog):
     async def listener(self, message):
         if not message.author.bot:
             container = ''
-            async with self.config.start().items() as start_items:
-                for k, v in start_items:
+            async with self.config.start() as start_items:
+                for k, v in start_items.items():
                     if message.content[:len(k)].lower() == k:
                         ok = False
                         if len(message.content) > len(k):
@@ -71,8 +71,8 @@ class Reaction(commands.Cog):
                             # 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
                             # 	await asyncio.sleep(random.randint(1, 10))
                             await message.channel.send(v + container)
-            async with self.config.sub().items() as sub_items:
-                for k, v in sub_items:
+            async with self.config.sub() as sub_items:
+                for k, v in sub_items.items():
                     if message.content.lower().find(k) != -1:
                         await message.channel.send(v)
 

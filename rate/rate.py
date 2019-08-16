@@ -140,6 +140,7 @@ class Rate(commands.Cog):
             if type(activity) == discord.activity.Spotify:
                 title = activity.title
                 track_id = activity.track_id
+                url = 'https://open.spotify.com/track/' + track_id
                 image_url = activity.album_cover_url
                 primary_artist = activity.artists[0]
                 secondary_artists = activity.artists[1:]
@@ -162,7 +163,10 @@ class Rate(commands.Cog):
                 description='I give this track {} **{}/10**.'.format(article, rate),
                 colour=int(0x2F93E0)
             )
-            em.set_author(name=title)
+            if url:
+                em.set_author(name=title, url=url)
+            else:
+                em.set_author(name=title)
             if image_url:
                 em.set_thumbnail(url=image_url)
             await ctx.send(embed=em)

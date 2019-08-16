@@ -57,22 +57,24 @@ class Reaction(commands.Cog):
     async def listener(self, message):
         if not message.author.bot:
             container = ''
-            for k, v in await self.config.start().items():
-                if message.content[:len(k)].lower() == k:
-                    ok = False
-                    if len(message.content) > len(k):
-                        if message.content[len(k):len(k) + 1] == ' ':
+            async with self.config.start().items() as start_items:
+                for k, v in start_items:
+                    if message.content[:len(k)].lower() == k:
+                        ok = False
+                        if len(message.content) > len(k):
+                            if message.content[len(k):len(k) + 1] == ' ':
+                                ok = True
+                        else:
                             ok = True
-                    else:
-                        ok = True
-                    if ok:
-                        # if k == 'i' or k == "i'm" or k == "i've":
-                        # 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
-                        # 	await asyncio.sleep(random.randint(1, 10))
-                        await message.channel.send(v + container)
-            for k, v in await self.config.sub().items():
-                if message.content.lower().find(k) != -1:
-                    await message.channel.send(v)
+                        if ok:
+                            # if k == 'i' or k == "i'm" or k == "i've":
+                            # 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
+                            # 	await asyncio.sleep(random.randint(1, 10))
+                            await message.channel.send(v + container)
+            async with self.config.sub().items() as sub_items:
+                for k, v in sub_items:
+                    if message.content.lower().find(k) != -1:
+                        await message.channel.send(v)
 
 
             """if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':

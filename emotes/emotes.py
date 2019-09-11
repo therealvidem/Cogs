@@ -130,7 +130,7 @@ class Emotes(commands.Cog):
                 await ctx.send('I cannot find that category with my future vision!')
                 return
             try:
-                str_id = str(int(id) - 1)
+                str_id = str(int(str_id) - 1)
             except:
                 pass
             available_ids = await self.get_available_ids(ctx, category)

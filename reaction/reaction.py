@@ -1,14 +1,17 @@
 from redbot.core import commands, Config
 import asyncio
+import time
 
 class Reaction(commands.Cog):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=2294513185132091514)
         default_global = {
             'start': {},
-            'sub': {}
+            'sub': {},
+            'cooldown': 5
         }
         self.config.register_global(**default_global)
+        self.cooldowns = {}
         # self.foreseelist = [
         # 	'foresee',
         # 	'predict',
@@ -38,6 +41,11 @@ class Reaction(commands.Cog):
     @commands.group(name='reaction')
     async def reaction(self, ctx):
         pass
+
+    @reaction.command(name='setcooldown')
+    async def setcooldown(self, ctx, new_cooldown: int):
+        await self.config.cooldown.set(new_cooldown)
+        await ctx.send(f'Successfully set cooldown to {new_cooldown}')
     
     @reaction.group(name='sub')
     async def sub(self, ctx):
@@ -57,25 +65,34 @@ class Reaction(commands.Cog):
 
     async def listener(self, message):
         if not message.author.bot:
-            container = ''
-            async with self.config.start() as start_items:
-                for k, v in start_items.items():
-                    if message.content[:len(k)].lower() == k:
-                        ok = False
-                        if len(message.content) > len(k):
-                            if message.content[len(k):len(k) + 1] == ' ':
+            is_on_cooldown = False
+            cooldown_time = await self.config.cooldown()
+            if message.author.id in self.cooldowns and time.time() - self.cooldowns[message.author.id] < cooldown_time:
+                is_on_cooldown = True
+            if not is_on_cooldown:
+                container = ''
+                async with self.config.start() as start_items:
+                    for k, v in start_items.items():
+                        if message.content[:len(k)].lower() == k:
+                            ok = False
+                            if len(message.content) > len(k):
+                                if message.content[len(k):len(k) + 1] == ' ':
+                                    ok = True
+                            else:
                                 ok = True
-                        else:
-                            ok = True
-                        if ok:
-                            # if k == 'i' or k == "i'm" or k == "i've":
-                            # 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
-                            # 	await asyncio.sleep(random.randint(1, 10))
-                            await message.channel.send(v + container)
-            async with self.config.sub() as sub_items:
-                for k, v in sub_items.items():
-                    if message.content.lower().find(k) != -1:
-                        await message.channel.send(v)
+                            if ok:
+                                # if k == 'i' or k == "i'm" or k == "i've":
+                                # 	container = 'I ' + random.choice(self.foreseelist) + ' ' + message.author.name + ' will say, "' + message.content + '"'
+                                # 	await asyncio.sleep(random.randint(1, 10))
+                                await message.channel.send(v + container)
+                                self.cooldowns[message.author.id] = time.time()
+                                return
+                async with self.config.sub() as sub_items:
+                    for k, v in sub_items.items():
+                        if message.content.lower().find(k) != -1:
+                            await message.channel.send(v)
+                            self.cooldowns[message.author.id] = time.time()
+                            return
 
 
             """if message.content == 'vcnor FORM THE WEIRD QUARTET!' and self.bot.user.id == '224328344769003520':

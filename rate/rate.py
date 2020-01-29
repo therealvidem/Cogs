@@ -8,10 +8,10 @@ import random
 
 class Rate(commands.Cog):
     def __init__(self, bot):
-        self.botid = str(bot.user.id)
+        self.bot = bot
 
     def list_sort(self, thing):
-        random.seed(self.botid + thing.lower())
+        random.seed(str(self.bot.user.id) + thing.lower())
         return random.random() * 11
 
     @commands.group(name='rate', autohelp=False)
@@ -34,7 +34,7 @@ class Rate(commands.Cog):
     @rate.command(name='thing')
     @cooldown(3, 10)
     async def thing(self, ctx, *, thing: str):
-        random.seed(self.botid + thing.lower())
+        random.seed(str(self.bot.user.id) + thing.lower())
         rate = random.randint(0, 10)
         emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
         article = 'an' if rate == 8 else 'a'
@@ -46,7 +46,7 @@ class Rate(commands.Cog):
         member = await BetterMemberConverter().convert(ctx, member) if member else ctx.message.author
         name = str(member)
         image_url = member.avatar_url
-        random.seed(self.botid + str(member.id))
+        random.seed(str(self.bot.user.id) + str(member.id))
         rate = random.randint(0, 10)
         emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
         article = 'an' if rate == 8 else 'a'
@@ -81,7 +81,7 @@ class Rate(commands.Cog):
                 pass
             shiplist = sorted([name1.lower(), name2.lower()])
             shipname = ' x '.join(shiplist)
-            random.seed(self.botid + ' x '.join(sorted([person1, person2])))
+            random.seed(str(self.bot.user.id) + ' x '.join(sorted([person1, person2])))
             rate = random.randint(0, 10)
             emoji = ':heart:' if rate >= 5 else ':broken_heart:'
             article = 'an' if rate == 8 else 'a'
@@ -92,7 +92,7 @@ class Rate(commands.Cog):
     async def regularship(self, ctx, person1: str, person2: str):
         shiplist = sorted([person1.lower(), person2.lower()])
         shipname = ' x '.join(shiplist)
-        random.seed(self.botid + shipname)
+        random.seed(str(self.bot.user.id) + shipname)
         rate = random.randint(0, 10)
         emoji = ':heart:' if rate >= 5 else ':broken_heart:'
         article = 'an' if rate == 8 else 'a'
@@ -150,12 +150,12 @@ class Rate(commands.Cog):
                         artists_string += ', ' + secondary_artists[i]
                     else:
                         artists_string += ' and ' + secondary_artists[i]
-                random.seed(self.botid + track_id.lower())
+                random.seed(str(self.bot.user.id) + track_id.lower())
             else:
                 artists_string = 'by {}'.format(activity.state)
                 title = activity.details
                 image_url = None
-                random.seed(self.botid + title.lower() + artists_string.lower())
+                random.seed(str(self.bot.user.id) + title.lower() + artists_string.lower())
             rate = random.randint(0, 10)
             article = 'an' if rate == 8 else 'a'
             em = discord.Embed(

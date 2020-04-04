@@ -1,3 +1,4 @@
 red_setup_logs
 __pycache__*
 .vscode/settings.json
+geckodriver.log

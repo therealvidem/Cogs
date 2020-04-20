@@ -52,7 +52,7 @@ class Bonk(commands.Cog):
         return temp
 
     @commands.command(name='bonk')
-    # @cooldown(1, 10)
+    @cooldown(1, 10)
     async def bonk(self, context: Context, *, person_name: str):
         name = ''
         try:

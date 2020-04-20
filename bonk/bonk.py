@@ -22,17 +22,16 @@ class Bonk(commands.Cog):
         self.text_outline_size = 5
         self.text_position = (500, 275)
         self.text_rotate = 45
-        self.draw_text_size = (400, 400)
         self.filesize_limit = 8388608
     
     def generate_image(self, name: str):
         img = Image.open(self.img_path).convert('RGBA')
         # Draw the rotated text of the name of the person and
         # pastes it into the image
-        text = Image.new('RGBA', self.draw_text_size, (255, 255, 255, 0))
+        text_w, text_h = self.font.getsize(name, stroke_width=self.text_outline_size)
+        text = Image.new('RGBA', (text_w, text_h), (255, 255, 255, 0))
         draw_text = ImageDraw.Draw(text)
-        text_w, text_h = draw_text.textsize(name, font=self.font, stroke_width=self.text_outline_size)
-        draw_text.text(((self.draw_text_size[0] - text_w) / 2, (self.draw_text_size[1] - text_h) / 2), name, 
+        draw_text.text((0, 0), name, 
             fill='black', 
             font=self.font, 
             align='center', 

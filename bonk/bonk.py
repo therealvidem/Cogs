@@ -68,7 +68,7 @@ class Bonk(commands.Cog):
             return second_last_message.author
 
     @commands.command(name='bonk')
-    # @cooldown(1, 10)
+    @cooldown(1, 10)
     async def bonk(self, context: Context, *, person_name: str=None):
         name = ''
         if person_name is None:

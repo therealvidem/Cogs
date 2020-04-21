@@ -26,9 +26,6 @@ class Bonk(commands.Cog):
         self.text_rotate = 45
 
         self.filesize_limit = 8388608
-        self.last_author = None
-        self.second_last_author = None
-        self.third_last_author = None
     
     def generate_image(self, name: str):
         img = Image.open(self.img_path).convert('RGBA')
@@ -62,18 +59,22 @@ class Bonk(commands.Cog):
         file_size = img.tell()
         img.seek(0)
         return file_size <= self.filesize_limit
+    
+    def get_second_last_person(self, context: Context):
+        print(self.bot.cached_messages)
+        second_last_message = discord.utils.find(lambda m: m.id != context.message.id, reversed(self.bot.cached_messages))
+        if second_last_message:
+            print(second_last_message.content)
+            return second_last_message.author
 
     @commands.command(name='bonk')
-    @cooldown(1, 10)
+    # @cooldown(1, 10)
     async def bonk(self, context: Context, *, person_name: str=None):
         name = ''
         if person_name is None:
-            if self.second_last_author:
-                try:
-                    person = self.second_last_author
-                    name = person.display_name
-                except:
-                    pass
+            person = self.get_second_last_person(context)
+            if person:
+                name = person.display_name
         else:
             try:
                 person = await BetterMemberConverter().convert(context, person_name)
@@ -87,8 +88,3 @@ class Bonk(commands.Cog):
                 img_name_ext = f'_{name}.png' if name else '.png'
                 f = discord.File(img, f'{self.img_name}{img_name_ext}')
                 await context.send(file=f)
-    
-    async def on_message(self, message: Message):
-        self.third_last_author = self.second_last_author
-        self.second_last_author = self.last_author
-        self.last_author = message.author

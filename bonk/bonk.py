@@ -62,7 +62,7 @@ class Bonk(commands.Cog):
     
     def get_second_last_person(self, context: Context):
         print(self.bot.cached_messages)
-        second_last_message = discord.utils.find(lambda m: m.channel == context.channel and m.id != context.message.id, reversed(self.bot.cached_messages))
+        second_last_message = discord.utils.find(lambda m: m.channel.id == context.channel.id and m.id != context.message.id, reversed(self.bot.cached_messages))
         if second_last_message:
             print(second_last_message.content)
             return second_last_message.author

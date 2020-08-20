@@ -22,7 +22,7 @@ def get_member_named(bot, guild, name):
             return result
 
     def pred(m):
-        return m.name.lower().find(name.lower()) == 0 or (m.nick is not None and m.nick.lower().find(name.lower()) == 0)
+        return m.name.lower().find(name.lower()) != -1 or (m.nick is not None and m.nick.lower().find(name.lower()) != -1)
 
     return utils.find(pred, guild.members)
 

@@ -112,12 +112,11 @@ class Emotes(commands.Cog):
             return False
 
     async def get_latest_id(self, ctx, category):
-        for i in range(len(category['emotes'])):
-            try:
-                category['emotes'][str(i)]
-            except:
-                return i
-        return 0
+        if 'latest' in category:
+            return category['latest'] + 1
+        else:
+            category['latest'] = 0
+            return 0
     
     async def get_available_ids(self, ctx, category):
         return [i for i in category['emotes']]
@@ -180,6 +179,7 @@ class Emotes(commands.Cog):
                         'dir': os.path.join(self.path, guild_id, category_name, str(latest_id) + '.png'),
                         'category': category_name
                     }
+                    category['latest'] += 1
                     category['emotes'][str(latest_id)] = emote_data
                     as_command = '{}emotes getserver {} {}' if is_global else '{}emotes getglobal {} {}'
                     as_command = as_command.format(ctx.prefix, category_name, latest_id + 1)

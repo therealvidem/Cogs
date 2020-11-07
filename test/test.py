@@ -3,7 +3,6 @@ from redbot.core import Config
 from .customconverters import BetterMemberConverter
 import random
 import discord
-import asyncio
 import math
 import names
 
@@ -42,13 +41,13 @@ class Test(commands.Cog):
     @commands.command()
     async def spongebob(self, ctx, *, msg: str):
         capitalize = True if msg[0].isupper() else False
-        newmsg = list(msg)
-        for i in msg:
+        newmsg = []
+        for char in msg:
             if capitalize:
-                newmsg[i] = newmsg[i].upper()
+                newmsg.append(char.upper())
             else:
-                newmsg[i] = newmsg[i].lower()
-            if msg[i] != ' ':
+                newmsg.append(char.lower())
+            if char != ' ':
                 capitalize = not capitalize
         await ctx.send(''.join(newmsg))
 
@@ -61,7 +60,7 @@ class Test(commands.Cog):
             await ctx.send('You may only print ten names at a time!')
             return
         msg = names.get_full_name(gender=gender)
-        for i in range(1, num):
+        for _ in range(1, num):
             msg += ', ' + names.get_full_name()
         await ctx.send(msg)
 

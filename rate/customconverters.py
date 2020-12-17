@@ -1,10 +1,7 @@
-from discord.ext.commands import Converter
 from discord.ext.commands import MemberConverter
-from discord.ext.commands.errors import BadArgument
-from discord import utils
 import re
 
-def get_member_named(bot, guild, name):
+async def get_member_named(bot, guild, name):
     result = None
     if len(name) > 5 and name[-5] == '#':
         member_names = {m.name.lower(): m for m in bot.members}
@@ -21,10 +18,14 @@ def get_member_named(bot, guild, name):
         if result is not None:
             return result
 
-    def pred(m):
-        return m.name.lower().find(name.lower()) != -1 or (m.nick is not None and m.nick.lower().find(name.lower()) != -1)
+    # def pred(m):
+    #     return m.name.lower().find(name.lower()) == 0 or (m.nick is not None and m.nick.lower().find(name.lower()) == 0)
 
-    return utils.find(pred, guild.members)
+    found_members = await guild.query_members(name, limit=1)
+    if len(found_members) > 0:
+        return found_members[0]
+    else:
+        return None
 
 class BetterMemberConverter(MemberConverter):
     async def convert(self, ctx, argument):
@@ -35,13 +36,10 @@ class BetterMemberConverter(MemberConverter):
         if match is None:
             # not a mention...
             if guild:
-                result = get_member_named(ctx.bot, guild, argument)
+                result = await get_member_named(ctx.bot, guild, argument)
         else:
             user_id = int(match.group(1))
             if guild:
                 result = guild.get_member(user_id)
-            
-        if result is None:
-            raise BadArgument('Member "{}" not found'.format(argument))
         
         return result

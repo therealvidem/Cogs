@@ -155,6 +155,9 @@ class Rate(commands.Cog):
     async def _spotify(self, ctx, *, member: Optional[BetterMemberConverter]):
         member = member or ctx.author
         activity = get(member.activities, type=ActivityType.listening)
+        if not activity:
+            member = ctx.guild.get_member(member.id)
+            activity = get(member.activities, type=ActivityType.listening)
         if activity:
             if type(activity) == discord.activity.Spotify:
                 title = activity.title

@@ -2,7 +2,7 @@ import random
 import discord
 from discord.enums import ActivityType
 from .customconverters import BetterMemberConverter
-from discord.ext import commands
+from redbot.core import commands
 from discord.utils import get
 from typing import Optional
 

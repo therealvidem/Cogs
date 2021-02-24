@@ -2,7 +2,7 @@ from redbot.core import commands
 import asyncio
 import random
 
-class Color(commands.Cog):
+class VidemColor(commands.Cog):
 	def __init__(self):
 		pass
 	

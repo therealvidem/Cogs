@@ -1,0 +1,96 @@
+import zlib
+from datetime import datetime
+
+import discord
+import requests
+from redbot.core import checks, commands
+from redbot.core.commands.context import Context
+from redbot.core.config import Config
+from redbot.core.utils import menus
+
+API_URL = 'http://ws.audioscrobbler.com/2.0/'
+
+INVALID_API_KEY_ERROR_CODE = 10
+EMBED_COLOR = 0x01f30a
+
+class LastFM(commands.Cog):
+    def __init__(self):
+        self.config = Config.get_conf(self, identifier=zlib.crc32(b'videmlastfm'))
+        self.config.register_global(api_key=None)
+    
+    async def fetch_lastfm(self, ctx: Context, method: str, **kwargs):
+        api_key = await self.config.api_key() if 'api_key' not in kwargs else kwargs['api_key']
+    
+        if not api_key:
+            await ctx.send('The API key has not been set.')
+            return None
+
+        payload = {
+            'api_key': api_key,
+            'method': method,
+            'format': 'json',
+            **kwargs,
+        }
+
+        result = requests.get(API_URL, params=payload).json()
+        
+        if 'error' in result:
+            await ctx.send('An error occurred')
+            ctx.bot.on_command_error(ctx, f'{ctx.command.qualified_name} returned error code: {result["error"]}')
+            return None
+        else:
+            return result
+    
+    @commands.group(name='lastfm')
+    async def _lastfm(self, ctx: Context):
+        pass
+
+    @_lastfm.command(name='setapikey')
+    @commands.cooldown(1, 3)
+    @checks.is_owner()
+    async def _setapikey(self, ctx: Context, api_key: str):
+        '''
+        Sets the API key to use for interfacing with LastFM.
+        API keys can be created by getting an API account at: https://www.last.fm/api/account/create.
+        '''
+        if await self.fetch_lastfm(ctx, 'chart.gettopartists', api_key=api_key):
+            await self.config.api_key.set(api_key)
+            await ctx.send('Successfully set API key')
+        else:
+            await ctx.send('That API key is invalid.')
+    
+    @_lastfm.command(name='recent')
+    @commands.cooldown(1, 3)
+    async def _recent(self, ctx: Context, user: str, amount: int=5):
+        '''
+        Gets up to Top 15 (default Top 5) most recent scrobbles of the specified user.
+        '''
+        if amount > 15:
+            await ctx.send('You can only get up to the Top 15 recent tracks.')
+            return
+
+        if result := await self.fetch_lastfm(ctx, 'user.getrecenttracks', user=user):
+            embeds = []
+
+            for i, track in enumerate(result['recenttracks']['track'][:amount]):
+                em = discord.Embed(
+                    title=track["name"],
+                    colour=EMBED_COLOR,
+                    url=track["url"],
+                )
+                em.set_author(name=f'Artist: {track["artist"]["#text"]}')
+                em.set_footer(text=f'Top {i + 1} of {amount} most recently played tracks for {user}')
+                em.timestamp = datetime.utcfromtimestamp(int(track['date']['uts']))
+                if 'image' in track:
+                    # Get the "large" image, which is 3rd in the list of images
+                    em.set_image(url=track['image'][2]['#text'])
+                embeds.append(em)
+            
+            if len(embeds) > 0:
+                await menus.menu(
+                    ctx,
+                    pages=embeds,
+                    controls=menus.DEFAULT_CONTROLS,
+                )
+            else:
+                await ctx.send('That user does not have any recent tracks.')

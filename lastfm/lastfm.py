@@ -12,11 +12,15 @@ API_URL = 'http://ws.audioscrobbler.com/2.0/'
 
 INVALID_API_KEY_ERROR_CODE = 10
 EMBED_COLOR = 0x01f30a
+DEFAULT_MAX_RECENT = 15
 
 class LastFM(commands.Cog):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=zlib.crc32(b'videmlastfm'))
-        self.config.register_global(api_key=None)
+        self.config.register_global(
+            api_key=None,
+            max_recent=DEFAULT_MAX_RECENT,
+        )
     
     async def fetch_lastfm(self, ctx: Context, method: str, **kwargs):
         api_key = await self.config.api_key() if 'api_key' not in kwargs else kwargs['api_key']
@@ -36,7 +40,7 @@ class LastFM(commands.Cog):
         
         if 'error' in result:
             await ctx.send('An error occurred')
-            ctx.bot.on_command_error(ctx, f'{ctx.command.qualified_name} returned error code: {result["error"]}')
+            await ctx.bot.on_command_error(ctx, f'{ctx.command.qualified_name} returned error code: {result["error"]}')
             return None
         else:
             return result
@@ -59,14 +63,27 @@ class LastFM(commands.Cog):
         else:
             await ctx.send('That API key is invalid.')
     
+    @_lastfm.group(name='set')
+    async def _set(self, ctx: Context):
+        pass
+
+    @_set.command(name='maxrecent')
+    async def _set_maxrecent(self, ctx: Context, new_max_recent: int):
+        if new_max_recent > 0:
+            await ctx.send('The max should be greater than 0.')
+            return
+        
+        await self.config.max_recent.set(new_max_recent)
+    
     @_lastfm.command(name='recent')
     @commands.cooldown(1, 3)
     async def _recent(self, ctx: Context, user: str, amount: int=5):
         '''
-        Gets up to Top 15 (default Top 5) most recent scrobbles of the specified user.
+        Gets the most recent scrobbles of the specified user.
         '''
-        if amount > 15:
-            await ctx.send('You can only get up to the Top 15 recent tracks.')
+        max_recent = await self.config.max_recent()
+        if amount <= 0 or amount > max_recent:
+            await ctx.send(f'That amount is not within the range 1-{max_recent}.')
             return
 
         if result := await self.fetch_lastfm(ctx, 'user.getrecenttracks', user=user):

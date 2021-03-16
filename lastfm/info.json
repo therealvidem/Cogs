@@ -4,5 +4,6 @@
     ],
     "description": "Several useful commands interfacing with LastFM",
     "hidden": false,
+    "min_python_version": [3, 8, 0],
     "short": "Several useful commands interfacing with LastFM"
 }

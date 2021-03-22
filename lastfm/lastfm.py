@@ -14,6 +14,16 @@ INVALID_API_KEY_ERROR_CODE = 10
 EMBED_COLOR = 0x01f30a
 DEFAULT_MAX_RECENT = 15
 
+ordinals = {
+    '1': 'st',
+    '2': 'nd',
+    '3': 'rd',
+}
+def num_to_ordinal(n):
+    global ordinals
+    n_str = str(n)
+    return f'{n_str}{ordinals[n_str[-1]] if n_str[-1] in ordinals else "th"}'
+
 class LastFM(commands.Cog):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=zlib.crc32(b'videmlastfm'))
@@ -96,11 +106,20 @@ class LastFM(commands.Cog):
                     url=track["url"],
                 )
                 em.set_author(name=f'Artist: {track["artist"]["#text"]}')
-                em.set_footer(text=f'Top {i + 1} of {amount} most recently played tracks for {user}')
-                em.timestamp = datetime.utcfromtimestamp(int(track['date']['uts']))
+                em.set_footer(text=f'{num_to_ordinal(i + 1)} of {amount} most recently played tracks for {user}')
+
+                user_lastfm_name = result["recenttracks"]["@attr"]["user"]
+                em.description = f'Viewing scrobbles for [{user_lastfm_name}](https://www.last.fm/user/{user_lastfm_name})'
+
+                if 'date' in track:
+                    em.timestamp = datetime.utcfromtimestamp(int(track['date']['uts']))
+                if '@attr' in track and 'nowplaying' in track['@attr']:
+                    em.timestamp = datetime.utcnow()
+                
                 if 'image' in track:
                     # Get the "large" image, which is 3rd in the list of images
                     em.set_image(url=track['image'][2]['#text'])
+                
                 embeds.append(em)
             
             if len(embeds) > 0:

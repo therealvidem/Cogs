@@ -1,5 +1,8 @@
 {
     "author" : ["videm#1556"],
-    "description" : "Shows colors based off different commands.",
-    "short" : "Shows colors based off different commands."
+    "description" : "An extension for Toxic-Cogs.",
+    "short" : "An extension for Toxic-Cogs.",
+    "required_cogs": {
+        "color": "https://github.com/NeuroAssassin/Toxic-Cogs"
+    }
 }

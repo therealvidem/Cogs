@@ -36,7 +36,7 @@ class Pterodactyl(commands.Cog):
                 api_key = await guild_group.api_key()
                 self.clients[ctx.guild.id] = Client(url=panel_url, api_key=api_key)
             else:
-                await ctx.send(f'This guild is not currently registered. Use `{self.bot.command_prefix}pt register` to register.')
+                await ctx.send(f'This guild is not currently registered. Use `{self.bot.get_prefix(ctx.message)}pt register` to register.')
                 return False
         return True
     

@@ -170,7 +170,7 @@ class Pterodactyl(commands.Cog):
         response += '```'
         await ctx.send(response)
     
-    async def send_power_action(self, ctx: Context, server_id_or_alias: str, action: str):
+    async def send_power_action(self, ctx: Context, server_id_or_alias: str, action: str, action_past_participle: str):
         if not await self.server_permissions_pred(ctx):
             await ctx.send('You do not have permission to run that command')
             return
@@ -187,28 +187,28 @@ class Pterodactyl(commands.Cog):
             await ctx.send('An error has occurred')
             print(e)
         else:
-            await ctx.send('Server has successfully been started')
+            await ctx.send(f'Server has successfully been {action_past_participle}')
 
     @_pt.command(name='start')
     @commands.admin()
     @commands.guild_only()
     async def _pt_start(self, ctx: Context, server_id_or_alias: str):
-        await self.send_power_action(ctx, server_id_or_alias, 'start')
+        await self.send_power_action(ctx, server_id_or_alias, 'start', 'started')
         
     @_pt.command(name='stop')
     @commands.admin()
     @commands.guild_only()
     async def _pt_stop(self, ctx: Context, server_id_or_alias: str):
-        await self.send_power_action(ctx, server_id_or_alias, 'stop')
+        await self.send_power_action(ctx, server_id_or_alias, 'stop', 'stopped')
         
     @_pt.command(name='restart')
     @commands.admin()
     @commands.guild_only()
     async def _pt_restart(self, ctx: Context, server_id_or_alias: str):
-        await self.send_power_action(ctx, server_id_or_alias, 'restart')
+        await self.send_power_action(ctx, server_id_or_alias, 'restart', 'restarted')
         
     @_pt.command(name='kill')
     @commands.admin()
     @commands.guild_only()
     async def _pt_kill(self, ctx: Context, server_id_or_alias: str):
-        await self.send_power_action(ctx, server_id_or_alias, 'kill')
+        await self.send_power_action(ctx, server_id_or_alias, 'kill', 'killed')

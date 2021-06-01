@@ -3,12 +3,9 @@ from colour import Color as col
 
 from redbot.core import checks, commands
 from redbot.core.commands import Context
-from redbot.core.commands import command as command_decorator
 
 class VidemColor(commands.Cog):
 	def __init__(self, bot):
-		global color_cog
-		
 		self.color_cog = color_cog = bot.get_cog('Color')
 
 		if not color_cog:

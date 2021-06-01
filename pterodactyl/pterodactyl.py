@@ -192,23 +192,27 @@ class Pterodactyl(commands.Cog):
     @_pt.command(name='start')
     @commands.admin()
     @commands.guild_only()
+    @commands.cooldown(1, 60)
     async def _pt_start(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'start', 'started')
         
     @_pt.command(name='stop')
     @commands.admin()
     @commands.guild_only()
+    @commands.cooldown(1, 60)
     async def _pt_stop(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'stop', 'stopped')
         
     @_pt.command(name='restart')
     @commands.admin()
     @commands.guild_only()
+    @commands.cooldown(1, 60)
     async def _pt_restart(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'restart', 'restarted')
         
     @_pt.command(name='kill')
     @commands.admin()
     @commands.guild_only()
+    @commands.cooldown(1, 60)
     async def _pt_kill(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'kill', 'killed')

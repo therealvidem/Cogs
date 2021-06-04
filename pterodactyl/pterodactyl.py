@@ -1,18 +1,15 @@
-import pprint
 from http import HTTPStatus
 from typing import Dict, Union
 
 import discord
-from discord.channel import DMChannel
 from discord.ext.commands.converter import ColorConverter
 from discord.member import Member
 from discord.message import Message
-from pydactyl.client import Client, PterodactylClient
+from pydactyl.client import PterodactylClient
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands.context import Context
 from requests.models import HTTPError, Response
-
 
 status_emojis = {
     'running': '🟢',
@@ -333,22 +330,22 @@ class Pterodactyl(commands.Cog):
         server_id = await self.get_server_id(ctx, server_id_or_alias)
 
         async with self.config.guild(ctx.guild).server_embed_info() as server_embed_info:
-            if server_id in server_embed_info and 'color' in server_embed_info[server_id]:
+            if server_id in server_embed_info:
                 embed_info = server_embed_info[server_id]
                 if color is None:
-                    del embed_info['color']
-                    await ctx.send(f"Successfully removed the color for '{server_id}'")
+                    if 'color' in embed_info:
+                        del embed_info['color']
+                        await ctx.send(f"Successfully removed the color for '{server_id}'")
+                    else:
+                        await ctx.send('That server does not have an color')
                 else:
                     embed_info['color'] = color.value
-                    await ctx.send(f"Successfully set the embed color of '{server_id}' to the color '{color}'")
+                    await ctx.send(f"Successfully set the embed color of '{server_id}' to '{color}'")
             else:
-                if color is None:
-                    await ctx.send('That server does not have a color')
-                else:
-                    server_embed_info[server_id] = {
-                        'color': color.value
-                    }
-                    await ctx.send(f"Successfully set the embed color of '{server_id}' to the color '{color}'")
+                server_embed_info[server_id] = {
+                    'color': color.value
+                }
+                await ctx.send(f"Successfully set the embed color of '{server_id}' to the color '{color}'")
     
     @_server.command(name='setimage')
     @has_server_permissions()
@@ -358,11 +355,14 @@ class Pterodactyl(commands.Cog):
         server_id = await self.get_server_id(ctx, server_id_or_alias)
 
         async with self.config.guild(ctx.guild).server_embed_info() as server_embed_info:
-            if server_id in server_embed_info and 'image_url' in server_embed_info[server_id]:
+            if server_id in server_embed_info:
                 embed_info: Dict = server_embed_info[server_id]
                 if image_url is None:
-                    del embed_info['image_url']
-                    await ctx.send(f"Successfully removed the image for '{server_id}'")
+                    if 'image_url' in embed_info:
+                        del embed_info['image_url']
+                        await ctx.send(f"Successfully removed the image for '{server_id}'")
+                    else:
+                        await ctx.send('That server does not have an image')
                 else:
                     embed_info['image_url'] = image_url
                     await ctx.send(f"Successfully set the embed image of '{server_id}' to '{image_url}'")

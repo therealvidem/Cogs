@@ -1,14 +1,33 @@
-from typing import Dict
+import pprint
+from http import HTTPStatus
+from typing import Dict, Union
 
 import discord
 from discord.channel import DMChannel
+from discord.ext.commands.converter import ColorConverter
 from discord.member import Member
 from discord.message import Message
-from pydactyl.client import Client
+from pydactyl.client import Client, PterodactylClient
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands.context import Context
+from requests.models import HTTPError, Response
 
+
+status_emojis = {
+    'running': '🟢',
+    'starting': '🔃',
+    'stopped': '🔴',
+}
+
+def is_status_ok(response: Union[Response, Dict]):
+    return isinstance(response, dict) or response.ok or response.status_code == HTTPStatus.NO_CONTENT
+
+def has_server_permissions():
+    async def predicate(ctx):
+        return ctx.author.guild_permissions.administrator \
+            or ctx.author.id in await ctx.cog.config.guild(ctx.guild).whitelist()
+    return commands.check(predicate)
 
 class Pterodactyl(commands.Cog):
     def __init__(self, bot: Red):
@@ -20,35 +39,38 @@ class Pterodactyl(commands.Cog):
             'registered': False,
             'aliases': {},
             'whitelist': [],
+            'server_embed_info': {},
         }
         self.config.register_guild(**default_guild)
-        self.clients: Dict[str, Client] = {}
-    
-    async def server_permissions_pred(self, ctx: Context):
-        return ctx.author.guild_permissions.administrator \
-            or ctx.author.id in await self.config.guild(ctx.guild).whitelist()
+        self.pt_instances: Dict[str, PterodactylClient] = {}
     
     async def check_guild(self, ctx: Context):
         guild_group = self.config.guild(ctx.guild)
-        if ctx.guild.id not in self.clients:
+        if ctx.guild.id not in self.pt_instances:
             if await guild_group.registered():
                 panel_url = await guild_group.panel_url()
                 api_key = await guild_group.api_key()
-                self.clients[ctx.guild.id] = Client(url=panel_url, api_key=api_key)
+                self.pt_instances[ctx.guild.id] = PterodactylClient(url=panel_url, api_key=api_key)
             else:
                 await ctx.send(f'This guild is not currently registered')
                 return False
         return True
     
+    async def get_server_id(self, ctx: Context, server_id_or_alias: str):
+        aliases = await self.config.guild(ctx.guild).aliases()
+        if server_id_or_alias in aliases:
+            return aliases[server_id_or_alias]
+        return server_id_or_alias
+    
     @commands.group(name='pt')
-    async def _pt(self, _: Context):
+    async def _pt(self, _):
         pass
     
     @_pt.command(name='register')
     @commands.admin()
     @commands.guild_only()
     async def _pt_register(self, ctx: Context, panel_url: str):
-        if ctx.guild.id in self.clients or await self.config.guild(ctx.guild).registered():
+        if ctx.guild.id in self.pt_instances or await self.config.guild(ctx.guild).registered():
             await ctx.send('This server has already been registered')
             return
         member: Member = ctx.author
@@ -60,9 +82,9 @@ class Pterodactyl(commands.Cog):
         
         msg: Message = await self.bot.wait_for('message', check=check, timeout=60)
         api_key = str(msg.content)
-        client = Client(url=panel_url, api_key=api_key)
+        pt_instance = PterodactylClient(url=panel_url, api_key=api_key)
         try:
-            client.list_servers()
+            pt_instance.client.list_servers()
         except:
             await member.send('Error: That is an invalid API key and panel URL combination')
         else:
@@ -70,13 +92,13 @@ class Pterodactyl(commands.Cog):
             await guild_group.registered.set(True)
             await guild_group.panel_url.set(panel_url)
             await guild_group.api_key.set(api_key)
-            self.clients[ctx.guild.id] = client
+            self.pt_instances[ctx.guild.id] = pt_instance
             await member.send('Successfully entered that API key')
     
     @_pt.group(name='whitelist')
     @commands.admin()
     @commands.guild_only()
-    async def _whitelist(self, _: Context):
+    async def _whitelist(self, _):
         pass
 
     @_whitelist.command(name='add')
@@ -122,24 +144,27 @@ class Pterodactyl(commands.Cog):
     @_pt.group(name='alias')
     @commands.admin()
     @commands.guild_only()
-    async def _alias(self, _: Context):
+    async def _alias(self, _):
         pass
 
     @_alias.command(name='set')
     @commands.admin()
     @commands.guild_only()
-    async def _alias_set(self, ctx: Context, server_id: str, alias: str=None):
+    async def _alias_set(self, ctx: Context, alias: str, server_id: str=None):
         async with self.config.guild(ctx.guild).aliases() as aliases:
-            if server_id in aliases:
-                if alias is None:
-                    aliases.pop(alias)
-                    await ctx.send(f'Successfully removed the alias for {server_id}')
+            if alias in aliases:
+                if server_id is None:
+                    del aliases[alias]
+                    await ctx.send(f"Successfully unbounded the alias from the server '{server_id}'")
                 else:
                     aliases[alias] = server_id
-                    await ctx.send(f'Successfully set {server_id} to the alias {alias}')
+                    await ctx.send(f"Successfully bound the alias '{alias}' to the server '{server_id}'")
             else:
-                aliases[alias] = server_id
-                await ctx.send(f'Successfully set {server_id} to the alias {alias}')
+                if server_id is None:
+                    await ctx.send("That alias is not bound to any server")
+                else:
+                    aliases[alias] = server_id
+                    await ctx.send(f"Successfully bound the alias '{alias}' to the server '{server_id}'")
     
     @_alias.command(name='list')
     @commands.admin()
@@ -161,58 +186,188 @@ class Pterodactyl(commands.Cog):
     async def _pt_listservers(self, ctx: Context):
         if not await self.check_guild(ctx): return
         
-        client = self.clients[ctx.guild.id]
+        pt_instance = self.pt_instances[ctx.guild.id]
         response = '```\n'
-        for page in client.list_servers():
+        for page in pt_instance.client.list_servers():
             for data in page.data:
                 server = data['attributes']
                 response += f'{server["name"]} (id: {server["identifier"]})\n'
         response += '```'
         await ctx.send(response)
     
+    @_pt.group(name='server')
+    @commands.admin()
+    @commands.guild_only()
+    async def _server(self, _):
+        pass
+    
     async def send_power_action(self, ctx: Context, server_id_or_alias: str, action: str, action_past_participle: str):
-        if not await self.server_permissions_pred(ctx):
-            await ctx.send('You do not have permission to run that command')
-            return
+        # if not await self.server_permissions_pred(ctx):
+        #     await ctx.send('You do not have permission to run that command')
+        #     return
         if not await self.check_guild(ctx): return
 
-        aliases = await self.config.guild(ctx.guild).aliases()
-        if server_id_or_alias in aliases:
-            server_id_or_alias = aliases[server_id_or_alias]
+        server_id = await self.get_server_id(ctx, server_id_or_alias)
 
-        client = self.clients[ctx.guild.id]
+        pt_instance = self.pt_instances[ctx.guild.id]
         try:
-            client.send_power_action(server_id_or_alias, action)
+            response = pt_instance.client.send_power_action(server_id, action)
+        except HTTPError as e:
+            if e.response.status_code == HTTPStatus.NOT_FOUND:
+                await ctx.send(f"'{server_id_or_alias}' is not a valid server")
+            else:
+                await ctx.send('An error has occurred')
+                print(e)
         except Exception as e:
             await ctx.send('An error has occurred')
             print(e)
         else:
-            await ctx.send(f'Server has successfully been {action_past_participle}')
+            if is_status_ok(response):
+                await ctx.send(f'Server has successfully been {action_past_participle}')
+            else:
+                await ctx.send(f'Something went wrong while trying to {action} the server')
+    
+    # def server_exists(self, ctx: Context, server_id: str):
+    #     pt_instance = self.pt_instances[ctx.guild.id]
+    #     try:
+    #         info_response = pt_instance.client.get_server(server_id)
+    #     except:
+    #         return False
+    #     else:
+    #         if is_status_ok(info_response):
+    #             return True
+    #     return False
 
-    @_pt.command(name='start')
-    @commands.admin()
+    @_server.command(name='start')
+    @has_server_permissions()
     @commands.guild_only()
     @commands.cooldown(1, 60)
-    async def _pt_start(self, ctx: Context, server_id_or_alias: str):
+    async def _server_start(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'start', 'started')
         
-    @_pt.command(name='stop')
-    @commands.admin()
+    @_server.command(name='stop')
+    @has_server_permissions()
     @commands.guild_only()
     @commands.cooldown(1, 60)
-    async def _pt_stop(self, ctx: Context, server_id_or_alias: str):
+    async def _server_stop(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'stop', 'stopped')
         
-    @_pt.command(name='restart')
-    @commands.admin()
+    @_server.command(name='restart')
+    @has_server_permissions()
     @commands.guild_only()
     @commands.cooldown(1, 60)
-    async def _pt_restart(self, ctx: Context, server_id_or_alias: str):
+    async def _server_restart(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'restart', 'restarted')
         
-    @_pt.command(name='kill')
-    @commands.admin()
+    @_server.command(name='kill')
+    @has_server_permissions()
     @commands.guild_only()
     @commands.cooldown(1, 60)
-    async def _pt_kill(self, ctx: Context, server_id_or_alias: str):
+    async def _server_kill(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'kill', 'killed')
+
+    @_server.command(name='status')
+    @commands.cooldown(1, 5)
+    async def _server_status(self, ctx: Context, server_id_or_alias: str):
+        if not await self.check_guild(ctx): return
+
+        server_id = await self.get_server_id(ctx, server_id_or_alias)
+
+        pt_instance = self.pt_instances[ctx.guild.id]
+        try:
+            info_response = pt_instance.client.get_server(server_id)
+            util_response = pt_instance.client.get_server_utilization(server_id)
+        except HTTPError as e:
+            if e.response.status_code == HTTPStatus.NOT_FOUND:
+                await ctx.send(f"'{server_id_or_alias}' is not a valid server")
+            else:
+                await ctx.send('An error has occurred')
+                print(e)
+        except Exception as e:
+            await ctx.send('An error has occurred')
+            print(e)
+        else:
+            # pprint.pprint(util_response)
+            if is_status_ok(info_response) and is_status_ok(util_response):
+                embed = discord.Embed()
+                embed.title = info_response['name']
+                embed.color = await self.bot.get_embed_color(ctx)
+                embed_info = (await self.config.guild(ctx.guild).server_embed_info()).get(server_id, None)
+                if embed_info:
+                    if 'color' in embed_info:
+                        embed.color = discord.Color(embed_info['color'])
+                    if 'image_url' in embed_info:
+                        embed.set_thumbnail(url=embed_info['image_url'])
+                embed.add_field(
+                    name='ID',
+                    value=info_response['identifier'],
+                    inline=False,
+                )
+                current_state = util_response['current_state']
+                embed.add_field(
+                    name='Current State',
+                    value=f'{current_state.capitalize()} {status_emojis[current_state]}',
+                    inline=False,
+                )
+                ram_limit_bytes = info_response['limits']['memory'] * 1024 * 1024
+                ram_usage_bytes = util_response['resources']['memory_bytes']
+                embed.add_field(
+                    name='RAM Usage',
+                    value=f'{round((ram_usage_bytes / ram_limit_bytes) * 100, 2)}%',
+                    inline=True,
+                )
+                disk_limit_bytes = info_response['limits']['disk'] * 1024 * 1024
+                disk_usage_bytes = util_response['resources']['disk_bytes']
+                embed.add_field(
+                    name='Disk Usage',
+                    value=f'{round((disk_usage_bytes / disk_limit_bytes) * 100, 2)}%',
+                    inline=True,
+                )
+                await ctx.send(embed=embed)
+    
+    @_server.command(name='setembedcolor')
+    @has_server_permissions()
+    async def _server_setembedcolor(self, ctx: Context, server_id_or_alias: str, color: ColorConverter=None):
+        if not await self.check_guild(ctx): return
+
+        server_id = await self.get_server_id(ctx, server_id_or_alias)
+
+        async with self.config.guild(ctx.guild).server_embed_info() as server_embed_info:
+            if server_id in server_embed_info and 'color' in server_embed_info[server_id]:
+                embed_info = server_embed_info[server_id]
+                if color is None:
+                    del embed_info['color']
+                    await ctx.send(f"Successfully removed the color for '{server_id}'")
+                else:
+                    embed_info['color'] = color.value
+                    await ctx.send(f"Successfully set the embed color of '{server_id}' to the color '{color}'")
+            else:
+                if color is None:
+                    await ctx.send('That server does not have a color')
+                else:
+                    server_embed_info[server_id] = {
+                        'color': color.value
+                    }
+                    await ctx.send(f"Successfully set the embed color of '{server_id}' to the color '{color}'")
+    
+    @_server.command(name='setimage')
+    @has_server_permissions()
+    async def _server_setimage(self, ctx: Context, server_id_or_alias: str, image_url: str=None):
+        if not await self.check_guild(ctx): return
+
+        server_id = await self.get_server_id(ctx, server_id_or_alias)
+
+        async with self.config.guild(ctx.guild).server_embed_info() as server_embed_info:
+            if server_id in server_embed_info and 'image_url' in server_embed_info[server_id]:
+                embed_info: Dict = server_embed_info[server_id]
+                if image_url is None:
+                    del embed_info['image_url']
+                    await ctx.send(f"Successfully removed the image for '{server_id}'")
+                else:
+                    embed_info['image_url'] = image_url
+                    await ctx.send(f"Successfully set the embed image of '{server_id}' to '{image_url}'")
+            else:
+                server_embed_info[server_id] = {
+                    'image_url': image_url
+                }
+                await ctx.send(f"Successfully set the embed image of '{server_id}' to '{image_url}'")

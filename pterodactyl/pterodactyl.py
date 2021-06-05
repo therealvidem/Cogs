@@ -14,7 +14,8 @@ from requests.models import HTTPError, Response
 status_emojis = {
     'running': '🟢',
     'starting': '🔃',
-    'stopped': '🔴',
+    'stopping': '🔃',
+    'offline': '🔴',
 }
 
 def is_status_ok(response: Union[Response, Dict]):

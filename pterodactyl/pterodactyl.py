@@ -1,7 +1,9 @@
+from enum import Enum, auto
 from http import HTTPStatus
 from typing import Dict, Union
 
 import discord
+from discord.channel import TextChannel
 from discord.ext.commands.converter import ColorConverter
 from discord.member import Member
 from discord.message import Message
@@ -10,6 +12,10 @@ from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands.context import Context
 from requests.models import HTTPError, Response
+
+
+class LoggingType(Enum):
+    LOG_POWER_ACTION = auto()
 
 status_emojis = {
     'running': '🟢',
@@ -23,8 +29,9 @@ def is_status_ok(response: Union[Response, Dict]):
 
 def has_server_permissions():
     async def predicate(ctx):
-        return ctx.author.guild_permissions.administrator \
-            or ctx.author.id in await ctx.cog.config.guild(ctx.guild).whitelist()
+        return ctx.channel.type == discord.ChannelType.text and \
+            (ctx.author.guild_permissions.administrator \
+            or ctx.author.id in await ctx.cog.config.guild(ctx.guild).whitelist())
     return commands.check(predicate)
 
 class Pterodactyl(commands.Cog):
@@ -38,6 +45,7 @@ class Pterodactyl(commands.Cog):
             'aliases': {},
             'whitelist': [],
             'server_embed_info': {},
+            'logging': {},
         }
         self.config.register_guild(**default_guild)
         self.pt_instances: Dict[str, PterodactylClient] = {}
@@ -71,14 +79,13 @@ class Pterodactyl(commands.Cog):
         if ctx.guild.id in self.pt_instances or await self.config.guild(ctx.guild).registered():
             await ctx.send('This server has already been registered')
             return
+        
         member: Member = ctx.author
-
         await member.send('Enter your API key here (Note: You have 60 seconds to enter it)')
-
         def check(m):
             return m.channel.type == discord.ChannelType.private and m.channel.recipient.id == member.id
-        
         msg: Message = await self.bot.wait_for('message', check=check, timeout=60)
+
         api_key = str(msg.content)
         pt_instance = PterodactylClient(url=panel_url, api_key=api_key)
         try:
@@ -92,6 +99,24 @@ class Pterodactyl(commands.Cog):
             await guild_group.api_key.set(api_key)
             self.pt_instances[ctx.guild.id] = pt_instance
             await member.send('Successfully entered that API key')
+    
+    @_pt.command(name='unregister')
+    @commands.admin()
+    @commands.guild_only()
+    async def _pt_unregister(self, ctx: Context):
+        guild_group = self.config.guild(ctx.guild)
+        registered = await guild_group.registered()
+        
+        if not registered:
+            await ctx.send('This server has not yet been registered')
+            return
+        
+        await guild_group.registered.set(False)
+        await guild_group.panel_url.set(None)
+        await guild_group.api_key.set(None)
+        if ctx.guild.id in self.pt_instances:
+            del self.pt_instances[ctx.guild.id]
+        await ctx.send('Successfully unregistered this server')
     
     @_pt.group(name='whitelist')
     @commands.admin()
@@ -140,14 +165,12 @@ class Pterodactyl(commands.Cog):
             await ctx.send(response)
     
     @_pt.group(name='alias')
-    @commands.admin()
-    @commands.guild_only()
+    @has_server_permissions()
     async def _alias(self, _):
         pass
 
     @_alias.command(name='set')
-    @commands.admin()
-    @commands.guild_only()
+    @has_server_permissions()
     async def _alias_set(self, ctx: Context, alias: str, server_id: str=None):
         async with self.config.guild(ctx.guild).aliases() as aliases:
             if alias in aliases:
@@ -165,8 +188,7 @@ class Pterodactyl(commands.Cog):
                     await ctx.send(f"Successfully bound the alias '{alias}' to the server '{server_id}'")
     
     @_alias.command(name='list')
-    @commands.admin()
-    @commands.guild_only()
+    @has_server_permissions()
     async def _alias_list(self, ctx: Context):
         aliases = await self.config.guild(ctx.guild).aliases()
         if len(aliases) == 0:
@@ -179,8 +201,7 @@ class Pterodactyl(commands.Cog):
             await ctx.send(response)
     
     @_pt.command(name='listservers')
-    @commands.admin()
-    @commands.guild_only()
+    @has_server_permissions()
     async def _pt_listservers(self, ctx: Context):
         if not await self.check_guild(ctx): return
         
@@ -194,7 +215,6 @@ class Pterodactyl(commands.Cog):
         await ctx.send(response)
     
     @_pt.group(name='server')
-    @commands.admin()
     @commands.guild_only()
     async def _server(self, _):
         pass
@@ -206,6 +226,11 @@ class Pterodactyl(commands.Cog):
         if not await self.check_guild(ctx): return
 
         server_id = await self.get_server_id(ctx, server_id_or_alias)
+
+        async with self.config.guild(ctx.guild).logging() as logging:
+            if LoggingType.LOG_POWER_ACTION in logging:
+                destination: TextChannel = logging[LoggingType.LOG_POWER_ACTION]
+                destination.send(f"{ctx.author} has sent the power action '{action}'")
 
         pt_instance = self.pt_instances[ctx.guild.id]
         try:
@@ -238,28 +263,24 @@ class Pterodactyl(commands.Cog):
 
     @_server.command(name='start')
     @has_server_permissions()
-    @commands.guild_only()
     @commands.cooldown(1, 60)
     async def _server_start(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'start', 'started')
         
     @_server.command(name='stop')
     @has_server_permissions()
-    @commands.guild_only()
     @commands.cooldown(1, 60)
     async def _server_stop(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'stop', 'stopped')
         
     @_server.command(name='restart')
     @has_server_permissions()
-    @commands.guild_only()
     @commands.cooldown(1, 60)
     async def _server_restart(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'restart', 'restarted')
         
     @_server.command(name='kill')
     @has_server_permissions()
-    @commands.guild_only()
     @commands.cooldown(1, 60)
     async def _server_kill(self, ctx: Context, server_id_or_alias: str):
         await self.send_power_action(ctx, server_id_or_alias, 'kill', 'killed')
@@ -372,3 +393,25 @@ class Pterodactyl(commands.Cog):
                     'image_url': image_url
                 }
                 await ctx.send(f"Successfully set the embed image of '{server_id}' to '{image_url}'")
+    
+    @_server.group(name='log')
+    @has_server_permissions()
+    async def _log(self, _):
+        pass
+    
+    async def toggle_logging(self, ctx: Context, logging_type: LoggingType, server_id_or_alias: str, destination: TextChannel, **logging_info):
+        async with self.config.guild(ctx.guild).logging() as logging:
+            if logging_type in logging:
+                del logging[logging_type]
+                await ctx.send(f'Disabled logging {logging_type} for {server_id_or_alias} in {destination}')
+            else:
+                logging[logging_type] = {
+                    'destination': destination,
+                    **logging_info,
+                }
+                await ctx.send(f'Enabled logging {logging_type} for {server_id_or_alias} in {destination}')
+
+    @_log.command(name='poweractions')
+    @has_server_permissions()
+    async def _log_poweractions(self, ctx: Context, server_id_or_alias: str, destination: TextChannel):
+        await self.toggle_logging(ctx, LoggingType.LOG_POWER_ACTION, server_id_or_alias, destination)

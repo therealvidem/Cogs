@@ -1,8 +1,9 @@
 from enum import Enum, auto
 from http import HTTPStatus
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import discord
+from discord.abc import GuildChannel
 from discord.channel import TextChannel
 from discord.ext.commands.converter import ColorConverter
 from discord.member import Member
@@ -16,6 +17,10 @@ from requests.models import HTTPError, Response
 
 class LoggingType(Enum):
     LOG_POWER_ACTION = auto()
+
+logging_type_names = {
+    LoggingType.LOG_POWER_ACTION: 'power action',
+}
 
 status_emojis = {
     'running': '🟢',
@@ -244,10 +249,10 @@ class Pterodactyl(commands.Cog):
             return
         
         async with self.config.guild(ctx.guild).logging() as logging:
-            if LoggingType.LOG_POWER_ACTION in logging and logging[LoggingType.LOG_POWER_ACTION]['server_id'] == server_id:
-                destination: TextChannel = self.bot.get_channel(logging[LoggingType.LOG_POWER_ACTION]['destination_id'])
+            if str(LoggingType.LOG_POWER_ACTION) in logging and logging[str(LoggingType.LOG_POWER_ACTION)]['server_id'] == server_id:
+                destination: Optional[GuildChannel] = self.bot.get_channel(logging[str(LoggingType.LOG_POWER_ACTION)]['destination_id'])
                 if destination:
-                    destination.send(f"{ctx.author} has sent the power action '{action}' to the server '{server_id}'")
+                    await destination.send(f"{ctx.author} has sent the power action '{action}' to the server '{server_id}'")
 
         try:
             response = pt_instance.client.send_power_action(server_id, action)
@@ -415,7 +420,7 @@ class Pterodactyl(commands.Cog):
     async def _log(self, _):
         pass
     
-    async def toggle_logging(self, ctx: Context, logging_type: LoggingType, server_id_or_alias: str, destination: TextChannel, **logging_info):
+    async def toggle_logging(self, ctx: Context, logging_type: LoggingType, server_id_or_alias: str, destination: TextChannel=None, **logging_info):
         if not await self.check_guild(ctx): return
 
         server_id = await self.get_server_id(ctx, server_id_or_alias)
@@ -427,17 +432,21 @@ class Pterodactyl(commands.Cog):
 
         async with self.config.guild(ctx.guild).logging() as logging:
             if logging_type in logging:
-                del logging[logging_type]
-                await ctx.send(f'Disabled logging {logging_type} for {server_id_or_alias} in {destination}')
+                del logging[str(logging_type)]
+                await ctx.send(f'Disabled logging {logging_type_names[logging_type]} for {server_id_or_alias}')
             else:
-                logging[logging_type] = {
+                if not destination:
+                    await ctx.send('You must specify a destination')
+                    return
+
+                logging[str(logging_type)] = {
                     'server_id': server_id,
                     'destination_id': destination.id,
                     **logging_info,
                 }
-                await ctx.send(f'Enabled logging {logging_type} for {server_id_or_alias} in {destination}')
+                await ctx.send(f'Enabled logging {logging_type_names[logging_type]} for {server_id_or_alias} in {destination}')
 
     @_log.command(name='poweractions')
     @has_server_permissions()
-    async def _log_poweractions(self, ctx: Context, server_id_or_alias: str, destination: TextChannel):
+    async def _log_poweractions(self, ctx: Context, server_id_or_alias: str, destination: TextChannel=None):
         await self.toggle_logging(ctx, LoggingType.LOG_POWER_ACTION, server_id_or_alias, destination)

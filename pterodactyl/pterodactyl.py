@@ -245,8 +245,9 @@ class Pterodactyl(commands.Cog):
         
         async with self.config.guild(ctx.guild).logging() as logging:
             if LoggingType.LOG_POWER_ACTION in logging and logging[LoggingType.LOG_POWER_ACTION]['server_id'] == server_id:
-                destination: TextChannel = logging[LoggingType.LOG_POWER_ACTION]['destination']
-                destination.send(f"{ctx.author} has sent the power action '{action}' to the server '{server_id}'")
+                destination: TextChannel = self.bot.get_channel(logging[LoggingType.LOG_POWER_ACTION]['destination_id'])
+                if destination:
+                    destination.send(f"{ctx.author} has sent the power action '{action}' to the server '{server_id}'")
 
         try:
             response = pt_instance.client.send_power_action(server_id, action)
@@ -431,7 +432,7 @@ class Pterodactyl(commands.Cog):
             else:
                 logging[logging_type] = {
                     'server_id': server_id,
-                    'destination': destination,
+                    'destination_id': destination.id,
                     **logging_info,
                 }
                 await ctx.send(f'Enabled logging {logging_type} for {server_id_or_alias} in {destination}')

@@ -68,6 +68,14 @@ class Pterodactyl(commands.Cog):
             return aliases[server_id_or_alias]
         return server_id_or_alias
     
+    async def server_exists(self, client: PterodactylClient, server_id: str):
+        try:
+            response = client.client.get_server(server_id)
+        except:
+            return False
+        else:
+            return is_status_ok(response)
+    
     @commands.group(name='pt')
     async def _pt(self, _):
         pass
@@ -75,6 +83,7 @@ class Pterodactyl(commands.Cog):
     @_pt.command(name='register')
     @commands.admin()
     @commands.guild_only()
+    @commands.cooldown(1, 60)
     async def _pt_register(self, ctx: Context, panel_url: str):
         if ctx.guild.id in self.pt_instances or await self.config.guild(ctx.guild).registered():
             await ctx.send('This server has already been registered')
@@ -202,6 +211,7 @@ class Pterodactyl(commands.Cog):
     
     @_pt.command(name='listservers')
     @has_server_permissions()
+    @commands.cooldown(1, 5)
     async def _pt_listservers(self, ctx: Context):
         if not await self.check_guild(ctx): return
         
@@ -227,12 +237,17 @@ class Pterodactyl(commands.Cog):
 
         server_id = await self.get_server_id(ctx, server_id_or_alias)
 
-        async with self.config.guild(ctx.guild).logging() as logging:
-            if LoggingType.LOG_POWER_ACTION in logging:
-                destination: TextChannel = logging[LoggingType.LOG_POWER_ACTION]
-                destination.send(f"{ctx.author} has sent the power action '{action}'")
-
         pt_instance = self.pt_instances[ctx.guild.id]
+        
+        if not await self.server_exists(pt_instance, server_id):
+            await ctx.send(f"The server '{server_id_or_alias}' does not exist")
+            return
+        
+        async with self.config.guild(ctx.guild).logging() as logging:
+            if LoggingType.LOG_POWER_ACTION in logging and logging[LoggingType.LOG_POWER_ACTION]['server_id'] == server_id:
+                destination: TextChannel = logging[LoggingType.LOG_POWER_ACTION]['destination']
+                destination.send(f"{ctx.author} has sent the power action '{action}' to the server '{server_id}'")
+
         try:
             response = pt_instance.client.send_power_action(server_id, action)
         except HTTPError as e:
@@ -400,12 +415,22 @@ class Pterodactyl(commands.Cog):
         pass
     
     async def toggle_logging(self, ctx: Context, logging_type: LoggingType, server_id_or_alias: str, destination: TextChannel, **logging_info):
+        if not await self.check_guild(ctx): return
+
+        server_id = await self.get_server_id(ctx, server_id_or_alias)
+
+        pt_instance = self.pt_instances[ctx.guild.id]
+        if not await self.server_exists(pt_instance, server_id):
+            await ctx.send(f"The server '{server_id_or_alias}' does not exist")
+            return
+
         async with self.config.guild(ctx.guild).logging() as logging:
             if logging_type in logging:
                 del logging[logging_type]
                 await ctx.send(f'Disabled logging {logging_type} for {server_id_or_alias} in {destination}')
             else:
                 logging[logging_type] = {
+                    'server_id': server_id,
                     'destination': destination,
                     **logging_info,
                 }

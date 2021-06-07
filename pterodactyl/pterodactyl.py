@@ -394,7 +394,7 @@ class Pterodactyl(commands.Cog):
                 }
                 await ctx.send(f"Successfully set the embed image of '{server_id}' to '{image_url}'")
     
-    @_server.group(name='log')
+    @_pt.group(name='log')
     @has_server_permissions()
     async def _log(self, _):
         pass

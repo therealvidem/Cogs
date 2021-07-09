@@ -1,6 +1,8 @@
 import random
 from colour import Color as col
 
+from .customconverters import BetterMemberConverter
+from discord import Member
 from redbot.core import checks, commands
 from redbot.core.commands import Context
 
@@ -24,6 +26,14 @@ class VidemColor(commands.Cog):
 	async def mycolor(self, ctx: Context):
 		"""Gets the display color of the invoker"""
 		c = col(rgb=tuple(v / 255 for v in ctx.author.color.to_rgb()))
+		embed, f = await self.color_cog.build_embed(c)
+		await ctx.send(file=f, embed=embed)
+	
+	@checks.bot_has_permissions(embed_links=True)
+	@commands.command(name='membercolor')
+	async def membercolor(self, ctx: Context, member: BetterMemberConverter):
+		"""Gets the display color of the invoker"""
+		c = col(rgb=tuple(v / 255 for v in member.color.to_rgb()))
 		embed, f = await self.color_cog.build_embed(c)
 		await ctx.send(file=f, embed=embed)
 	

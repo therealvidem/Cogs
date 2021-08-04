@@ -2,7 +2,6 @@ import random
 from colour import Color as col
 
 from .customconverters import BetterMemberConverter
-from discord import Member
 from redbot.core import checks, commands
 from redbot.core.commands import Context
 

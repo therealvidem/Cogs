@@ -1,8 +1,6 @@
-import random
-
-from datetime import datetime
 from dateutil import parser
 from dateutil.tz import gettz
+from randomtimestamp import randomtimestamp
 from redbot.core import commands
 from redbot.core.commands import Context, Converter
 
@@ -19,11 +17,23 @@ class TimestampCog(commands.Cog):
 		self.bot = bot
 
 	@commands.command(name='timestamp')
-	async def timestamp(self, ctx: Context, *, datetime: Datetime):
+	async def _timestamp(self, ctx: Context, *, dt: Datetime):
 		"""Gets the Discord timestamp style of the given datetime"""
-		await ctx.send(f'<t:{int(datetime.timestamp())}>')
+		await ctx.send(f'<t:{int(dt.timestamp())}>')
 	
 	@commands.command(name='timestampraw')
-	async def timestampraw(self, ctx: Context, *, datetime: Datetime):
+	async def _timestampraw(self, ctx: Context, *, dt: Datetime):
 		"""Gets the (raw) Discord timestamp style of the given datetime"""
-		await ctx.send(f'\\<t:{int(datetime.timestamp())}\\>')
+		await ctx.send(f'\\<t:{int(dt.timestamp())}\\>')
+	
+	@commands.command(name='timestamprandom')
+	async def _timestamprandom(self, ctx: Context):
+		"""Returns a random datetime in Discord timestamp style"""
+		dt = randomtimestamp(end_year=292277026596)
+		await ctx.send(f'<t:{int(dt.timestamp())}>')
+	
+	@commands.command(name='timestamprandomraw')
+	async def _timestamprandomraw(self, ctx: Context):
+		"""Returns a random datetime in (raw) Discord timestamp style"""
+		dt = randomtimestamp(end_year=292277026596)
+		await ctx.send(f'\\<t:{int(dt.timestamp())}\\>')

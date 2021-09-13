@@ -1,0 +1,6 @@
+{
+    "author" : ["videm#1556"],
+    "description" : "Adds a command to get Discord timestamp styles",
+    "short" : "Adds a command to get Discord timestamp styles",
+    "requirements": ["python-dateutil"]
+}

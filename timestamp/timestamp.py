@@ -29,11 +29,11 @@ class TimestampCog(commands.Cog):
 	@commands.command(name='timestamprandom')
 	async def _timestamprandom(self, ctx: Context):
 		"""Returns a random datetime in Discord timestamp style"""
-		dt = randomtimestamp(end_year=292277026596)
+		dt = randomtimestamp(end_year=9999)
 		await ctx.send(f'<t:{int(dt.timestamp())}>')
 	
 	@commands.command(name='timestamprandomraw')
 	async def _timestamprandomraw(self, ctx: Context):
 		"""Returns a random datetime in (raw) Discord timestamp style"""
-		dt = randomtimestamp(end_year=292277026596)
+		dt = randomtimestamp(end_year=9999)
 		await ctx.send(f'\\<t:{int(dt.timestamp())}\\>')

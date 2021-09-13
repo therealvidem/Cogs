@@ -22,3 +22,8 @@ class TimestampCog(commands.Cog):
 	async def timestamp(self, ctx: Context, *, datetime: Datetime):
 		"""Gets the Discord timestamp style of the given datetime"""
 		await ctx.send(f'<t:{int(datetime.timestamp())}>')
+	
+	@commands.command(name='timestampraw')
+	async def timestampraw(self, ctx: Context, *, datetime: Datetime):
+		"""Gets the (raw) Discord timestamp style of the given datetime"""
+		await ctx.send(f'\\<t:{int(datetime.timestamp())}\\>')

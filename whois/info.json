@@ -1,0 +1,5 @@
+{
+    "author" : ["videm#1556"],
+    "description" : "A command to get a lot of information about a user",
+    "short" : "A simple whois command"
+}

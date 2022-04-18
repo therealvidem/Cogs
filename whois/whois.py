@@ -14,7 +14,7 @@ def get_user_profile(member: discord.Member):
     creation_date = f'<t:{int(user.created_at.timestamp())}>'
     joined_date = f'<t:{int(member.joined_at.timestamp())}>'
     roles = member.roles
-    roles_string = ', '.join(str(role) for role in roles if role.id != member.guild.id) if len(roles) > 0 else 'None'
+    roles_string = ', '.join(role.mention for role in roles if role.id != member.guild.id) if len(roles) > 0 else 'None'
 
     embed = discord.Embed()
     embed.title = username

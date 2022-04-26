@@ -1,8 +1,7 @@
+from datetime import timezone
 import discord
 from .customconverters import BetterMemberConverter
 from redbot.core import commands
-from discord.utils import get
-from typing import Optional
 
 EMBED_COLOR = 0x01f30a
 
@@ -11,10 +10,10 @@ def get_user_profile(member: discord.Member):
     username = str(user)
     color = member.color
     nickname: str = member.nick if member.nick else member.display_name
-    creation_date = f'<t:{int(user.created_at.timestamp())}>'
+    creation_date = f'<t:{int(user.created_at.replace(tzinfo=timezone.utc).timestamp())}>'
     joined_date = f'<t:{int(member.joined_at.timestamp())}>'
     roles = member.roles
-    roles_string = ', '.join(role.mention for role in roles if role.id != member.guild.id) if len(roles) > 0 else 'None'
+    roles_string = ' '.join(reversed(list(role.mention for role in roles if role.id != member.guild.id))) if len(roles) > 0 else 'None'
 
     embed = discord.Embed()
     embed.title = username

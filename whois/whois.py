@@ -11,7 +11,7 @@ def get_user_profile(member: discord.Member):
     color = member.color
     nickname: str = member.nick if member.nick else member.display_name
     creation_date = f'<t:{int(user.created_at.replace(tzinfo=timezone.utc).timestamp())}>'
-    joined_date = f'<t:{int(member.joined_at.timestamp())}>'
+    joined_date = f'<t:{int(member.joined_at.replace(tzinfo=timezone.utc).timestamp())}>'
     roles = member.roles
     roles_string = ' '.join(reversed(list(role.mention for role in roles if role.id != member.guild.id))) if len(roles) > 0 else 'None'
 

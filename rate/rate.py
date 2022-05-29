@@ -12,7 +12,7 @@ class Rate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.id = str(bot.user.id)
-        self.spotify_rate = [
+        self.song_rate = [
             "It couldn't be worse :sick:.",
             "It's pretty trash.",
             'There are a lot of better music.',
@@ -35,24 +35,12 @@ class Rate(commands.Cog):
 
     @commands.group(name='rate')
     @commands.cooldown(rate=3, per=10)
-    async def _rate(self, ctx):
-        if ctx.invoked_subcommand is None:
-            prefix = ctx.prefix
-            title = "**Videm's Robust Rating System 9000:**\n"
-            message = f'List of commands available for {prefix}rate:\n'
-            message += f'``{prefix}rate someone [member]``\n'
-            message += f'``{prefix}rate ship [person] [person]``\n'
-            message += f'``{prefix}rate regularship [person] [person]``\n'
-            message += f'``{prefix}rate thing [thingy]``\n'
-            message += f'``{prefix}rate list [thingies]``\n'
-            message += f'``{prefix}rate people [people]``\n'
-            message += f'``{prefix}rate spotify [member]``\n'
-            em = discord.Embed(title=title, description=message, color=EMBED_COLOR)
-            await ctx.send(embed=em)
+    async def _rate(self, _):
+        pass
 
     @_rate.command(name='thing')
     @commands.cooldown(rate=3, per=10)
-    async def _thing(self, ctx, *, thing):
+    async def _thing(self, ctx, *, thing: str):
         if thing:
             rate = self.get_rate(thing)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
@@ -151,13 +139,15 @@ class Rate(commands.Cog):
         else:
             await ctx.send('Not enough choices to choose from')
     
-    @_rate.command('spotify')
-    async def _spotify(self, ctx, *, member: Optional[BetterMemberConverter]):
+    @_rate.command('song')
+    async def _song(self, ctx, *, member: Optional[BetterMemberConverter]):
         member = member or ctx.author
         activity = get(member.activities, type=ActivityType.listening)
         if not activity:
             member = ctx.guild.get_member(member.id)
             activity = get(member.activities, type=ActivityType.listening)
+        if not activity and len(member.activities) > 0:
+            activity = member.activities[0]
         if activity:
             if type(activity) == discord.activity.Spotify:
                 title = activity.title
@@ -182,7 +172,7 @@ class Rate(commands.Cog):
             article = 'an' if rate == 8 else 'a'
             em = discord.Embed(
                 title=artists_string,
-                description=f'I give this track {article} **{rate}/10**. {self.spotify_rate[rate]}',
+                description=f'I give this track {article} **{rate}/10**. {self.song_rate[rate]}',
                 colour=EMBED_COLOR
             )
             if url:
@@ -193,4 +183,4 @@ class Rate(commands.Cog):
                 em.set_thumbnail(url=image_url)
             await ctx.send(embed=em)
         else:
-            await ctx.send(f'{member} is not listening to anything on Spotify.')
+            await ctx.send(f'{member} is not listening to anything.')

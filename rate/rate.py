@@ -1,4 +1,5 @@
 import random
+import re
 import discord
 from discord.enums import ActivityType
 from .customconverters import BetterMemberConverter
@@ -166,7 +167,10 @@ class Rate(commands.Cog):
             else:
                 artists_string = f'by {activity.state}'
                 title = activity.details
-                image_url = None
+                # Only supports YouTube Music Desktop App's Discord activity
+                if 'large_image' in activity.assets and activity.assets['large_image']:
+                    match = re.search(r'lh3\.googleusercontent\.com.+', activity.assets['large_image'].replace('\n', ''))
+                    image_url = f'https://{match.group()}' if match else None
                 url = None
                 rate = self.get_rate(f'{title.lower()}{artists_string.lower()}')
             article = 'an' if rate == 8 else 'a'

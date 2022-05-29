@@ -148,7 +148,7 @@ class Rate(commands.Cog):
             member = ctx.guild.get_member(member.id)
             activity = get(member.activities, type=ActivityType.listening)
         if not activity and len(member.activities) > 0:
-            activity = member.activities[0]
+            activity = member.activities[-1]
         if activity:
             if type(activity) == discord.activity.Spotify:
                 title = activity.title

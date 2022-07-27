@@ -157,7 +157,7 @@ class Rate(commands.Cog):
                 image_url = activity.album_cover_url
                 primary_artist = activity.artists[0]
                 secondary_artists = activity.artists[1:]
-                artists_string = f'by {primary_artist}'
+                artists_string = primary_artist
                 for i in range(0, len(secondary_artists)):
                     if i < len(secondary_artists) - 1:
                         artists_string += ', ' + secondary_artists[i]
@@ -165,14 +165,17 @@ class Rate(commands.Cog):
                         artists_string += ' and ' + secondary_artists[i]
                 rate = self.get_rate(track_id)
             else:
-                artists_string = f'by {activity.state}'
+                if activity.state.startswith('by '):
+                    artists_string = activity.state[3:]
+                else:
+                    artists_string = activity.state
                 title = activity.details
-                # Only supports YouTube Music Desktop App's Discord activity
+                # Only supports YouTube Music
                 if 'large_image' in activity.assets and activity.assets['large_image']:
                     match = re.search(r'lh3\.googleusercontent\.com.+', activity.assets['large_image'].replace('\n', ''))
                     image_url = f'https://{match.group()}' if match else None
                 url = None
-                rate = self.get_rate(f'{title.lower()}{artists_string.lower()}')
+                rate = self.get_rate(f'{title}{artists_string}')
             article = 'an' if rate == 8 else 'a'
             em = discord.Embed(
                 title=artists_string,

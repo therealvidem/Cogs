@@ -1,8 +1,10 @@
+import re
 from discord import Embed
 from wiktionaryparser import WiktionaryParser
 
 from redbot.core import commands
 from redbot.core.commands import Context
+from redbot.core.utils import menus
 
 class Wiktionary(commands.Cog):
 	def __init__(self, bot):
@@ -19,14 +21,24 @@ class Wiktionary(commands.Cog):
 		if len(results) == 0:
 			await ctx.send('No results found.')
 			return
-		word_data = results[0]
-		em = Embed(
-			title=f'**{word}**',
-			description=', '.join(word_data['pronunciation']['text']) if 'pronunciation' in word_data else '',
-			url=f'https://en.wiktionary.org/wiki/${word}'
+		print(results)
+		embeds = []
+		for word_data in results:
+			em = Embed(
+				title=f'**{word}**',
+				description='\n'.join(word_data['pronunciations']['text']) if 'pronunciations' in word_data and len(word_data['pronunciations']['text']) > 0 else '',
+				url=f'https://en.wiktionary.org/wiki/{word}'
+			)
+			if 'etymology' in word_data and len(word_data['etymology']) > 0:
+				em.add_field(name='Etymology', value=word_data['etymology'], inline=False)	
+			for i in range(min(3, len(word_data['definitions']))):
+				definition_data = word_data['definitions'][i]
+				for j in range(min(5, len(definition_data['text']))):
+					text: str = definition_data['text'][j]	
+					em.add_field(name=f'Definition {i * 3 + j + 1} ({definition_data["partOfSpeech"]})', value=text)
+			embeds.append(em)
+		await menus.menu(
+			ctx,
+			pages=embeds,
+			controls=menus.DEFAULT_CONTROLS,
 		)
-		for i in range(len(word_data['definitions'])):
-			em.add_field(name=f'Definition {i}', value=word_data['definitions'][i])
-		if 'etymology' in word_data:
-			em.add_field(name='Etymology', value=word_data['etymology'])
-		await ctx.send(embed=em)

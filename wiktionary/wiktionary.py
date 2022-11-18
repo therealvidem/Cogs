@@ -16,7 +16,7 @@ class Wiktionary(commands.Cog):
 			await ctx.send('Word is too long.')
 			return
 		results = self.parser.fetch(word)
-		if len(word_data) == 0:
+		if len(results) == 0:
 			await ctx.send('No results found.')
 			return
 		word_data = results[0]

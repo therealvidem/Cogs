@@ -148,7 +148,12 @@ class Rate(commands.Cog):
             member = ctx.guild.get_member(member.id)
             activity = get(member.activities, type=ActivityType.listening)
         if not activity and len(member.activities) > 0:
-            activity = discord.utils.find(lambda a: hasattr(a, 'state') and hasattr(a, 'details'), member.activities)
+            # TODO: Bad code, refactor later
+            for a in ctx.author.activities:
+                if hasattr(a, 'state') and hasattr(a, 'details') and hasattr(a, 'name') and a.name == 'YouTube Music':
+                    activity = a
+            if not activity:
+                activity = discord.utils.find(lambda a: hasattr(a, 'state') and hasattr(a, 'details'), ctx.author.activities)
         if activity:
             if type(activity) == discord.activity.Spotify:
                 title = activity.title

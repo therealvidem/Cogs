@@ -52,21 +52,6 @@ class Scream(commands.Cog):
                 await ctx.send('wat')
 
     @commands.command()
-    async def triggered(self, ctx, n: int=1):
-        if n and n <= 31 and n > 0:
-            await ctx.send('***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * n) + '***')
-        else:
-            if n > 31:
-                await ctx.send('You\'re triggered too much! Calm down!')
-            elif n == -1:
-                await ctx.send(
-                    '***' + ('T̰͈ͪ̒̿R̼̘̔̆͜I̗̯̾ͨͣ͘G̾ͫ̍̾̂̊͛G͌̔ͤ҉̺͕̼E̐ͨ̉̾ͤͥͦR̼̘̎̂̐ͩ̏Ȩ̠̣͐̏̇̐D̤̟̦ͧ' * 31) + '***')
-            elif n < -1:
-                await ctx.send('Are you actually triggered tho?')
-            else:
-                await ctx.send('wat')
-
-    @commands.command()
     async def ooo(self, ctx, n: int=10):
         if n and n <= 1987 and n > 0:
             await ctx.send('***' + ('O' * n) + '***')

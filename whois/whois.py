@@ -17,7 +17,7 @@ def get_user_profile(member: discord.Member):
 
     embed = discord.Embed()
     embed.title = username
-    embed.set_thumbnail(url=user.avatar_url)
+    embed.set_thumbnail(url=user.display_avatar.url)
     embed.color = color
     embed.add_field(
         name='ID', value=user.id, inline=False

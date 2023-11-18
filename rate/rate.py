@@ -56,7 +56,7 @@ class Rate(commands.Cog):
         member = member or ctx.author
         if member:
             name = str(member)
-            image_url = member.avatar_url
+            image_url = member.display_avatar.url
             rate = self.get_rate(member.id)
             emoji = ':thumbsup:' if rate >= 5 else ':thumbsdown:'
             article = 'an' if rate == 8 else 'a'

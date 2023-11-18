@@ -1,4 +1,4 @@
 from .lastfm import LastFM
 
-def setup(bot):
-    bot.add_cog(LastFM())
+async def setup(bot):
+    await bot.add_cog(LastFM())

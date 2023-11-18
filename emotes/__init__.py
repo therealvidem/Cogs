@@ -1,4 +1,4 @@
 from .emotes import Emotes
 
-def setup(bot):
-    bot.add_cog(Emotes())
+async def setup(bot):
+    await bot.add_cog(Emotes())

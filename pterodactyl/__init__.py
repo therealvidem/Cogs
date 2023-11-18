@@ -1,4 +1,4 @@
 from .pterodactyl import Pterodactyl
 
-def setup(bot):
-    bot.add_cog(Pterodactyl(bot))
+async def setup(bot):
+    await bot.add_cog(Pterodactyl(bot))

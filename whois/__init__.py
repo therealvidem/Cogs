@@ -1,4 +1,4 @@
 from .whois import WhoIs
 
-def setup(bot):
-    bot.add_cog(WhoIs(bot))
+async def setup(bot):
+    await bot.add_cog(WhoIs(bot))

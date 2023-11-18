@@ -1,5 +1,5 @@
 
 from .wiktionary import Wiktionary
 
-def setup(bot):
-    bot.add_cog(Wiktionary(bot))
+async def setup(bot):
+    await bot.add_cog(Wiktionary(bot))

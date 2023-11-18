@@ -1,4 +1,4 @@
 from .rate import Rate
 
-def setup(bot):
-    bot.add_cog(Rate(bot))
+async def setup(bot):
+    await bot.add_cog(Rate(bot))

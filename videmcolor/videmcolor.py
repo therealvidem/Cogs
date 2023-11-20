@@ -112,7 +112,7 @@ class VidemColor(commands.Cog):
         for color_name, info in colors.items():
             embed, f = await self.build_embed_custom(info['color'], f'{color_name}.png')
             embed.title = info['title']
-            embed.add_field(name='Part of the Mask', value=info['part'])
+            embed.add_field(name='Part of the Mask', value=info['part'], inline=False)
             embeds.append(embed)
             files.append(f)
         await ctx.send(files=files, embeds=embeds)

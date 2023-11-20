@@ -76,17 +76,43 @@ class VidemColor(commands.Cog):
     async def barcolors(self, ctx: Context):
         """Gets The BAR colors"""
         colors = {
-            'neon_blue': col(rgb=(77 / 255, 77 / 255, 255 / 255)),
-            'the_bar_hat_brim': col(rgb=(55 / 255, 55 / 255, 181 / 255)),
-            'the_bar_bucket_grip': col(rgb=(128 / 255, 128 / 255, 255 / 255)),
-            'white': col(rgb=(255 / 255, 255 / 255, 255 / 255)),
-            'roblox': col(rgb=(225 / 255, 34 / 255, 26 / 255)),
-            'skype': col(rgb=(0 / 255, 175 / 255, 240 / 255)),
+            'neon_blue': {
+                'color': col(rgb=(77 / 255, 77 / 255, 255 / 255)),
+                'title': 'Color Embed for: Neon Blue',
+                'part': 'Face and Bucket Outlines',
+            },
+            'the_bar_hat_brim': {
+                'color': col(rgb=(55 / 255, 55 / 255, 181 / 255)),
+                'title': 'Color Embed for: The BAR Hat Brim Color',
+                'part': 'Bucket Hat Brim',
+            },
+            'the_bar_bucket_grip': {
+                'color': col(rgb=(128 / 255, 128 / 255, 255 / 255)),
+                'title': 'Color Embed for: The BAR Bucket Grip Color',
+                'part': 'Bucket Grip',
+            },
+            'white': {
+                'color': col(rgb=(255 / 255, 255 / 255, 255 / 255)),
+                'title': 'Color Embed for: White',
+                'part': 'Mouth',
+            },
+            'roblox': {
+                'color': col(rgb=(225 / 255, 34 / 255, 26 / 255)),
+                'title': 'Color Embed for: Roblox Color',
+                'part': 'Right Eye Fabric',
+            },
+            'skype': {
+                'color': col(rgb=(0 / 255, 175 / 255, 240 / 255)),
+                'title': 'Color Embed for: Skype Color',
+                'part': 'Left Eye Fabric',
+            },
         }
         embeds = []
         files = []
-        for color_name, color in colors.items():
-            embed, f = await self.build_embed_custom(color, f'{color_name}.png')
+        for color_name, info in colors.items():
+            embed, f = await self.build_embed_custom(info['color'], f'{color_name}.png')
+            embed.title = info['title']
+            embed.add_field(name='Part of the Mask', value=info['part'])
             embeds.append(embed)
             files.append(f)
         await ctx.send(files=files, embeds=embeds)

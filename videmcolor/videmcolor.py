@@ -1,5 +1,9 @@
+import discord
+import io
 import random
 from colour import Color as col
+from colour import rgb2hex
+from PIL import Image
 
 from .customconverters import BetterMemberConverter
 from redbot.core import checks, commands

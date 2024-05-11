@@ -1,5 +1,9 @@
+import math
+import random
 from redbot.core import commands
 from redbot.core.bot import Red
+
+from scream.customconverters import BetterMemberConverter
 
 class Scream(commands.Cog):
     def __init__(self, bot: Red):

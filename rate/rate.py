@@ -149,8 +149,9 @@ class Rate(commands.Cog):
             activity = get(member.activities, type=ActivityType.listening)
         if not activity and len(member.activities) > 0:
             # TODO: Bad code, refactor later
+            special_cases = set(['YouTube Music', 'foobar2000'])
             for a in ctx.author.activities:
-                if hasattr(a, 'state') and hasattr(a, 'details') and hasattr(a, 'name') and a.name == 'YouTube Music':
+                if hasattr(a, 'state') and hasattr(a, 'details') and hasattr(a, 'name') and a.name in special_cases:
                     activity = a
             if not activity:
                 activity = discord.utils.find(lambda a: hasattr(a, 'state') and hasattr(a, 'details'), ctx.author.activities)

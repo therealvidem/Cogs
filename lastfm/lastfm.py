@@ -1,5 +1,5 @@
 import zlib
-from datetime import datetime
+from datetime import datetime, timezone
 
 import discord
 import requests
@@ -109,12 +109,14 @@ class LastFM(commands.Cog):
                 em.set_footer(text=f'{num_to_ordinal(i + 1)} of {amount} most recently played tracks for {user}')
 
                 user_lastfm_name = result["recenttracks"]["@attr"]["user"]
-                em.description = f'Viewing scrobbles for [{user_lastfm_name}](https://www.last.fm/user/{user_lastfm_name})'
 
+                timestamp_string = None
                 if 'date' in track:
-                    em.timestamp = datetime.utcfromtimestamp(int(track['date']['uts']))
+                    timestamp_string = f'Listened: {discord.utils.format_dt(datetime.fromtimestamp(int(track["date"]["uts"])), "R")}'
                 if '@attr' in track and 'nowplaying' in track['@attr']:
-                    em.timestamp = datetime.utcnow()
+                    timestamp_string = 'Now playing'
+
+                em.description = f'Viewing scrobbles for [{user_lastfm_name}](https://www.last.fm/user/{user_lastfm_name})\n{timestamp_string}'
                 
                 if 'image' in track:
                     # Get the "large" image, which is 3rd in the list of images
